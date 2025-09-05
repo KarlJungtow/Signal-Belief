@@ -1,0 +1,21 @@
+{% extends "global/Page.html" %}
+{% block title %}Final Payment{% endblock %}
+{% block content %}
+
+<p>One round was chosen at random from the main experiment:
+<strong>{{ player.paid_treatment }} (Round {{ player.paid_round }})</strong>.</p>
+
+{% if player.payoff_type == 'consumption' %}
+  <p>The <strong>consumption decision</strong> in that round was selected.</p>
+  <p>Your utility in that round: {{ player.payoff }}</p>
+{% else %}
+  <p>The <strong>belief accuracy</strong> in that round was selected. Your chance of winning  was {{ player.threshold }}</p>
+  <p>Your score in that round: {{ player.belief_points }} </p>
+{% endif %}
+
+<p>Converted at the exchange rate ({{ player.conversion_rate }} € per point) plus
+the show-up fee ({{ player.showup_fee }} €), your final payoff is:</p>
+
+<h3>{{ player.payoff }} €</h3>
+
+{% endblock %}

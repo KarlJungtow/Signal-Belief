@@ -1,0 +1,20 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Please wait{% endblock %}
+
+{% block content %}
+<p class="lead">
+  Please wait until all participants reach this point. The next part will begin together.
+</p>
+
+<div style="display:flex; align-items:center; gap:.6rem; margin-top: .75rem;">
+  <div class="spinner-border" role="status" aria-hidden="true"></div>
+  <div>Waiting for others…</div>
+</div>
+
+{% comment %}
+This is a WaitPage. There is no Next button; oTree will automatically advance
+everyone when all required participants arrive (depending on wait_for_all_groups).
+{% endcomment %}
+{% endblock %}

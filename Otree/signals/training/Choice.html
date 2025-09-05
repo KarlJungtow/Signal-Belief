@@ -1,0 +1,83 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}Training Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}{% endblock %}
+
+{% block content %}
+
+<p>
+  This is a <strong>training</strong> round. There is <strong>no signal</strong> and <strong>no belief entry</strong>.
+  Your prior is <strong>50/50</strong> that π = 0.5 or π = 1.5. You only choose <em>c₁</em>.
+</p>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <p><strong>Incomes & Prices (defaults):</strong></p>
+    <ul>
+      <li>Current income: <strong>y₁ = {{ y1 }}</strong></li>
+      <li>Price now: <strong>p₁ = {{ p1 }}</strong></li>
+      <li>Income profile: <strong>x = {{ x }}</strong> (0.5 = decreasing, 1.5 = increasing)</li>
+      <li>Future income is indexed: <code>y₂ = π · x · y₁</code></li>
+      <li>So, if π = 0.5 ⇒ y₂ = <strong>{{ y2_pi05 }}</strong>; if π = 1.5 ⇒ y₂ = <strong>{{ y2_pi15 }}</strong></li>
+    </ul>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <p>
+      Choose your period-1 consumption <em>c₁</em> (slider). Feasibility requires <strong>1 ≤ c₁ ≤ {{ c1_max }}</strong>.
+    </p>
+
+    <!-- Slider input -->
+    <input
+      type="range"
+      id="c1_slider"
+      name="c1"
+      min="1"
+      max="{{ c1_max }}"
+      step="0.1"
+      value="{{ start_c1 }}"
+      oninput="c1_out.value = this.value"
+      class="form-range"
+      style="width:100%;"
+    />
+    <div class="mt-2">
+      c₁: <output id="c1_out">{{ start_c1 }}</output>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <p><strong>Utility preview (not paid in training):</strong> u(c₁,c₂) = c₁ · c₂</p>
+    <p>Below are utilities for integer c₁ choices (1–20) under both possible price levels.</p>
+
+    <table class="table table-sm table-bordered align-middle">
+      <thead>
+        <tr>
+          <th style="width:10%">c₁</th>
+          <th>u at π = 0.5</th>
+          <th>u at π = 1.5</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in table_rows %}
+        <tr>
+          <td>{{ row.c1 }}</td>
+          <td>
+            {% if row.infeasible05 %}—{% else %}{{ row.u05}}{% endif %}
+          </td>
+          <td>
+            {% if row.infeasible15 %}—{% else %}{{ row.u15 }}{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{{ next_button }}
+
+{% endblock %}
