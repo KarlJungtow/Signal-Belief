@@ -5,6 +5,7 @@ from .question_reader import load_questions
 
 doc = """Your app description"""
 
+
 class C(BaseConstants):
     NAME_IN_URL = 'intro'
     PLAYERS_PER_GROUP = None
@@ -14,8 +15,14 @@ class C(BaseConstants):
     # Optional sanity check
     assert len(QUESTIONS) >= 4, "Need at least 5 questions in questions.xlsx"
 
-class Subsession(BaseSubsession): pass
-class Group(BaseGroup): pass
+
+class Subsession(BaseSubsession):
+    pass
+
+
+class Group(BaseGroup):
+    pass
+
 
 class Player(BasePlayer):
     # Hard-coded 5 fields pulling label/choices at import time
@@ -45,9 +52,15 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect,
     )
 
+
 # PAGES
-class WelcomePage(Page): pass
-class GeneralInstructions(Page): pass
+class WelcomePage(Page):
+    pass
+
+
+class GeneralInstructions(Page):
+    pass
+
 
 class ComprehensionTest(Page):
     form_model = 'player'
@@ -66,8 +79,9 @@ class ComprehensionTest(Page):
         errors = {}
         for field, right in correct.items():
             if values.get(field) != right:
-                errors[field] = 'Das ist nicht korrekt. Bitte erneut versuchen.'
+                errors[field] = 'This is not correct. Please try again'
         return errors or None
+
 
 class SyncGate(WaitPage):
     @staticmethod
@@ -75,4 +89,9 @@ class SyncGate(WaitPage):
         return player.round_number == C.NUM_ROUNDS
 
 
-page_sequence = [WelcomePage, GeneralInstructions, ComprehensionTest, SyncGate]
+page_sequence = [
+    WelcomePage,
+    GeneralInstructions,
+    ComprehensionTest,
+    SyncGate,
+]

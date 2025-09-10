@@ -7,16 +7,16 @@ SESSION_CONFIGS = [
 
                     #'intro',
                     #'training',
-                    #'t0_baseline',
+                    't0_baseline',
                     #'t1',
                     #'t2',
                     #'t3',
-                    't4',
-                    #'payoff'
+                    #'t4',
+                    'payoff'
             ],
         num_demo_participants=1,
         showup_fee=4.0,
-        conversion_rate=0.2,
+        conversion_rate=0.1,
         binary_lotterie_prize=100,
     ),
 ]
