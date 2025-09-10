@@ -4,10 +4,14 @@
 {% block title %}Treatment 4 — Belief{% endblock %}
 
 {% block content %}
-  <p><strong>Belief entry:</strong> How many red dots did you see?</p>
+<p><strong>Belief entry:</strong> How many red dots did you see?</p>
+<div class="d-flex align-items-center">
+  <span class="me-2">0</span>
   <input type="range" name="belief_input_raw" id="bel_slider" min="0" max="400" step="1"
-         value="200" oninput="bel_out.value=this.value" class="form-range" />
-  <div>Red dots: <output id="bel_out">200</output> / 400</div>
+         value="200" oninput="bel_out.value=this.value" class="form-range flex-fill" />
+  <span class="ms-2">400</span>
+</div>
+<div>Red dots: <output id="bel_out">200</output> / 400</div>
 
 
 {{ next_button }}

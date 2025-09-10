@@ -1,24 +1,33 @@
 import random
 import itertools
+import numpy as np
+from math import floor
 
 
 #---template helpers----------------------------------------------------------------------------------------------------
 def create_session(subsession, C, treatment):
     # Build 20 pairs (r, x): each r appears once with x=0.5 and once with x=1.5
-    pairs = list(itertools.product(C.RED_COUNTS, C.XS))
-
+    pairs = list(itertools.product(C.XS, C.RED_COUNTS))
+    pairs = [(y, x) for (x, y) in pairs]
     # Precompute a 20-item image list if explicit files not provided
     image_files_master = synthesize_filenames(C.RED_COUNTS, C.IMAGE_FILES)
-
     # For each participant, randomize order and assign per-round parameters
     for p in subsession.get_players():
+        #Shuffle Pairs in the first round randomly, different for every player
         if subsession.round_number == 1:
-            schedule = pairs[:]
-            random.shuffle(schedule)
 
-            # shuffle image files for each player (distinct images within treatment)
+            schedule = pairs[:]
             images = image_files_master[:]
-            random.shuffle(images)
+
+            # combine them into tuples and shuffle together
+            combined = list(zip(schedule, images))
+            random.shuffle(combined)
+
+            # unzip back into two lists
+            schedule, images = zip(*combined)
+
+            schedule = list(schedule)
+            images = list(images)
 
             p.participant.vars[f"{treatment}_schedule"] = schedule
             p.participant.vars[f"{treatment}_images"] = images
@@ -34,41 +43,39 @@ def create_session(subsession, C, treatment):
         p.image_file = image_file
         p.c1_max = calc_c1_max(p, C)
 
-
 def build_vars_for_template_choice(player, C):
     return {
         "y1": C.Y1,
         "p1": C.P1,
         "R": C.R,
         "x": player.income_factor,
-        "y2_pi05": 0.5 * player.income_factor * C.Y1,
-        "y2_pi15": 1.5 * player.income_factor * C.Y1,
+        "y2_pi1": player.income_factor * C.Y1,
         "c1_max": player.c1_max,
-        "table_rows": build_payoff_table(player.income_factor, C.P1, C.Y1, C.R),
+        "table_rows": build_payoff_table(player.income_factor, C.P1, C.Y1, C.R, player.c1_max),
     }
 
 
-def build_payoff_table(x_val: float, p1, y1, R):
+def build_payoff_table(x_val: float, p1, y1, R, c1_max):
     """
     Build a payoff table like Table 1 in the spec:
     rows for c1 = 1..20, columns for π = 0.5 and 1.5.
     Returns a list of dicts {c1, u05, u15, infeasible05, infeasible15}.
     """
     rows = []
-    for k in range(1, 21):
+    for k in range(1, floor(c1_max)+1):
         c = float(k)
         # π = 0.5
         pi05 = 0.5
         p2_05 = pi05 * p1
         s05 = y1 - p1 * c
         c2_05 = (pi05 * x_val * y1 + R * s05) / p2_05
-        u05 = c * c2_05 if c2_05 >= 1 else None
+        u05 = round(c * c2_05, 2) if c2_05 >= 1 else None
         # π = 1.5
         pi15 = 1.5
         p2_15 = pi15 * p1
         s15 = y1 - p1 * c
         c2_15 = (pi15 * x_val * y1 + R * s15) / p2_15
-        u15 = c * c2_15 if c2_15 >= 1 else None
+        u15 = round(c * c2_15, 2) if c2_15 >= 1 else None
         rows.append(dict(
             c1=k,
             u05=u05, infeasible05=(c2_05 < 1),
@@ -82,9 +89,9 @@ def synthesize_filenames(red_count, file_names=None):
         # two variants per red count
         synthesized = []
         for r in red_count:
-            synthesized.append(f"dots_T0_{r}_a.png")
+            synthesized.append(f"dots_T0_{r}_x=05.png")
         for r in red_count:
-            synthesized.append(f"dots_T0_{r}_b.png")
+            synthesized.append(f"dots_T0_{r}_x=15.png")
         return synthesized
     else:
         if len(file_names) != 20:
@@ -109,10 +116,11 @@ def record_main_round(player, app_label: str):
         # belief side
         h_true=getattr(player, 'h_true', None),      # r/400
         h_hat=getattr(player, 'h_hat', None),        # normalized belief ∈[0,1]
+        belief_input_raw=getattr(player, 'belief_input_raw', None),
         # metadata that may help
         x=getattr(player, 'income_factor', None),
         pi=getattr(player, 'pi', None),
-        red_count=getattr(player, 'red_count', getattr(player, 'r', None)),
+        red_count=getattr(player, 'red_count', None),
     )
     arr = player.participant.vars.setdefault('main_rounds', [])
     arr.append(current_round_entry)
@@ -128,7 +136,7 @@ def run_binary_lottery(chosen, prize: float = 100):
     h_true = float(chosen.get('h_true') or 0.0)
 
 
-    threshold = max(0.0, 1.0 - (h_hat - h_true) ** 2)
+    threshold = max(0.0, 1.0 - (abs(h_hat - h_true)*4)) #TODO Change formula, currently punishes linearly until dist of 100
     U = random.random()
 
     if U <= threshold:
@@ -138,8 +146,7 @@ def run_binary_lottery(chosen, prize: float = 100):
 
 # ---- helpers per spec ----
 def calc_c1_max(p, C) -> float:
-    # c1_max = (π*x*y1 + R*y1 - p2) / (R*p1)
-    return (p.pi * p.income_factor * C.Y1 + C.R * C.Y1 - p.p2) / (C.R * C.P1)
+    return (0.5 * p.income_factor * C.Y1 + C.R * C.Y1 - p.p2) / (C.R * C.P1)
 
 def c2_given(p, C) -> float:
     s = C.Y1 - C.P1 * float(p.c1)

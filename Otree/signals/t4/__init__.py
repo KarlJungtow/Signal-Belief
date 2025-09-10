@@ -42,6 +42,7 @@ class Player(BasePlayer):
     p2 = models.FloatField()         # period-2 price (= pi * p1 by default)
     image_file = models.StringField()
     r = models.FloatField()
+    c1_max = models.FloatField()
 
     # Decision
     c1 = models.FloatField()
@@ -55,17 +56,6 @@ class Player(BasePlayer):
     u = models.FloatField()
 
     # ---- helpers per spec ----
-    def calc_c1_max(self) -> float:
-        # c1_max = (π x y1 + R*y1 - p2) / (R*p1)
-        return (self.pi * self.income_factor * C.Y1 + C.R * C.Y1 - self.p2) / (C.R * C.P1)
-
-    def c2_given(self, c1: float) -> float:
-        # s = y1 - p1*c1; c2 = (π x y1 + R*s)/p2 ; with p2 = π * p1 (default)
-        s = C.Y1 - C.P1 * float(c1)
-        return (self.pi * self.income_factor * C.Y1 + C.R * s) / self.p2
-
-    def u_given(self, c1: float) -> float:
-        return float(c1) * self.c2_given(c1)
 
 # -- oTree lifecycle hooks (function-based API) --
 
@@ -109,12 +99,17 @@ def creating_session(subsession: Subsession):
         p.p2 = p.pi * C.P1
         p.image_file = image_file
         p.current_role= current_role
+        p.c1_max = calc_c1_max(p, C)
 
         if p.current_role== 'borrower':
             p.c1 = C.Y1 - 3
         else:
             p.c1 = C.Y1 + 3
 # ------------- Pages -------------
+class Explanation(Page):
+    def is_displayed(player):
+        return player.round_number == 1
+
 
 class IncomeInfo(Page):
     form_model = 'player'
@@ -127,12 +122,9 @@ class IncomeInfo(Page):
             p1=C.P1,
             R = C.R,
             x=player.income_factor,
-            # Note: in baseline the subject chooses c1 BEFORE seeing the signal; prior is 50/50
-            y2_pi05=0.5 * player.income_factor * C.Y1,
-            y2_pi15=1.5 * player.income_factor * C.Y1,
+            y2_pi1=player.income_factor * C.Y1,
             c1 = player.c1,
-            table_rows=build_payoff_table(player.income_factor, C.P1, C.Y1, C.R),
-
+            table_rows=build_payoff_table(player.income_factor, C.P1, C.Y1, C.R, player.c1_max),
         )
 
 
@@ -168,9 +160,9 @@ class Belief(Page):
         player.h_hat = float(player.belief_input_raw) / 400.0
 
         # Compute implied outcomes now (hidden from subject; used in payoff stage)
-        player.c2 = player.c2_given(player.c1)
-        player.u = player.u_given(player.c1)
-        record_main_round(player, app_label='t1')
+        player.c2 = c2_given(player, C)
+        player.u = u_given(player)
+        record_main_round(player, app_label='t4')
 
 class SyncGate(WaitPage):
     @staticmethod
@@ -179,4 +171,4 @@ class SyncGate(WaitPage):
 
 
 
-page_sequence = [IncomeInfo, Signal, Belief, SyncGate]
+page_sequence = [Explanation, IncomeInfo, Signal, Belief, SyncGate]

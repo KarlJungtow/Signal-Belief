@@ -55,18 +55,7 @@ class Player(BasePlayer):
     c2 = models.FloatField()
     u = models.FloatField()
 
-    # ---- helpers per spec ----
-    def calc_c1_max(self) -> float:
-        # c1_max = (π x y1 + R*y1 - p2) / (R*p1)
-        return (self.pi * self.income_factor * C.Y1 + C.R * C.Y1 - self.p2) / (C.R * C.P1)
 
-    def c2_given(self, c1: float) -> float:
-        # s = y1 - p1*c1; c2 = (π x y1 + R*s)/p2 ; with p2 = π * p1 (default)
-        s = C.Y1 - C.P1 * float(c1)
-        return (self.pi * self.income_factor * C.Y1 + C.R * s) / self.p2
-
-    def u_given(self, c1: float) -> float:
-        return float(c1) * self.c2_given(c1)
 
 # -- oTree lifecycle hooks (function-based API) --
 
@@ -79,53 +68,21 @@ def creating_session(subsession: Subsession):
     Assign image file names. If C.IMAGE_FILES is not provided, synthesize names.
     Belief mode can be configured in SESSION_CONFIGS as 'belief_mode': 'B1' or 'B2' (default B1).
     """
-    # Build 20 pairs (r,x): each r appears once with x=0.5 and once with x=1.5
-    #pairs = [(r, 0.5) for r in C.RED_COUNTS] + [(r, 1.5) for r in C.RED_COUNTS]
-    pairs = list(itertools.product(C.RED_COUNTS, [0.5, 1.5]))
-    # Precompute a 20-item image list if explicit files not provided
-    image_files_master = synthesize_filenames(C.RED_COUNTS, C.IMAGE_FILES)
-
-    # For each participant, randomize order and assign per-round parameters
-    for p in subsession.get_players():
-        if subsession.round_number == 1:
-            schedule = pairs[:]
-            random.shuffle(schedule)
-            # shuffle image files for each player (distinct images within treatment)
-            images = image_files_master[:]
-            random.shuffle(images)
-            p.participant.vars['t3_schedule'] = schedule
-            p.participant.vars['t3_images'] = images
-
-        r, x = p.participant.vars['t3_schedule'][subsession.round_number - 1]
-        image_file = p.participant.vars['t3_images'][subsession.round_number - 1]
-
-        p.income_factor = float(x)
-        p.r = int(r)
-        p.h_true = p.r / 400.0
-        p.pi = 1.5 if p.r > 200 else 0.5
-        p.p2 = p.pi * C.P1
-        p.image_file = image_file
-        p.c1_max = p.calc_c1_max()
+    create_session(subsession, C, 't3')
 
 # ------------- Pages -------------
+
+class Explanation(Page):
+    def is_displayed(player):
+        return player.round_number == 1
+
 
 class IncomeInfo(Page):
     form_model = 'player'
 
     @staticmethod
     def vars_for_template(player: Player):
-        # Build a payoff table like the document’s panel: c1 = 1..20; columns for π=0.5 and π=1.5
-        return dict(
-            y1=C.Y1,
-            p1=C.P1,
-            R = C.R,
-            x=player.income_factor,
-            # Note: in baseline the subject chooses c1 BEFORE seeing the signal; prior is 50/50
-            y2_pi05=0.5 * player.income_factor * C.Y1,
-            y2_pi15=1.5 * player.income_factor * C.Y1,
-            c1_max=player.c1_max,
-            table_rows=build_payoff_table(player.income_factor, C.P1, C.Y1, C.R),
-        )
+        return build_vars_for_template_choice(player, C)
 
 
 class Signal(Page):
@@ -146,18 +103,7 @@ class ChoiceBelief(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
-        # Build a payoff table like the document’s panel: c1 = 1..20; columns for π=0.5 and π=1.5
-        return dict(
-            y1=C.Y1,
-            p1=C.P1,
-            R = C.R,
-            x=player.income_factor,
-            # Note: in baseline the subject chooses c1 BEFORE seeing the signal; prior is 50/50
-            y2_pi05=0.5 * player.income_factor * C.Y1,
-            y2_pi15=1.5 * player.income_factor * C.Y1,
-            c1_max=player.c1_max,
-            table_rows=build_payoff_table(player.income_factor, C.P1, C.Y1, C.R),
-        )
+        return build_vars_for_template_choice(player, C)
 
 
     @staticmethod
@@ -182,9 +128,9 @@ class ChoiceBelief(Page):
         player.h_hat = float(player.belief_input_raw) / 400.0
 
         # Compute implied outcomes now (hidden from subject; used in payoff stage)
-        player.c2 = player.c2_given(player.c1)
-        player.u = player.u_given(player.c1)
-        record_main_round(player, app_label='t1')
+        player.c2 = c2_given(player, C)
+        player.u = u_given(player)
+        record_main_round(player, app_label='t3')
 
 class SyncGate(WaitPage):
     @staticmethod
@@ -193,4 +139,4 @@ class SyncGate(WaitPage):
 
 
 
-page_sequence = [IncomeInfo, Signal, ChoiceBelief, SyncGate]
+page_sequence = [Explanation, IncomeInfo, Signal, ChoiceBelief, SyncGate]

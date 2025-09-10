@@ -27,6 +27,8 @@ class Player(BasePlayer):
     U_draw = models.FloatField()
     threshold = models.FloatField()
     won_belief = models.BooleanField()
+    true_red_count = models.IntegerField
+    belief_raw = models.IntegerField
 
     # raw point outcomes
     u_points = models.FloatField()
@@ -38,7 +40,6 @@ class Player(BasePlayer):
     conversion_rate = models.FloatField
     showup_fee = models.FloatField()
 
-# Should belief be able to contribute to payoff?
 def belief_enabled(session):
     return session.config.get('belief_pay_enabled', True)
 
@@ -76,8 +77,10 @@ def set_final_payoff(player: Player):
     else:
         # Binary scoring lottery: Pr(win 100) = 1 - (h_hat - h_true)^2
         player.belief_points, player.threshold = run_binary_lottery(chosen, belief_prize)
+        player.threshold = round(player.threshold, 2)
         player.payoff = player.belief_points * player.conversion_rate
-
+        player.true_red_count = chosen.get('red_count')
+        player.belief_raw = chosen.get('belief_input_raw')
     player.payoff += player.showup_fee
 
 class Final(Page):

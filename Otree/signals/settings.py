@@ -4,12 +4,16 @@ SESSION_CONFIGS = [
     dict(
         name='signals',
         app_sequence=[
-                    't0_baseline',
-                    't1',
-                    't2',
-                    't3',
+
+                    #'intro',
+                    #'training',
+                    #'t0_baseline',
+                    #'t1',
+                    #'t2',
+                    #'t3',
                     't4',
-                    'payoff'],
+                    #'payoff'
+            ],
         num_demo_participants=1,
         showup_fee=4.0,
         conversion_rate=0.2,

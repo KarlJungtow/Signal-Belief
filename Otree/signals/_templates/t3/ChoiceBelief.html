@@ -9,12 +9,14 @@
   <strong>50/50</strong> that π = 0.5 or π = 1.5. There is <strong>no feedback</strong>.
 </p>
 
-  <p><strong>Belief entry:</strong> How many red dots did you see?</p>
+<p><strong>Belief entry:</strong> How many red dots did you see?</p>
+<div class="d-flex align-items-center">
+  <span class="me-2">0</span>
   <input type="range" name="belief_input_raw" id="bel_slider" min="0" max="400" step="1"
-         value="200" oninput="bel_out.value=this.value" class="form-range" />
-  <div>Red dots: <output id="bel_out">200</output> / 400</div>
-
-
+         value="200" oninput="bel_out.value=this.value" class="form-range flex-fill" />
+  <span class="ms-2">400</span>
+</div>
+<div>Red dots: <output id="bel_out">200</output> / 400</div>
 
 <div class="card mb-3">
   <div class="card-body">
@@ -23,7 +25,7 @@
       <li>Price now: <strong>p₁ = {{ p1 }}</strong></li>
       <li>Income profile: <strong>x = {{ x }}</strong> (0.5 = decreasing, 1.5 = increasing)</li>
       <li>Future income is indexed: <code>y₂ = π · x · y₁</code></li>
-      <li>If π = 0.5 ⇒ y₂ = <strong>{{ y2_pi05 }}</strong>; if π = 1.5 ⇒ y₂ = <strong>{{ y2_pi15 }}</strong></li>
+      <li>So, if π = 1 ⇒ y₂ = <strong>{{ y2_pi1 }}</strong>
     </ul>
   </div>
 </div>
@@ -31,15 +33,20 @@
 <div class="card mb-3">
   <div class="card-body">
     <p>Choose your period-1 consumption <em>c₁</em>. Feasibility requires <strong>1 ≤ c₁ ≤ {{ c1_max }}</strong>.</p>
-    <input type="range" name="c1" id="c1_slider"
-           min="1" max="{{ c1_max }}" step="1"
-           value="{{ c1_max }}"
-           oninput="c1_out.value=this.value" class="form-range"
-           aria-label="a"
-    />
+    <div class="d-flex align-items-center">
+      <span class="me-2">1</span>
+      <input type="range" name="c1" id="c1_slider"
+             min="1" max="{{ c1_max }}" step="1"
+             value="{{ c1_max }}"
+             oninput="c1_out.value=this.value" class="form-range flex-fill"
+             aria-label="a"
+      />
+      <span class="ms-2">{{ c1_max }}</span>
+    </div>
     <div class="mt-2">c₁: <output id="c1_out">{{ c1_max }}</output></div>
   </div>
 </div>
+
 <div class="mt-2">
   c₂ if π=0.5: <span id="c2_05">—</span> &nbsp;&nbsp; | &nbsp;&nbsp;
   c₂ if π=1.5: <span id="c2_15">—</span>
@@ -115,5 +122,4 @@
   update();
   slider.addEventListener('input', update);
 </script>
-
 {% endblock %}
