@@ -1,16 +1,13 @@
 from otree.api import *
 from helper_functions import *
 
-doc = """
-Baseline treatment (T0): Choice -> Signal (4 countdown + 6s show) -> Belief.
-No feedback. Priors 50/50.
-"""
-
-
 class C(BaseConstants):
+    RED_COUNTS = get_red_counts()
+    XS = get_income_profile()
+
     NAME_IN_URL = "t1"
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 1
+    NUM_ROUNDS = 1#len(RED_COUNTS) * len(XS)
 
     # Defaults from the spec
     Y1 = 10.0
@@ -18,12 +15,7 @@ class C(BaseConstants):
     I = 0.0  # net interest
     R = 1.0 + I  # gross R
 
-    # Signals: 10 compositions. Each used twice (once with x=0.5 and once with x=1.5)
-    # → total 20 images.
-    RED_COUNTS = [120, 185, 190, 195, 199, 201, 205, 210, 215, 280]
-
-    # Two income profiles per treatment
-    XS = [0.5, 1.5]
+    SIGNAL_SHOW_SECONDS = 6
 
     # Can be specified here, otherwise filenames like
     # dots_{Treatment}_{NumRedDots}_{a/b} are expected
@@ -81,6 +73,11 @@ class Explanation(Page):
     def is_displayed(player: Player):
         return player.round_number == 1
 
+class SyncGate(WaitPage):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == 1
+
 
 class Choice(Page):
     form_model = "player"
@@ -113,15 +110,11 @@ class Choice(Page):
 
 
 class Signal(Page):
-    # No form: show countdown, then show image 6s, auto-hide, then enable Next.
-    timeout_seconds = 10  # 10s countdown + 6s show (user can proceed when enabled)
-
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
             image_file=player.image_file,
-            countdown_seconds=4,
-            show_seconds=6,
+            show_seconds= C.SIGNAL_SHOW_SECONDS,
         )
 
 
@@ -138,16 +131,10 @@ class Belief(Page):
             return "Enter how many red dots you saw (0–400)."
 
 
-class SyncGate(WaitPage):
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.round_number == C.NUM_ROUNDS
-
-
 page_sequence = [
     Explanation,
+    SyncGate,
     Signal,
     Belief,
     Choice,
-    SyncGate,
 ]

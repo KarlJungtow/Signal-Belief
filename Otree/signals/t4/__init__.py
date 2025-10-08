@@ -10,9 +10,12 @@ No feedback. Priors 50/50.
 
 
 class C(BaseConstants):
+    RED_COUNTS = get_red_counts()
+    XS = get_income_profile()
+
     NAME_IN_URL = 't4'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 1
+    NUM_ROUNDS = 1#len(RED_COUNTS) * len(XS)
 
     # Defaults from the spec
     Y1 = 10.0
@@ -20,12 +23,7 @@ class C(BaseConstants):
     I = 0.0  # net interest
     R = 1.0 + I  # gross R
 
-    # Signals: 10 compositions. Each used twice (once with x=0.5 and once with x=1.5) → total 20 images.
-    RED_COUNTS = [120, 185, 190, 195, 199, 201, 205, 210, 215, 280]
-
-    # Two income profiles per treatment
-    XS = [0.5, 1.5]
-
+    SIGNAL_SHOW_SECONDS = 6
     # Can be specified here, otherwise filenames like dots_{Treatment}_{NumRedDots}_{a/b} are expected
     IMAGE_FILES = None
 
@@ -142,15 +140,11 @@ class IncomeInfo(Page):
 
 
 class Signal(Page):
-    # No form: show countdown, then show image 6s, auto-hide, then enable Next.
-    timeout_seconds = 10  # 10s countdown + 6s show (user can proceed when enabled)
-
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
             image_file=player.image_file,
-            countdown_seconds=4,
-            show_seconds=6,
+            show_seconds=C.SIGNAL_SHOW_SECONDS,
         )
 
 
@@ -185,8 +179,8 @@ class SyncGate(WaitPage):
 
 page_sequence = [
     Explanation,
+    SyncGate,
     IncomeInfo,
     Signal,
     Belief,
-    SyncGate,
 ]

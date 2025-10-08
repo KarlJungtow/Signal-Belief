@@ -76,14 +76,6 @@ class Choice(Page):
         player.c2 = c2_given(player, C)
         player.u = u_given(player)
 
-
-class SyncGate(WaitPage):
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.round_number == C.NUM_ROUNDS
-
-
 page_sequence = [
     Choice,
-    SyncGate,
 ]

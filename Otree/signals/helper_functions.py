@@ -154,3 +154,11 @@ def c2_given(p, C) -> float:
 
 def u_given(p) -> float:
     return float(p.c1) * p.c2
+
+
+# Constants ------------------------------------------------------------------------------------------------------------
+def get_red_counts():
+    return [120, 185, 195, 205, 215, 280]
+
+def get_income_profile():
+    return [0.5, 1.5]

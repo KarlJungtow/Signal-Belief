@@ -4,48 +4,54 @@
 {% block title %}Treatment 3 — Signal{% endblock %}
 
 {% block content %}
-<p>Get ready to view the dot matrix. A 10-second countdown will start. The image will be shown for 6 seconds and then hidden automatically.</p>
 
-<div class="mb-3">
-  <div id="countdown" style="font-size: 1.2rem;">Countdown: {{ countdown_seconds }}</div>
+<div class="d-flex flex-column align-items-center gap-3">
+  <button type="button" class="btn btn-primary btn-lg" id="show-btn">Show me</button>
+
+  <div id="image_wrap" style="display:none; margin: 1rem 0; text-align: center;">
+    <img src="{% static image_file %}" alt="Signal image" class="img-fluid" />
+    <div id="timer" class="mt-2 lead"></div>
+  </div>
 </div>
 
-<div id="image_wrap" style="display:none; margin: 1rem 0;">
-  <img src="{% static image_file %}" alt="Signal image" class="img-fluid" />
-  <div><em>The image will hide automatically.</em></div>
+{# Hidden real next button — triggered automatically #}
+<div class="d-none">
+  {% next_button %}
 </div>
 
-<button class="btn btn-primary" id="nextbtn" disabled>
-  Continue
-</button>
+{% endblock %}
 
-
+{% block scripts %}
 <script>
-  // Disable the built-in Next so we can control enable timing
-  const realNext = document.querySelector('button.next-button') || document.querySelector('button.otree-btn-next');
-  if (realNext) { realNext.style.display = 'none'; }
+  (function () {
+    const showBtn = document.getElementById('show-btn');
+    const imgWrap = document.getElementById('image_wrap');
+    const timerEl = document.getElementById('timer');
 
-  const proxyBtn = document.getElementById('nextbtn');
-  proxyBtn.addEventListener('click', () => { if (realNext) realNext.click(); });
-
-  let countdown = {{ countdown_seconds }};
-  let showTime = {{ show_seconds }};
-  const countdownEl = document.getElementById('countdown');
-  const imgWrap = document.getElementById('image_wrap');
-
-  const tick = setInterval(() => {
-    countdown -= 1;
-    countdownEl.textContent = 'Countdown: ' + countdown;
-    if (countdown <= 0) {
-      clearInterval(tick);
-      countdownEl.style.display = 'none';
-      // Show image for 6s
+    showBtn.addEventListener('click', function () {
+      showBtn.disabled = true;
       imgWrap.style.display = 'block';
-      setTimeout(() => {
-        imgWrap.style.display = 'none';
-        proxyBtn.disabled = false; // enable continue
-      }, showTime * 1000);
-    }
-  }, 1000);
+
+      let remaining = {{ show_seconds }};
+      timerEl.textContent = `Time left: ${remaining}`;
+
+      const intervalId = setInterval(() => {
+        remaining -= 1;
+        if (remaining > 0) {
+          timerEl.textContent = `Time left: ${remaining}`;
+        } else {
+          clearInterval(intervalId);
+          // auto-advance
+          const form = document.getElementById('form');
+          if (form) {
+            form.submit();
+          } else {
+            const nextBtn = document.getElementById('otree-next-button');
+            if (nextBtn) nextBtn.click();
+          }
+        }
+      }, 1000);
+    });
+  })();
 </script>
 {% endblock %}
