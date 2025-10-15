@@ -13,7 +13,7 @@ class C(BaseConstants):
     I = 0.0
     R = 1.0 + I
 
-    PIS = [0.5, 1.5]
+    PIS = [0.5, 2]
     INCOME = [5, 15]
 
 
@@ -77,6 +77,16 @@ class Choice(Page):
         player.c2 = c2_given(player, C)
         player.u = u_given(player)
 
+class Result(Page):
+    form_model='player'
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        return {"c1" : player.c1,
+                "c2" : player.c2,
+                "u" : player.u,
+                "pi" : player.pi}
 page_sequence = [
     Choice,
+    Result
 ]
