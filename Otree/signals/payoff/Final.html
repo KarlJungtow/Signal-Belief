@@ -10,7 +10,7 @@
   <p>Your utility in that round: {{ player.u_points }}</p>
 {% else %}
   <p>The <strong>belief accuracy</strong> in that round was selected. <br>
-    You guessed {{ player.belief_raw }} red points were in the matrix, correct was {{ player.true_red_count }} <br>
+    You guessed there was a {{ player.belief_raw }}% chance that more than half of the dots are red. There were {{ player.true_red_count }} red dots <br>
     Your chance of winning  was {{ player.threshold }}</p>
   <p>Your score in that round: {{ player.belief_points }} </p>
 {% endif %}

@@ -3,25 +3,16 @@ import time
 from helper_functions import *
 
 class C(BaseConstants):
-    RED_COUNTS = get_red_counts()
-    XS = get_income_profile()
-
     NAME_IN_URL = "t0_baseline"
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 1#len(RED_COUNTS) * len(XS)
+    NUM_ROUNDS = get_round_count()
 
     # Defaults from the spec
-    Y1 = 10.0
     P1 = 1.0
     I = 0.0  # net interest
     R = 1.0 + I  # gross R
 
     SIGNAL_SHOW_SECONDS = 6
-
-    # Can be specified here; otherwise filenames like
-    # dots_{Treatment}_{NumRedDots}_{x=05/x=15} are expected
-    IMAGE_FILES = None
-
 
 class Subsession(BaseSubsession):
     pass
@@ -33,7 +24,8 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     # Round parameters
-    income_factor = models.FloatField()  # x, 0.5 or 1.5
+    y1 = models.IntegerField()
+    y2 = models.FloatField()
     red_count = models.IntegerField(default=0)  # real number of red dots
     h_true = models.FloatField()  # red_count / 400
     pi = models.FloatField()  # inflation factor: 1.5 if r > 200 else 0.5
@@ -115,7 +107,6 @@ class Signal(Page):
         return dict(
             image_file=player.image_file,
             show_seconds=C.SIGNAL_SHOW_SECONDS,
-            reds=player.red_count,
         )
 
 
@@ -142,13 +133,12 @@ class Belief(Page):
         player.belief_time_spent = round(time.time() - player.belief_time_offset, 2)
 
         # Normalize belief for storing
-        player.h_hat = float(player.belief_input_raw) / 400.0
+        player.h_hat = float(player.belief_input_raw) / 100.0
 
         # Compute implied outcomes now (hidden from subject; used in payoff stage)
         player.c2 = c2_given(player, C)
         player.u = u_given(player)
         record_main_round(player, app_label="t0_baseline")
-
 
 
 page_sequence = [

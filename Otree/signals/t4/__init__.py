@@ -1,6 +1,7 @@
 from otree.api import *
 import itertools
 import random
+import time
 from helper_functions import *
 
 doc = """
@@ -10,22 +11,18 @@ No feedback. Priors 50/50.
 
 
 class C(BaseConstants):
-    RED_COUNTS = get_red_counts()
-    XS = get_income_profile()
-
     NAME_IN_URL = 't4'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 1#len(RED_COUNTS) * len(XS)
+    NUM_ROUNDS = get_round_count()
 
     # Defaults from the spec
-    Y1 = 10.0
     P1 = 1.0
     I = 0.0  # net interest
     R = 1.0 + I  # gross R
 
     SIGNAL_SHOW_SECONDS = 6
-    # Can be specified here, otherwise filenames like dots_{Treatment}_{NumRedDots}_{a/b} are expected
-    IMAGE_FILES = None
+
+
 
 
 class Subsession(BaseSubsession):
@@ -39,7 +36,8 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     # Round parameters
     current_role = models.StringField()
-    income_factor = models.FloatField()  # 0.5 or 1.5
+    y1 = models.FloatField()
+    y2 = models.FloatField()
     red_count = models.IntegerField(default=0)  # red count
     h_true = models.FloatField()  # r/400
     pi = models.FloatField()  # inflation factor: 1.5 if r > 200 else 0.5
@@ -60,6 +58,8 @@ class Player(BasePlayer):
     u = models.FloatField()
 
     # ---- helpers per spec ----
+    belief_time_offset = models.FloatField()
+    belief_time_spent = models.FloatField()
 
 
 # -- oTree lifecycle hooks (function-based API) --
@@ -73,10 +73,11 @@ def creating_session(subsession: Subsession):
     Belief mode can be configured in SESSION_CONFIGS as 'belief_mode': 'B1' or 'B2' (default B1).
     """
     # Build 20 pairs (r, x): each r appears once with x=0.5 and once with x=1.5
-    pairs = list(itertools.product(C.RED_COUNTS, [0.5, 1.5]))
+    pairs = list(itertools.product(get_income_profile(), get_red_counts()))
+    pairs = [(y, y1) for (y1, y) in pairs]
     roles_master = ['borrower'] * 10 + ['saver'] * 10
     # Precompute a 20-item image list if explicit files not provided
-    image_files_master = synthesize_filenames(C.RED_COUNTS, C.IMAGE_FILES)
+    image_files_master = synthesize_filenames(get_red_counts(), None)
 
     # For each participant, randomize order and assign per-round parameters
     for p in subsession.get_players():
@@ -94,23 +95,24 @@ def creating_session(subsession: Subsession):
             p.participant.vars['t4_images'] = images
             p.participant.vars['t4_roles'] = roles
 
-        r, x = p.participant.vars['t4_schedule'][subsession.round_number - 1]
+        r, y1 = p.participant.vars['t4_schedule'][subsession.round_number - 1]
         image_file = p.participant.vars['t4_images'][subsession.round_number - 1]
         current_role = p.participant.vars['t4_roles'][subsession.round_number - 1]
 
-        p.income_factor = float(x)
-        p.r = int(r)
-        p.h_true = p.r / 400.0
-        p.pi = 1.5 if p.r > 200 else 0.5
+        p.y1 = float(y1)
+        p.y2 = 15 if p.y1==5 else 5
+        p.red_count = int(r)
+        p.h_true = 1 if p.red_count > 200 else 0
+        p.pi = 2 if p.red_count > 200 else 0.5
         p.p2 = p.pi * C.P1
         p.image_file = image_file
         p.current_role = current_role
-        p.c1_max = calc_c1_max(p, C)
+        p.c1_max = calc_c1_max(p)
 
         if p.current_role == 'borrower':
-            p.c1 = C.Y1 - 3
+            p.c1 = p.y1 - 3
         else:
-            p.c1 = C.Y1 + 3
+            p.c1 = p.y1 + 3
 
 
 # ------------- Pages -------------
@@ -125,18 +127,17 @@ class IncomeInfo(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
-        # Build a payoff table like the document’s panel: c1 = 1..20; columns for π=0.5 and π=1.5
         return dict(
-            y1=C.Y1,
+            y1=player.y1,
             p1=C.P1,
             R=C.R,
-            x=player.income_factor,
-            y2_pi1=player.income_factor * C.Y1,
+            y2=player.y2,
             c1=player.c1,
             table_rows=build_payoff_table(
-                player.income_factor, C.P1, C.Y1, C.R, player.c1_max
+                player.y1, player.y2, C.P1, C.R, player.c1_max
             ),
         )
+        # Build a payoff table like the document’s panel: c1 = 1..20; columns for π=0.5 and π=1.5
 
 
 class Signal(Page):
@@ -153,6 +154,9 @@ class Belief(Page):
     form_fields = ['belief_input_raw']
 
     @staticmethod
+    def vars_for_template(player: Player):
+        player.belief_time_offset = time.time()
+    @staticmethod
     def error_message(player: Player, values):
         v = values.get('belief_input_raw')
         if v is None:
@@ -162,8 +166,9 @@ class Belief(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
+        player.belief_time_spent = round(time.time() - player.belief_time_offset, 2)
         # Normalize belief for storing
-        player.h_hat = float(player.belief_input_raw) / 400.0
+        player.h_hat = float(player.belief_input_raw) / 100.0
 
         # Compute implied outcomes now (hidden from subject; used in payoff stage)
         player.c2 = c2_given(player, C)

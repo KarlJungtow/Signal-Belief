@@ -9,13 +9,12 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 4
 
-    Y1 = 10.0
     P1 = 1.0
     I = 0.0
     R = 1.0 + I
 
     PIS = [0.5, 1.5]
-    XS = [0.5, 1.5]
+    INCOME = [5, 15]
 
 
 class Subsession(BaseSubsession):
@@ -23,20 +22,21 @@ class Subsession(BaseSubsession):
 
 
 def creating_session(subsession: Subsession):
-    combos = list(itertools.product(C.PIS, C.XS))
+    combos = list(itertools.product(C.PIS, C.INCOME))
     for p in subsession.get_players():
         if subsession.round_number == 1:
             schedule = combos[:]
             random.shuffle(schedule)
             p.participant.vars['training_schedule'] = schedule
 
-        pi, income_factor = p.participant.vars['training_schedule'][
+        pi, y1 = p.participant.vars['training_schedule'][
             subsession.round_number - 1
         ]
         p.pi = pi
-        p.income_factor = income_factor
+        p.y1 = y1
+        p.y2 = 15 if y1 == 5 else 5
         p.p2 = pi * C.P1
-        p.c1_max = calc_c1_max(p, C)
+        p.c1_max = calc_c1_max(p)
 
 
 class Group(BaseGroup):
@@ -45,7 +45,8 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     pi = models.FloatField()
-    income_factor = models.FloatField()
+    y1 = models.FloatField()
+    y2 = models.FloatField()
     p2 = models.FloatField()
     c1_max = models.FloatField()
 

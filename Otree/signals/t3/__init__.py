@@ -1,23 +1,17 @@
 from otree.api import *
 from helper_functions import *
-
+import time
 class C(BaseConstants):
-    RED_COUNTS = get_red_counts()
-    XS = get_income_profile()
-
     NAME_IN_URL = 't3'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 1#len(RED_COUNTS) * len(XS)
+    NUM_ROUNDS = get_round_count()
 
     # Defaults from the spec
-    Y1 = 10.0
     P1 = 1.0
     I = 0.0  # net interest
     R = 1.0 + I  # gross R
 
     SIGNAL_SHOW_SECONDS = 6
-    # Can be specified here, otherwise filenames like dots_{Treatment}_{NumRedDots}_{a/b} are expected
-    IMAGE_FILES = None
 
 
 class Subsession(BaseSubsession):
@@ -30,7 +24,8 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     # Round parameters
-    income_factor = models.FloatField()  # 0.5 or 1.5
+    y1 = models.FloatField()
+    y2 = models.FloatField()
     red_count = models.IntegerField(default=0)  # red count
     h_true = models.FloatField()  # r/400
     pi = models.FloatField()  # inflation factor: 1.5 if r > 200 else 0.5
@@ -50,6 +45,8 @@ class Player(BasePlayer):
     c2 = models.FloatField()
     u = models.FloatField()
 
+    belief_choice_time_offset = models.FloatField()
+    belief_choice_time_spent = models.FloatField()
 
 # -- oTree lifecycle hooks (function-based API) --
 def creating_session(subsession: Subsession):
@@ -66,6 +63,12 @@ def creating_session(subsession: Subsession):
 
 # ------------- Pages -------------
 class Explanation(Page):
+    @staticmethod
+    def is_displayed(player):
+        return player.round_number == 1
+
+
+class SyncGate(WaitPage):
     @staticmethod
     def is_displayed(player):
         return player.round_number == 1
@@ -94,6 +97,7 @@ class ChoiceBelief(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
+        player.belief_choice_time_offset = time.time()
         return build_vars_for_template_choice(player, C)
 
     @staticmethod
@@ -112,8 +116,9 @@ class ChoiceBelief(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
+        player.belief_choice_time_spent = round(time.time() - player.belief_choice_time_offset, 2)
         # Normalize belief for storing
-        player.h_hat = float(player.belief_input_raw) / 400.0
+        player.h_hat = float(player.belief_input_raw) / 100.0
 
         # Compute implied outcomes now (hidden from subject; used in payoff stage)
         player.c2 = c2_given(player, C)
@@ -121,10 +126,6 @@ class ChoiceBelief(Page):
         record_main_round(player, app_label='t3')
 
 
-class SyncGate(WaitPage):
-    @staticmethod
-    def is_displayed(player):
-        return player.round_number == C.NUM_ROUNDS
 
 
 page_sequence = [

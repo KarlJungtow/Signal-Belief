@@ -6,16 +6,15 @@
 {% block content %}
 <p>
   In the baseline treatment, you choose <strong>c₁</strong> first. Your prior is
-  <strong>50/50</strong> that π = 0.5 or π = 1.5. There is <strong>no feedback</strong>.
+  <strong>50/50</strong> that π = 0.5 or π = 2. There is <strong>no feedback</strong>.
 </p>
 
 <div class="card mb-3">
   <div class="card-body">
     <ul>
       <li>Current income: <strong>y₁ = {{ y1 }}</strong></li>
+      <li>Future income: <strong>y₂ = {{ y2 }}</strong></li>
       <li>Price now: <strong>p₁ = {{ p1 }}</strong></li>
-      <li>Income profile: <strong>x = {{ x }}</strong> (0.5 = decreasing, 1.5 = increasing)</li>
-      <li>If π = 1 ⇒ y₂ = <strong>{{ y2_pi1 }}</strong>
     </ul>
   </div>
 </div>
@@ -79,7 +78,7 @@
   const Y1 = {{ y1 }};
   const P1 = {{ p1 }};
   const R  = {{ R }};
-  const X  = {{ x }};
+  const Y2  = {{ y2 }};
   const C1_MAX = {{ c1_max }};
 
   const slider = document.getElementById('c1_slider');
@@ -88,10 +87,9 @@
   const c2_15  = document.getElementById('c2_15');
 
   function c2_given(c1, pi) {
-    // c2 = (pi*x*y1 + R*(y1 - p1*c1)) / (pi*p1)
     const p2 = pi * P1;
     const s  = Y1 - P1 * c1;
-    return (pi * X * Y1 + R * s) / p2;
+    return Y2 + (R * s) / p2;
   }
 
   function fmt(v) {

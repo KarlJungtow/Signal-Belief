@@ -6,41 +6,43 @@
 {% block content %}
 <p>
   In the baseline treatment, you choose <strong>c₁</strong> first. Your prior is
-  <strong>50/50</strong> that π = 0.5 or π = 1.5. There is <strong>no feedback</strong>.
+  <strong>50/50</strong> that π = 0.5 or π = 2. There is <strong>no feedback</strong>.
 </p>
 
 <div class="card mb-3">
   <div class="card-body">
     <ul>
       <li>Current income: <strong>y₁ = {{ y1 }}</strong></li>
+      <li>Future income: <strong>y₂ = {{ y2 }}</strong></li>
       <li>Price now: <strong>p₁ = {{ p1 }}</strong></li>
-      <li>Income profile: <strong>x = {{ x }}</strong> (0.5 = decreasing, 1.5 = increasing)</li>
-      <li>If π = 1 ⇒ y₂ = <strong>{{ y2_pi1 }}</strong>
     </ul>
   </div>
 </div>
 
-<<div class="card mb-3">
+<div class="card mb-3">
   <div class="card-body">
     <p>Choose your period-1 consumption <em>c₁</em>. Feasibility requires <strong>1 ≤ c₁ ≤ {{ c1_max }}</strong>.</p>
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <span>1</span>
-      <input type="range" name="c1" id="c1_slider"
-             min="1" max="{{ c1_max }}" step="1"
-             value="{{ c1_max }}"
-             oninput="c1_out.value=this.value" class="form-range"
-             aria-label="a"
-      />
-      <span>{{ c1_max }}</span>
-    </div>
-    <div class="mt-2">c₁: <output id="c1_out">{{ c1_max }}</output></div>
+<!-- Slider with min/max labels on the same line -->
+<div class="d-flex align-items-center gap-2">
+  <span class="text-muted small" aria-hidden="true">1</span>
+
+  <input type="range" name="c1" id="c1_slider"
+         min="1" max="{{ c1_max }}" step="1"
+         value="{{ c1_max }}"
+         oninput="c1_out.value=this.value" class="form-range flex-fill"
+         aria-describedby="c1_min_label c1_max_label" />
+
+  <span class="text-muted small" aria-hidden="true">{{ c1_max }}</span>
+</div>
+
+<div class="mt-2">c₁: <output id="c1_out">{{ c1_max }}</output></div>
+
   </div>
 </div>
 <div class="mt-2">
   c₂ if π=0.5: <span id="c2_05">—</span> &nbsp;&nbsp; | &nbsp;&nbsp;
-  c₂ if π=1.5: <span id="c2_15">—</span>
+  c₂ if π=2: <span id="c2_15">—</span>
 </div>
-<div class="mt-1 small text-muted">We show “—” if c₂ &lt; 1 (infeasible).</div>
 
 <div class="card mb-3">
   <div class="card-body">
@@ -51,7 +53,7 @@
         <tr>
           <th style="width:10%">c₁</th>
           <th>u at π = 0.5</th>
-          <th>u at π = 1.5</th>
+          <th>u at π = 2</th>
         </tr>
       </thead>
       <tbody>
@@ -74,9 +76,9 @@
 <script>
   // constants from server (defaults from the spec)
   const Y1 = {{ y1 }};
+  const Y2  = {{ y2 }};
   const P1 = {{ p1 }};
   const R  = {{ R }};
-  const X  = {{ x }};
   const C1_MAX = {{ c1_max }};
 
   const slider = document.getElementById('c1_slider');
@@ -85,10 +87,9 @@
   const c2_15  = document.getElementById('c2_15');
 
   function c2_given(c1, pi) {
-    // c2 = (pi*x*y1 + R*(y1 - p1*c1)) / (pi*p1)
     const p2 = pi * P1;
     const s  = Y1 - P1 * c1;
-    return (pi * X * Y1 + R * s) / p2;
+    return Y2 + (R * s) / p2;
   }
 
   function fmt(v) {
