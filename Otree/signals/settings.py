@@ -5,7 +5,7 @@ SESSION_CONFIGS = [
         name='signals',
         app_sequence=[
 
-                    'intro',
+                    #'intro',
                     'training',
                     't0_baseline',
                     't1',
