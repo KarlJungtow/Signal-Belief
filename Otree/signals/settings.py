@@ -5,12 +5,12 @@ SESSION_CONFIGS = [
         name='signals',
         app_sequence=[
 
-                    #'intro',
-                    #'training',
+                    'intro',
+                    'training',
                     't0_baseline',
-                    #'t1',
-                    #'t3',
-                    #'t4',
+                    't1',
+                    't3',
+                    't4',
                     'payoff'
             ],
         num_demo_participants=1,
