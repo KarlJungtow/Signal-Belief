@@ -1,0 +1,11 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}Feedback Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}{% endblock %}
+
+{% block content %}
+You chose to consume {{ c1 }} units. The Inflation was {{ pi }}. Therefore your round two consumption was {{ c2 }} units. <br>
+Your realized utility is {{c1}} * {{ c2 }} = {{ u }}.
+
+{{ next_button }}
+{{endblock}}

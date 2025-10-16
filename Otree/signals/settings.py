@@ -7,11 +7,11 @@ SESSION_CONFIGS = [
 
                     'intro',
                     'training',
-                    't0_baseline',
-                    't1',
-                    't3',
-                    't4',
-                    'payoff'
+                    #'t0_baseline',
+                    #'t1',
+                    #'t3',
+                    #'t4',
+                    #'payoff'
             ],
         num_demo_participants=1,
         showup_fee=4.0,

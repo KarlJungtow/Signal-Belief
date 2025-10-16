@@ -110,9 +110,9 @@ def creating_session(subsession: Subsession):
         p.c1_max = calc_c1_max(p)
 
         if p.current_role == 'borrower':
-            p.c1 = p.y1 - 3
-        else:
             p.c1 = p.y1 + 3
+        else:
+            p.c1 = p.y1 - 3
 
 
 # ------------- Pages -------------
