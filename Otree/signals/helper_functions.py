@@ -151,7 +151,7 @@ def run_binary_lottery(chosen, prize: float = 100):
     h_hat = float(chosen.get("h_hat") or 0.0)
     h_true = 1 if float(chosen.get("h_true") or 0.0) > 0.5 else 0
 
-    threshold = max(0.0, 1.0 - abs(h_hat - h_true))
+    threshold = max(0.0, 1.0 - abs(h_hat - h_true)**2)
     u = random.random()
 
     if u <= threshold:
@@ -162,7 +162,7 @@ def run_binary_lottery(chosen, prize: float = 100):
 
 # ---- helpers per spec ----
 def calc_c1_max(p) -> float:
-    return floor(p.y1 + p.y2 / 2) # TODO: Price HIGH
+    return floor(p.y1 + p.y2 / 2 - 0.5) # TODO: Price HIGH
 
 
 def c2_given(p, C) -> float:

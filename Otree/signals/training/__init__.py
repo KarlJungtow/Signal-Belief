@@ -7,13 +7,13 @@ from helper_functions import *
 class C(BaseConstants):
     NAME_IN_URL = 'training'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 4
+    NUM_ROUNDS = 2
 
     P1 = 1.0
     I = 0.0
     R = 1.0 + I
 
-    PIS = [0.5, 2]
+    PIS = [2]
     INCOME = [5, 15]
 
 
@@ -84,6 +84,8 @@ class Result(Page):
     def vars_for_template(player: Player):
         return {"c1" : player.c1,
                 "c2" : player.c2,
+                "c2_low" : calc_c2(player.y1, player.y2, C.P1, 0.5, player.c1, C.R),
+                "u_low" : (player.c1 * calc_c2(player.y1, player.y2, 1, 0.5, player.c1, C.R)),
                 "u" : player.u,
                 "pi" : player.pi}
 page_sequence = [

@@ -4,8 +4,12 @@
 {% block title %}Feedback Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}{% endblock %}
 
 {% block content %}
-You chose to consume {{ c1 }} units. The Inflation was {{ pi }}. Therefore your round two consumption was {{ c2 }} units. <br>
-Your realized utility is {{c1}} * {{ c2 }} = {{ u }}.
+You chose to consume {{ c1 }} units today. It ended up being the high-price state.
+The price of the consumption good doubled. Consequently, tomorrow's consumption will be {{ c2 }} units.
+According to this scenario, your payoff for this round is {{ u }} ({{ c1 }} x {{ c2 }} units).
+
+Had it been the low state, the price would have halved and you would have consumed {{ c2_low }} units tomorrow.
+In this scenario, your payoff would have been {{ u_low }} points ({{ c1 }} x {{ c2_low }})."
 
 {{ next_button }}
 {{endblock}}
