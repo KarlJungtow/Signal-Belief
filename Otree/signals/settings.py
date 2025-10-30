@@ -5,10 +5,10 @@ SESSION_CONFIGS = [
         name='signals',
         app_sequence=[
 
-                    'intro',
-                    'training',
-                    't1',
-                    't0_baseline',
+                    #'intro',
+                    #'training',
+                    #'t1',
+                    #'t0_baseline',
                     't3',
                     #'t4', T4 is off
                     'payoff'

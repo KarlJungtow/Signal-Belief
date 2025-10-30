@@ -27,7 +27,7 @@
   <span class="text-muted small" aria-hidden="true">1</span>
 
   <input type="range" name="c1" id="c1_slider"
-         min="1" max="{{ c1_max }}" step="1"
+         min="1" max="{{ c1_max }}" step="0.1"
          value="{{ c1_max }}"
          oninput="c1_out.value=this.value" class="form-range flex-fill"
          aria-describedby="c1_min_label c1_max_label" />
@@ -40,11 +40,9 @@
   </div>
 </div>
 <div class="mt-2">
-  c₂ if π=0.5: <span id="c2_05">—</span>
-  <span class="text-muted"> (u = <span id="u_05">—</span>)</span>
-  &nbsp;&nbsp; | &nbsp;&nbsp;
-  c₂ if π=2: <span id="c2_15">—</span>
-  <span class="text-muted"> (u = <span id="u_15">—</span>)</span>
+  If the price halves, round two consumption is <span id="c2_05">—</span> units and payoff is <span id="u_05">—</span> points
+  <br>
+  If the price doubles, round two consumption is <span id="c2_15">—</span> units and payoff is <span id="u_15">—</span> points.
 </div>
 
 
@@ -130,8 +128,8 @@ function update() {
   c2_15.textContent = ok15 ? fmt(v15) : '—';
 
   // Use the same c2s and the current c1 to print "c1 × c2 = product"
-  u_05.textContent = ok05 ? `${fmt(c1)} × ${fmt(v05)} = ${fmt(c1 * v05)}` : '—';
-  u_15.textContent = ok15 ? `${fmt(c1)} × ${fmt(v15)} = ${fmt(c1 * v15)}` : '—';
+  u_05.textContent = ok05 ? `${fmt(c1 * v05)}` : '—';
+  u_15.textContent = ok15 ? `${fmt(c1 * v15)}` : '—';
   highlightRow(c1);
 }
 
