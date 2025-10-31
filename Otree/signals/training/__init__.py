@@ -83,10 +83,10 @@ class Result(Page):
     @staticmethod
     def vars_for_template(player: Player):
         return {"c1" : player.c1,
-                "c2" : player.c2,
-                "c2_low" : calc_c2(player.y1, player.y2, C.P1, 0.5, player.c1, C.R),
-                "u_low" : (player.c1 * calc_c2(player.y1, player.y2, 1, 0.5, player.c1, C.R)),
-                "u" : player.u,
+                "c2" :  round(player.c2,2),
+                "c2_low" :  round(calc_c2(player.y1, player.y2, C.P1, 0.5, player.c1, C.R),2),
+                "u_low" : round((player.c1 * calc_c2(player.y1, player.y2, 1, 0.5, player.c1, C.R)),2),
+                "u" : round(player.u, 2),
                 "pi" : player.pi}
 page_sequence = [
     Choice,

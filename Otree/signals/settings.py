@@ -6,9 +6,9 @@ SESSION_CONFIGS = [
         app_sequence=[
 
                     #'intro',
-                    #'training',
-                    #'t1',
-                    #'t0_baseline',
+                    'training',
+                    't1',
+                    't0_baseline',
                     't3',
                     #'t4', T4 is off
                     'payoff'

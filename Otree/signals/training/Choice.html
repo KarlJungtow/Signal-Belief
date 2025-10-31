@@ -4,6 +4,28 @@
 {% block title %}Training Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}{% endblock %}
 
 {% block content %}
+<style>
+  /* === Compact + left-aligned utilities table === */
+  .utility-table-wrap {
+    float: left;
+    width: auto;
+    margin: 0 1rem 1rem 0; /* small gap to right and bottom */
+  }
+  #utility_table.table {
+    width: auto;           /* shrink to content width */
+    font-size: 0.9rem;     /* slightly smaller text */
+    margin-bottom: 0;      /* remove default bottom margin */
+  }
+  #utility_table.table th,
+  #utility_table.table td {
+    padding: .25rem .5rem; /* tighter cells */
+    white-space: nowrap;   /* keep values on one line */
+  }
+  @media (max-width: 576px) {
+    #utility_table.table { font-size: 0.85rem; }
+  }
+</style>
+
 <p>
   In the baseline treatment, you choose <strong>c₁</strong> first. Your prior is
   <strong>50/50</strong> that π = 0.5 or π = 2. <strong>During Training you will receive feedback</strong>
@@ -22,12 +44,13 @@
 <div class="card mb-3">
   <div class="card-body">
     <p>Choose your period-1 consumption <em>c₁</em>. Feasibility requires <strong>1 ≤ c₁ ≤ {{ c1_max }}</strong>.</p>
+
     <!-- Slider with min/max labels on the same line -->
     <div class="d-flex align-items-center gap-2">
       <span class="text-muted small" aria-hidden="true">1</span>
 
       <input type="range" name="c1" id="c1_slider"
-             min="1" max="{{ c1_max }}" step="1"
+             min="1" max="{{ c1_max }}" step="0.1"
              value="{{ c1_max }}"
              oninput="c1_out.value=this.value" class="form-range flex-fill"
              aria-describedby="c1_min_label c1_max_label" />
@@ -40,34 +63,38 @@
 </div>
 
 <div class="mt-2">
-  c₂ if π=0.5: <span id="c2_05">—</span> &nbsp;&nbsp; | &nbsp;&nbsp;
-  c₂ if π=1.5: <span id="c2_15">—</span>
+  If the price halves, round two consumption is <span id="c2_05">—</span> units and payoff is <span id="u_05">—</span> points.
+  <br>
+  If the price doubles, round two consumption is <span id="c2_15">—</span> units and payoff is <span id="u_15">—</span> points.
 </div>
 
 <div class="card mb-3">
   <div class="card-body">
     <p><strong>Utility reference (not feedback):</strong> u(c₁,c₂) = c₁ · c₂</p>
-    <p>Utilities for integer c₁ (1–20) under both possible π values. “—” marks infeasible (c₂ &lt; 1).</p>
-    <!-- NEW: give the table an id so we can target it -->
-    <table id="utility_table" class="table table-sm table-bordered align-middle">
-      <thead>
-        <tr>
-          <th style="width:10%">c₁</th>
-          <th>u at π = 0.5</th>
-          <th>u at π = 2</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in table_rows %}
-        <!-- NEW: add data-c1 so we know which row corresponds to each c1 -->
-        <tr data-c1="{{ row.c1 }}">
-          <td>{{ row.c1 }}</td>
-          <td>{% if row.infeasible05 %}—{% else %}{{ row.u05 }}{% endif %}</td>
-          <td>{% if row.infeasible15 %}—{% else %}{{ row.u15 }}{% endif %}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <p>Utilities for c₁</p>
+
+    <!-- Compact, left-aligned table -->
+    <div class="utility-table-wrap">
+      <table id="utility_table" class="table table-sm table-bordered align-middle w-auto">
+        <thead>
+          <tr>
+            <th style="width:10%">c₁</th>
+            <th class="text-end">u at π = 0.5</th>
+            <th class="text-end">u at π = 2</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in table_rows %}
+          <tr data-c1="{{ row.c1 }}">
+            <td class="text-end">{{ row.c1 }}</td>
+            <td class="text-end">{% if row.infeasible05 %}—{% else %}{{ row.u05 }}{% endif %}</td>
+            <td class="text-end">{% if row.infeasible15 %}—{% else %}{{ row.u15 }}{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
   </div>
 </div>
 
@@ -76,19 +103,17 @@
 
 {% block scripts %}
 <script>
-  // constants from server (defaults from the spec)
+  // constants from server
   const Y1 = {{ y1 }};
+  const Y2  = {{ y2 }};
   const P1 = {{ p1 }};
   const R  = {{ R }};
-  const Y2 = {{ y2 }};
   const C1_MAX = {{ c1_max }};
 
   const slider = document.getElementById('c1_slider');
   const outC1  = document.getElementById('c1_out');
   const c2_05  = document.getElementById('c2_05');
   const c2_15  = document.getElementById('c2_15');
-
-  // NEW: cache the table rows that have a data-c1 attribute
   const utilRows = Array.from(document.querySelectorAll('#utility_table tbody tr'));
 
   function c2_given(c1, pi) {
@@ -101,31 +126,36 @@
     return Number.isFinite(v) ? v.toFixed(2) : '—';
   }
 
-  // NEW: highlight the row for the current c1 using Bootstrap's yellow class
   function highlightRow(c1) {
-    const c1Int = Math.round(c1); // slider step is 1, but round just in case
+    const c1Int = Math.round(c1);
     utilRows.forEach(tr => {
       const isMatch = parseInt(tr.dataset.c1, 10) === c1Int;
-      tr.classList.toggle('table-warning', isMatch); // yellow background
+      tr.classList.toggle('table-warning', isMatch);
     });
   }
 
+  const u_05  = document.getElementById('u_05');
+  const u_15  = document.getElementById('u_15');
+
   function update() {
-    // keep slider within [1, C1_MAX] just in case
     let c1 = Math.min(Math.max(parseFloat(slider.value || 1), 1), C1_MAX);
     outC1.value = c1.toFixed(2);
 
     const v05 = c2_given(c1, 0.5);
-    const v15 = c2_given(c1, 1.5);
+    const v15 = c2_given(c1, 2);
 
-    c2_05.textContent = (v05 >= 1) ? fmt(v05) : '—';
-    c2_15.textContent = (v15 >= 1) ? fmt(v15) : '—';
+    const ok05 = (v05 >= 1);
+    const ok15 = (v15 >= 1);
 
-    // NEW: update the table highlight
+    c2_05.textContent = ok05 ? fmt(v05) : '—';
+    c2_15.textContent = ok15 ? fmt(v15) : '—';
+
+    u_05.textContent = ok05 ? `${fmt(c1 * v05)}` : '—';
+    u_15.textContent = ok15 ? `${fmt(c1 * v15)}` : '—';
+
     highlightRow(c1);
   }
 
-  // initial paint + on input
   update();
   slider.addEventListener('input', update);
 </script>
