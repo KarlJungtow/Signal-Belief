@@ -10,31 +10,55 @@ class Price(Enum):
 
 
 # --- template helpers -----------------------------------------------------------------------------------------------
-def create_session(subsession, C, treatment):
-    # Build 20 pairs (r, x): each r appears once with x=0.5 and once with x=2
-    pairs = list(itertools.product(get_income_profile(), get_red_counts()))
+def create_pairs(red_counts):
+    pairs = list(itertools.product(get_income_profile(), red_counts))
     pairs = [(y, y1) for (y1, y) in pairs]
-    # Precompute a 20-item image list if explicit files not provided
-    # Replace with C.IMAGE_FILES if custom file names are necessary
-    image_files_master = synthesize_filenames(get_red_counts(), None)
+    return pairs
 
+def create_schedule(player, treatment):
+    if "num_obvious_blue" not in player.participant.vars:
+        player.participant.vars["num_obvious_blue"] = 0
+    if "num_obvious_red" not in player.participant.vars:
+        player.participant.vars["num_obvious_red"] = 0
+
+    # Generate two random obvious red counts. Check, if participant saw the same redcount twice and will see it a third
+    # time this round. Set the last image to be the other one
+    # NOTE: Will be shuffled
+    obvious_red_counts = get_obvious_red_counts()
+    if player.participant.vars["num_obvious_blue"] >= 2 and obvious_red_counts[0] == 120:
+        obvious_red_counts[1] = 280
+    if player.participant.vars["num_obvious_red"] >= 2 and obvious_red_counts[0] == 280:
+        obvious_red_counts[1] = 120
+
+    player.participant.vars["num_obvious_blue"] += obvious_red_counts.count(120)
+    player.participant.vars["num_obvious_red"] += obvious_red_counts.count(280)
+
+    # Pair all red counts with the income profiles
+    red_counts = get_red_counts() + obvious_red_counts
+    pairs = create_pairs(red_counts)
+    image_files_master = synthesize_filenames(red_counts, treatment)
+
+    schedule = pairs[:]
+    images = image_files_master[:]
+
+    #
+    combined = list(zip(schedule, images))
+    random.shuffle(combined)
+
+    schedule, images = zip(*combined)
+    schedule = list(schedule)
+    images = list(images)
+
+    player.participant.vars[f"{treatment}_schedule"] = schedule
+    player.participant.vars[f"{treatment}_images"] = images
+
+
+def create_session(subsession, C, treatment):
     # For each participant, randomize order and assign per-round parameters
     for p in subsession.get_players():
         # Shuffle pairs in the first round randomly, different for every player
         if subsession.round_number == 1:
-            schedule = pairs[:]
-            images = image_files_master[:]
-            # Combine them into tuples and shuffle together
-            combined = list(zip(schedule, images))
-            random.shuffle(combined)
-
-            # Unzip back into two lists
-            schedule, images = zip(*combined)
-            schedule = list(schedule)
-            images = list(images)
-
-            p.participant.vars[f"{treatment}_schedule"] = schedule
-            p.participant.vars[f"{treatment}_images"] = images
+            create_schedule(p, treatment)
 
         r, y1 = p.participant.vars[f"{treatment}_schedule"][subsession.round_number - 1]
         image_file = p.participant.vars[f"{treatment}_images"][subsession.round_number - 1]
@@ -100,20 +124,26 @@ def build_payoff_table(y1, y2, p1, R, c1_max):
     return rows
 
 
-def synthesize_filenames(red_count, file_names=None):
-    if file_names is None:
-        # Two variants per red count
-        synthesized = []
+def synthesize_filenames(red_count, treatment):
+    def generate_block(x):
+        seen = {120: False, 280: False}
+        names = []
+
         for r in red_count:
-            synthesized.append(f"dots_T0_{r}_x1.png")
-        for r in red_count:
-            synthesized.append(f"dots_T0_{r}_x2.png")
-        return synthesized
-    else:
-        if len(file_names) != 20:
-            return synthesize_filenames(red_count)
-        else:
-            return file_names
+            if r in seen:
+                suffix = "a" if not seen[r] else "b"
+                seen[r] = True
+                names.append(f"dots_{treatment}_{r}_{x}_{suffix}.png")
+            else:
+                names.append(f"dots_{treatment}_{r}_{x}.png")
+
+        return names
+
+    block1 = generate_block("x1")
+    block2 = generate_block("x2")
+
+    return block1 + block2
+
 
 
 # helper_functions.py
@@ -167,24 +197,29 @@ def calc_c1_max(p) -> float:
 
 def c2_given(p, C) -> float:
     return calc_c2(p.y1, p.y2, C.P1, p.p2, p.c1, C.R)
-    # s = p.y1 - C.P1 * float(p.c1)
-    # return p.y2 + ((C.R * s) / p.p2)
 
 def calc_c2(y1, y2, p1, p2, c1, R):
     s = y1 - p1*c1
     return y2 + (R*s)/p2
+
 def u_given(p) -> float:
     return float(p.c1) * p.c2
 
 
 # Constants ------------------------------------------------------------------------------------------------------------
 def get_red_counts():
-    return [120, 185, 195, 205, 215, 280]
+    return [185, 195, 205, 215]
 
+def get_obvious_red_counts():
+    obvious_red_counts = [120, 120, 280, 280]
+    random.shuffle(obvious_red_counts)
+    return obvious_red_counts[:2]
 
 def get_income_profile():
     return [5, 15]
 
-
 def get_round_count():
     return 1#len(get_red_counts() * len(get_income_profile()))
+
+if __name__ == '__main__':
+    print(synthesize_filenames(get_red_counts() + get_obvious_red_counts(), "T0"))

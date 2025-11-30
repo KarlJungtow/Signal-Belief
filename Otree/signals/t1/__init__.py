@@ -65,7 +65,7 @@ def creating_session(subsession: Subsession):
     Belief mode can be configured in SESSION_CONFIGS as 'belief_mode': 'B1' or 'B2'
     (default B1).
     """
-    create_session(subsession, C, "t1")
+    create_session(subsession, C, "T0")
 
 
 # ------------- Pages -------------

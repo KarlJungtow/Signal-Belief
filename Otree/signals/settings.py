@@ -5,7 +5,7 @@ SESSION_CONFIGS = [
         name='signals',
         app_sequence=[
 
-                    #'intro',
+                    'intro',
                     #'training',
                     't1',
                     #'t0_baseline',
@@ -30,7 +30,7 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=0.2, participation_fee=4.00, doc=""
 )
 
-PARTICIPANT_FIELDS = []
+PARTICIPANT_FIELDS = ["num_obvious_blue", "num_obvious_red"]
 SESSION_FIELDS = []
 
 # ISO-639 code
