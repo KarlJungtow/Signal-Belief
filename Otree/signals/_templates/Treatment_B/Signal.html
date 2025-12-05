@@ -1,7 +1,7 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Treatment 3 — Signal{% endblock %}
+{% block title %}Treatment 2 — Signal{% endblock %}
 
 {% block content %}
 
@@ -29,7 +29,7 @@
     const timerEl = document.getElementById('timer');
 
     showBtn.addEventListener('click', function () {
-      showBtn.disabled = true;
+      showBtn.style.display = 'none';
       imgWrap.style.display = 'block';
 
       let remaining = {{ show_seconds }};

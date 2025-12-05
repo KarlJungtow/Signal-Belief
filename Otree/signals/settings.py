@@ -6,15 +6,15 @@ SESSION_CONFIGS = [
         app_sequence=[
 
                     #'intro',
-                    'training',
+                    #'training',
                     #'Treatment_A',
                     #'Treatment_C',
-                    #'Treatment_B',
-                    #'post_questionnaire',
-                    #'payoff'
+                    'Treatment_B',
+                    'post_questionnaire',
+                    'payoff'
             ],
         num_demo_participants=1,
-        showup_fee=4.0,
+        showup_fee=7.0,
         conversion_rate=0.1,
         binary_lotterie_prize=100,
     ),

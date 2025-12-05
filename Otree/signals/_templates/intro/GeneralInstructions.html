@@ -4,6 +4,15 @@
 {% block title %}Instructions{% endblock %}
 
 {% block content %}
+<html>
+<head>
+    <style>
+        .center {
+            margin: auto;
+            width:400px;
+        }
+    </style>
+</head>
 
 <p>
     This study is composed of three parts. In each part you participate in 12 rounds of decision-making. In each round, you will
@@ -123,8 +132,11 @@
     This hint consists of a graph containing 400 red and blue dots. The figure below shows an example. Every round, there will be a
     different hint graph.
 </p>
+<div class="center">
+    <img src="{% static 'dots_A_120_x1_a.png' %}" alt="Example hint" width="100%">
+</div>
 
-<p><em>Figure: Example hint.</em></p>
+<p class="center"><em>Figure: Example hint.</em></p>
 
 <ul>
     <li>If a majority of the dots (&gt; 200) are colored blue, the price level is low: <em>p2 = 0.5</em>.</li>

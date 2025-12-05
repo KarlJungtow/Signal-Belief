@@ -1,7 +1,7 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Baseline — Choice (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
+{% block title %}Part 1 — Choice (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
 
 {% block content %}
 <style>
@@ -21,11 +21,6 @@
   }
 </style>
 
-<p>
-  In the baseline treatment, you choose <strong>c<sub>1</sub></strong> first. Your prior is
-  <strong>50/50</strong> that π = 0.5 or π = 2. There is <strong>no feedback</strong>.
-</p>
-
 <!-- SINGLE CARD: income (left) + table (right) + slider area full width below -->
 <div class="card mb-3">
   <div class="card-body">
@@ -44,8 +39,8 @@
           Feasibility requires <strong>1 ≤ c<sub>1</sub> ≤ {{ c1_max }}</strong>.
         </p>
         <p class="mb-0">
-          In this round, you just stated a probability of
-          <strong>{{ belief }} %</strong> for P<sub>2</sub> = 2.
+          In this round, you just stated a probability of  <br>
+          <strong>{{ belief }} %</strong> to P<sub>2</sub>=2 is
         </p>
       </div>
 
@@ -78,27 +73,31 @@
 
     <hr>
 
-    <!-- Full-width area BELOW both income + table: slider, box, payoffs -->
-    <p>Choose your period-1 consumption c<sub>1</sub>:</p>
+<hr>
 
-    <!-- Slider with min/max labels on the same line -->
+<p>Choose your period-1 consumption c<sub>1</sub>:</p>
+
+<!-- Slider -->
+<div class="d-flex align-items-center gap-2">
+  <span class="text-muted small" aria-hidden="true">1</span>
+
+  <input
+    type="range"
+    name="c1"
+    id="c1_slider"
+    min="1" max="{{ c1_max }}" step="0.1"
+    value="{{ c1_max }}"
+    class="form-range flex-fill"
+  />
+
+  <span class="text-muted small" aria-hidden="true">{{ c1_max }}</span>
+</div>
+
+<div class="row align-items-start mt-3">
+
+  <!-- Enter c1 box (column 1) -->
+  <div class="col-4">
     <div class="d-flex align-items-center gap-2">
-      <span class="text-muted small" aria-hidden="true">1</span>
-
-      <input
-        type="range"
-        name="c1"
-        id="c1_slider"
-        min="1" max="{{ c1_max }}" step="0.1"
-        value="{{ c1_max }}"
-        class="form-range flex-fill"
-      />
-
-      <span class="text-muted small" aria-hidden="true">{{ c1_max }}</span>
-    </div>
-
-    <!-- Numeric input box synced with the slider -->
-    <div class="d-flex align-items-center gap-2 mt-2">
       <label for="c1_input_box" class="mb-0">Enter c<sub>1</sub>:</label>
       <input
         type="number"
@@ -109,21 +108,30 @@
         style="width: 120px;"
       />
     </div>
+  </div>
 
+  <!-- π = 0.5 payoff (column 2) -->
+  <div class="col-4 text-center">
+    <div style="font-size:1.1rem;">
+      <strong>π = 0.5</strong><br>
+      payoff = <span id="u_05">—</span>
+    </div>
+  </div>
+
+  <!-- π = 2 payoff (column 3) -->
+  <div class="col-4 text-center">
+    <div style="font-size:1.1rem;">
+      <strong>π = 2</strong><br>
+      payoff = <span id="u_15">—</span>
+    </div>
+  </div>
+
+</div>
+
+
+    <!-- hidden output just for JS sync -->
     <div class="mt-2" style="display: none">
       c<sub>1</sub>: <output id="c1_out">{{ c1_max }}</output>
-    </div>
-
-    <!-- Payoffs for the two price variants (still full width) -->
-    <div class="mt-3 small">
-      <div>
-        If the price halves (π = 0.5):<br>
-        c<sub>2</sub> = <span id="c2_05">—</span>, payoff = <span id="u_05">—</span> points
-      </div>
-      <div class="mt-2">
-        If the price doubles (π = 2):<br>
-        c<sub>2</sub> = <span id="c2_15">—</span>, payoff = <span id="u_15">—</span> points
-      </div>
     </div>
 
   </div>
@@ -189,8 +197,8 @@
     const ok05 = (v05 >= 1);
     const ok15 = (v15 >= 1);
 
-    c2_05.textContent = ok05 ? fmt(v05) : '—';
-    c2_15.textContent = ok15 ? fmt(v15) : '—';
+    //c2_05.textContent = ok05 ? fmt(v05) : '—';
+    //c2_15.textContent = ok15 ? fmt(v15) : '—';
 
     u_05.textContent  = ok05 ? fmt(c1 * v05) : '—';
     u_15.textContent  = ok15 ? fmt(c1 * v15) : '—';

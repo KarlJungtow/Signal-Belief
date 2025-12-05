@@ -1,7 +1,7 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Treatment 3 — Choice (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
+{% block title %}Treatment 2 — Belief (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
 
 {% block content %}
 
@@ -20,11 +20,6 @@
     #utility_table.table { font-size: 0.85rem; }
   }
 </style>
-
-<p>
-  First, you will receive information about your income. You know that the chances that π = 0.5 or π = 1.5 are
-  <strong>50/50</strong>. There is <strong>no feedback</strong>.
-</p>
 
 <!-- SINGLE CARD CONTAINING: income left + table right + belief entry below -->
 <div class="card mb-3">

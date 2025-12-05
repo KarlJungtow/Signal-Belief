@@ -222,7 +222,7 @@ def get_income_profile():
     return [5, 15]
 
 def get_round_count():
-    return len((get_red_counts()+get_obvious_red_counts()) * len(get_income_profile()))
+    return 1#len((get_red_counts()+get_obvious_red_counts()) * len(get_income_profile()))
 
 if __name__ == '__main__':
     print(synthesize_filenames(get_red_counts() + get_obvious_red_counts(), "T0"))

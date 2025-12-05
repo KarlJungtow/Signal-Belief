@@ -29,7 +29,7 @@
     const timerEl = document.getElementById('timer');
 
     showBtn.addEventListener('click', function () {
-      showBtn.disabled = true;
+      showBtn.style.display = 'none';
       imgWrap.style.display = 'block';
 
       let remaining = {{ show_seconds }};

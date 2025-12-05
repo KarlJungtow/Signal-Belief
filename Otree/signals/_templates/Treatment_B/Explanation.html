@@ -1,11 +1,62 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}
-Treatment 3 — Explanation
-{% endblock %}
+{% block title %}Part 2 Instructions{% endblock %}
 
-{{block content }}
-  This is the explanation for treatment 3
-  {{ next_button }}
-{{ endblock }}
+{% block content %}
+
+<p>
+    In this part, each round starts with information about your endowment profile for that round. You will also
+    see a table with the possible consumption choices and the corresponding payoff points for both possible prices.
+</p>
+
+<p>
+    In Part 3, you must choose your consumption in Period 1 <strong>before</strong> you receive the hint about the
+    Period 2 price.
+</p>
+
+<h3>Price uncertainty</h3>
+
+<p>
+    Recall that the price of consumption in Period 2, <em>p<sub>2</sub></em>, can be:
+</p>
+
+<ul>
+    <li><em>P<sub>2</sub> = 0.5</em>, or</li>
+    <li><em>P<sub>2</sub> = 2</em>.</li>
+</ul>
+
+<p>
+    Each of these two prices occurs with probability 50%. Thus, both price levels are equally likely.
+</p>
+
+<h3>Sequence of events within a round</h3>
+
+<ol>
+    <li>
+        At the beginning of the round, you see your endowment profile for that round and the payoff table for
+        all possible consumption choices at both price levels.
+    </li>
+    <li>
+        You select and confirm your consumption choice for Period 1.
+    </li>
+    <li>
+        After confirming your consumption choice, you receive the price hint for that round
+        (the graph with red and blue dots, as explained earlier).
+    </li>
+    <li>
+        You then state and confirm the probability that you assign to the majority of dots being red.
+    </li>
+    <li>
+        Once you have confirmed your stated probability, the next round begins with information about the new
+        endowment profile and a new consumption choice.
+    </li>
+</ol>
+
+<p>
+    This procedure is repeated for a total of 12 rounds in Part 3.
+</p>
+
+{{ next_button }}
+
+{% endblock %}
