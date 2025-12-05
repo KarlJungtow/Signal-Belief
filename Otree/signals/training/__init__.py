@@ -15,6 +15,7 @@ class C(BaseConstants):
 
     PIS = [2]
     INCOME = [5, 15]
+    SIGNAL_SHOW_SECONDS = 8
 
 
 class Subsession(BaseSubsession):
@@ -28,10 +29,13 @@ def creating_session(subsession: Subsession):
             schedule = combos[:]
             random.shuffle(schedule)
             p.participant.vars['training_schedule'] = schedule
-
+            p.image_file = "dots_A_280_x1_a.png"
+        else:
+            p.image_file = "dots_A_215_x1.png"
         pi, y1 = p.participant.vars['training_schedule'][
             subsession.round_number - 1
         ]
+
         p.pi = pi
         p.y1 = y1
         p.y2 = 15 if y1 == 5 else 5
@@ -49,7 +53,7 @@ class Player(BasePlayer):
     p2 = models.FloatField()
     c1_max = models.FloatField()
     belief_input_raw = models.FloatField(default=50)
-
+    image_file = models.StringField()
     # Decision
     c1 = models.FloatField()
 
@@ -77,6 +81,29 @@ class Choice(Page):
         player.c2 = c2_given(player, C)
         player.u = u_given(player)
 
+class Signal(Page):
+    @staticmethod
+    def vars_for_template(player: Player):
+        return dict(
+            image_file=player.image_file,
+            show_seconds= C.SIGNAL_SHOW_SECONDS,
+        )
+
+
+class Belief(Page):
+    form_model = "player"
+    form_fields = ["belief_input_raw"]
+
+    @staticmethod
+    def error_message(player: Player, values):
+        v = values.get("belief_input_raw")
+        if v is None:
+            return "Please enter your belief."
+        if not (0 <= v <= 100):
+            return "Enter the likelihood (0–100)."
+
+
+
 class Result(Page):
     form_model='player'
 
@@ -90,5 +117,7 @@ class Result(Page):
                 "pi" : player.pi}
 page_sequence = [
     Choice,
+    Signal,
+    Belief,
     Result
 ]
