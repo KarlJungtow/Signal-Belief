@@ -1,9 +1,191 @@
-{{ block title }}
-    General Instructions
-{{ endblock }}
+{% extends "global/Page.html" %}
+{% load otree static %}
 
-{{ block content }}
-    Here is an explanation for this experiment
+{% block title %}Instructions{% endblock %}
+
+{% block content %}
+
+<p>
+    This study is composed of three parts. In each part you participate in 12 rounds of decision-making. In each round, you will
+    be asked to make two choices. We refer to these as “Consumption choice” and “Price belief”. Both of these choices may affect
+    your final payoff. The specific instruction for each part will be given to you at the beginning of each part.
+</p>
+
+<h3>Consumption choice</h3>
+
+<p>
+    Each round represents two time periods, called Period 1 and Period 2. In each round, you will receive an endowment of virtual
+    goods in both periods. We denote the endowment in Period 1 by <em>E1</em> and the endowment in Period 2 by <em>E2</em>.
+</p>
+
+<p>These endowments will be either</p>
+
+<ul>
+    <li><em>E1</em> = 15 and <em>E2</em> = 5</li>
+</ul>
+
+<p>or</p>
+
+<ul>
+    <li><em>E1</em> = 5 and <em>E2</em> = 15</li>
+</ul>
+
+<p>
+    In 6 rounds, you will get the first endowment profile, and in the other 6 rounds, you will get the second endowment profile.
+    However, the order in which these profiles appear is random.
+</p>
+
+<p>
+    Your task is to choose how much to consume in Period 1. We denote this consumption choice by <em>c1</em>. Based on your Period 1
+    consumption choice, your consumption in Period 2 (denoted <em>c2</em>) is automatically determined. The latter depends on the price
+    in Period 2.
+</p>
+
+<p>
+    The price of consumption goods in Period 1 is fixed at <em>p1</em> = 1.
+</p>
+
+<p>
+    The price of consumption goods in Period 2, <em>p2</em>, is randomly determined. It will be either:
+</p>
+
+<ul>
+    <li>0.5 (50% lower than <em>p1</em>), or</li>
+    <li>2 (100% higher than <em>p1</em>).</li>
+</ul>
+
+<p>The two possible price levels for <em>p2</em> have an equal probability (50% chance).</p>
+
+<h3>Consumption payoff</h3>
+
+<p>
+    Your consumption payoff points earned each round are calculated with a payoff function (shown on screen during the experiment).
+</p>
+
+<p>
+    You will be given tables showing the possible payoff points you can earn for various integer <em>c1</em> choices, depending on the
+    endowment profile you receive and on the Period 2 price, <em>p2</em>.
+</p>
+
+<p>
+    You can also insert numbers with up to one decimal in the box below the table. The associated payoff points will be shown to you
+    in the same line.
+</p>
+
+<h3>Saving and Borrowing</h3>
+
+<p>
+    You can save or borrow using money. Your Period 1 saving or borrowing is determined by how your consumption choice <em>c1</em>
+    compares to your Period 1 endowment <em>E1</em>.
+</p>
+
+<p>
+    If you consume fewer units than your Period 1 endowment (<em>c1 &lt; E1</em>), you save <em>E1 − c1</em> units of money, that you can
+    carry over to Period 2. You may think of this as selling <em>E1 − c1</em> units of the good at price <em>p1</em>. These savings will
+    be used to buy additional consumption goods in Period 2 at the price <em>p2</em>. Then, your Period 2 consumption will be:
+</p>
+
+<p><em>c2 = E2 + (E1 − c1) · p1 / p2</em></p>
+
+<p>
+    If you consume more units than your Period 1 endowment (<em>c1 &gt; E1</em>), you borrow <em>c1 − E1</em> units of money, that you
+    must repay in Period 2. You may think of this as buying <em>c1 − E1</em> units of the good at price <em>p1</em>. These borrowings
+    will be repaid by selling a part of your endowment in Period 2 at the price <em>p2</em>. Then, your Period 2 consumption will be:
+</p>
+
+<p><em>c2 = E2 − (c1 − E1) · p1 / p2</em></p>
+
+<p>
+    There is no interest earned on saving, nor is there any interest charged on borrowing.
+</p>
+
+<h3>Constraints on your consumption choice</h3>
+
+<p>
+    Your consumption choice is restricted to be in the range:
+</p>
+
+<p><em>1 ≤ c1 ≤ E1 + E2</em></p>
+
+<p>
+    This restriction makes sure that you consume at least 1 unit of the good in each period even if you have to repay your borrowing
+    and that you will always be able to repay your borrowing whatever the price in Period 2.
+</p>
+
+<h3>Price belief</h3>
+
+<p>
+    In each round you will receive a hint for the randomly chosen price level for Period 2. The timing, when you receive this hint,
+    differs between the three parts.
+</p>
+
+<p>
+    This hint consists of a graph containing 400 red and blue dots. The figure below shows an example. Every round, there will be a
+    different hint graph.
+</p>
+
+<p><em>Figure: Example hint.</em></p>
+
+<ul>
+    <li>If a majority of the dots (&gt; 200) are colored blue, the price level is low: <em>p2 = 0.5</em>.</li>
+    <li>If a majority of the dots (&gt; 200) are colored red, the price level is high: <em>p2 = 2</em>.</li>
+</ul>
+
+<p>
+    The number of blue and red colored dots will never be equal. When you click the “Get hint” button, you will only have 8 seconds
+    to see this graph. After you saw the graph, you will be asked to state your belief about whether the majority of dots is red.
+</p>
+
+<p>
+    You can state your belief using a slider or type the probability that you attribute to the majority of dots being red. This
+    probability is denoted by <em>q</em>. Selecting 100% would indicate that you are certain that more than half of the dots are red.
+    Selecting 0% would indicate that you are certain that more than half of the dots are blue. However, if you are uncertain, you may
+    state any probability between 0% and 100%.
+</p>
+
+<h3>Belief payoff</h3>
+
+<p>
+    You can earn a bonus payoff of 2 Euros that is determined by how close your stated probability is to the actual outcome.
+    More specifically:
+</p>
+
+<ul>
+    <li>
+        You will receive 2 Euros with probability <em>q</em> if the majority of dots was red.
+    </li>
+    <li>
+        If the majority of dots was blue, you receive 2 Euros with the probability <em>1 − q</em>.
+    </li>
+</ul>
+
+<p>
+    This rule makes sure that it is in your own interest to state your true belief.
+</p>
+
+<h3>Final payoff</h3>
+
+<p>
+    At the end of the experiment, one round in each part will be randomly selected and your consumption payoff points from these
+    rounds will determine your final monetary payoff. We will transform payoff points to euros with a 1 to 20 ratio
+    (100 points = 5 euros). Another round in each part will be randomly selected for the reward on your stated belief.
+</p>
+
+<p>
+    For both chosen rounds, we will remind you of your decisions and show you the actual outcomes. For the consumption choice, we will
+    show you the actual Period 2 price level and the computer will calculate your resulting payoff points. For beliefs, the computer
+    will run a lottery to determine whether you earned the 2 Euros bonus using your stated probability. You will only see the actual
+    outcomes for these randomly chosen rounds.
+</p>
+
+<h3>Training rounds</h3>
+
+<p>
+    On the next screen, we will ask you a few questions about these instructions to ensure you understand them.
+    Then, there will be two training rounds. Your decisions during these rounds will not affect your final payoff.
+    These rounds are designed to familiarize you with tasks. We will provide feedback on your decisions during these training rounds.
+</p>
+
     {{ next_button }}
 {{ endblock }}
 

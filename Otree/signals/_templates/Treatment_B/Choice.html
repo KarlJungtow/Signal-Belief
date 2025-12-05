@@ -1,11 +1,11 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Part 3 — Choice (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
+{% block title %}Treatment 3 — Choice (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
 
 {% block content %}
+
 <style>
-  /* Slightly compact utility table */
   #utility_table.table {
     width: 100%;
     font-size: 0.9rem;
@@ -22,17 +22,15 @@
 </style>
 
 <p>
-  In the baseline treatment, you choose <strong>c<sub>1</sub></strong> first. Your prior is
-  <strong>50/50</strong> that π = 0.5 or π = 2. There is <strong>no feedback</strong>.
+  Now, based on your information, please choose your period-1 consumption.
 </p>
 
-<!-- SINGLE CARD: income (left) + table (right) + slider area full width below -->
+<!-- SINGLE CARD: income (left) + table (right) + c1 slider & payoffs below -->
 <div class="card mb-3">
   <div class="card-body">
 
-    <!-- Top row: income info left, table right -->
     <div class="row">
-      <!-- LEFT: income information (no separate box) -->
+      <!-- LEFT: income info + belief reminder -->
       <div class="col-md-4 mb-3 mb-md-0">
         <h5>Income &amp; prices</h5>
         <ul>
@@ -44,8 +42,8 @@
           Feasibility requires <strong>1 ≤ c<sub>1</sub> ≤ {{ c1_max }}</strong>.
         </p>
         <p class="mb-0">
-          The probability for the price P<sub>2</sub>=2 is <br>
-          <strong>{{ belief }} %</strong>
+          In this round, you just stated a probability of
+          <strong>{{ belief }}%</strong> for P<sub>2</sub> = 2.
         </p>
       </div>
 
@@ -53,7 +51,7 @@
       <div class="col-md-8">
         <p><strong>Utility reference (not feedback):</strong>
           u(c<sub>1</sub>, c<sub>2</sub>) = c<sub>1</sub> · c<sub>2</sub></p>
-        <p class="mb-2">Utilities for different c<sub>1</sub> values:</p>
+        <p>Utilities for c<sub>1</sub> under both possible π values. “—” marks infeasible (c<sub>2</sub> &lt; 1).</p>
 
         <table id="utility_table" class="table table-sm table-bordered align-middle">
           <thead>
@@ -78,78 +76,50 @@
 
     <hr>
 
-<hr>
+    <!-- c1 slider + payoff display -->
+    <p>Choose your period-1 consumption c<sub>1</sub>:</p>
 
-<p>Choose your period-1 consumption c<sub>1</sub>:</p>
-
-<!-- Slider -->
-<div class="d-flex align-items-center gap-2">
-  <span class="text-muted small" aria-hidden="true">1</span>
-
-  <input
-    type="range"
-    name="c1"
-    id="c1_slider"
-    min="1" max="{{ c1_max }}" step="0.1"
-    value="{{ c1_max }}"
-    class="form-range flex-fill"
-  />
-
-  <span class="text-muted small" aria-hidden="true">{{ c1_max }}</span>
-</div>
-
-<div class="row align-items-start mt-3">
-
-  <!-- Enter c1 box (column 1) -->
-  <div class="col-4">
+    <!-- Slider with min/max labels on the same line -->
     <div class="d-flex align-items-center gap-2">
-      <label for="c1_input_box" class="mb-0">Enter c<sub>1</sub>:</label>
+      <span class="text-muted small" aria-hidden="true">1</span>
+
       <input
-        type="number"
-        id="c1_input_box"
+        type="range"
+        name="c1"
+        id="c1_slider"
         min="1" max="{{ c1_max }}" step="0.1"
         value="{{ c1_max }}"
-        class="form-control"
-        style="width: 120px;"
+        class="form-range flex-fill"
+        aria-describedby="c1_min_label c1_max_label"
       />
+
+      <span class="text-muted small" aria-hidden="true">{{ c1_max }}</span>
     </div>
-  </div>
 
-  <!-- π = 0.5 payoff (column 2) -->
-  <div class="col-4 text-center">
-    <div style="font-size:1.1rem;">
-      <strong>π = 0.5</strong><br>
-      payoff = <span id="u_05">—</span>
-    </div>
-  </div>
-
-  <!-- π = 2 payoff (column 3) -->
-  <div class="col-4 text-center">
-    <div style="font-size:1.1rem;">
-      <strong>π = 2</strong><br>
-      payoff = <span id="u_15">—</span>
-    </div>
-  </div>
-
-</div>
-
-
-    <!-- hidden output just for JS sync -->
-    <div class="mt-2" style="display: none">
+    <div class="mt-2">
       c<sub>1</sub>: <output id="c1_out">{{ c1_max }}</output>
     </div>
 
+    <div class="mt-3 small">
+      <div>
+        If the price is π = 0.5:<br>
+        c<sub>2</sub> = <span id="c2_05">—</span>, payoff = <span id="u_05">—</span> points
+      </div>
+      <div class="mt-2">
+        If the price is π = 2:<br>
+        c<sub>2</sub> = <span id="c2_15">—</span>, payoff = <span id="u_15">—</span> points
+      </div>
+    </div>
+
   </div>
 </div>
 
-{% block next_button %}
-    <button class="otree-btn-next btn btn-primary">Confirm</button>
-{% endblock %}
+{{ next_button }}
 {% endblock %}
 
 {% block scripts %}
 <script>
-  // constants from server (defaults from the spec)
+  // constants from server
   const Y1     = {{ y1 }};
   const Y2     = {{ y2 }};
   const P1     = {{ p1 }};
@@ -157,7 +127,6 @@
   const C1_MAX = {{ c1_max }};
 
   const slider = document.getElementById('c1_slider');
-  const box    = document.getElementById('c1_input_box');
   const outC1  = document.getElementById('c1_out');
   const c2_05  = document.getElementById('c2_05');
   const c2_15  = document.getElementById('c2_15');
@@ -184,17 +153,13 @@
     });
   }
 
-  function applyC1(rawVal) {
-    let c1 = parseFloat(rawVal);
-
+  function update() {
+    let c1 = parseFloat(slider.value || 1);
     if (isNaN(c1)) c1 = 1;
     if (c1 < 1) c1 = 1;
     if (c1 > C1_MAX) c1 = C1_MAX;
 
-    // keep slider + input box + display in sync
-    slider.value = c1;
-    box.value    = c1.toFixed(2);
-    outC1.value  = c1.toFixed(2);
+    outC1.value = c1.toFixed(2);
 
     const v05 = c2_given(c1, 0.5);
     const v15 = c2_given(c1, 2);
@@ -202,8 +167,8 @@
     const ok05 = (v05 >= 1);
     const ok15 = (v15 >= 1);
 
-    //c2_05.textContent = ok05 ? fmt(v05) : '—';
-    //c2_15.textContent = ok15 ? fmt(v15) : '—';
+    c2_05.textContent = ok05 ? fmt(v05) : '—';
+    c2_15.textContent = ok15 ? fmt(v15) : '—';
 
     u_05.textContent  = ok05 ? fmt(c1 * v05) : '—';
     u_15.textContent  = ok15 ? fmt(c1 * v15) : '—';
@@ -211,25 +176,8 @@
     highlightRow(c1);
   }
 
-  // initial paint
-  applyC1(slider.value || 1);
-
-  // Slider updates continuously
-  slider.addEventListener('input', function () {
-      applyC1(slider.value);
-  });
-
-  // Box: allow free typing, only validate on finish
-  box.addEventListener('change', function () {
-      applyC1(box.value);
-  });
-
-  // Prevent Enter from submitting page
-  box.addEventListener("keydown", function (e) {
-    if (e.key == "Enter") {
-      e.preventDefault();
-      box.blur();  // applyC1() is triggered via change
-    }
-  });
+  // initial paint + on input
+  update();
+  slider.addEventListener('input', update);
 </script>
 {% endblock %}

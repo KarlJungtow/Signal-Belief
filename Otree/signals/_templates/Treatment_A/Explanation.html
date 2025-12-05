@@ -1,0 +1,28 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}Part 1 Instructions{% endblock %}
+
+{% block content %}
+
+<p>
+    In this part, each round will start with the price hint about Period 2. You have to check the hint by clicking on the
+    “Get hint” button so that you can see the matrix with red and blue dots for 8 seconds. Then you must state the probability
+    that you attribute to the majority of dots being red.
+</p>
+
+<p>
+    Once you confirmed the stated probability that you attribute to the majority of dots being red, you will be informed about your
+    endowment profile and the potential payoffs associated with the various possible consumption choices for both prices. You will
+    also see your own stated belief for <em>q</em>.
+</p>
+
+<p>
+    After selecting and confirming your consumption choice, the next round starts with a new price hint.
+</p>
+
+<p>This procedure is repeated for 12 rounds.</p>
+
+  {{ next_button }}
+{{ endblock }}
+

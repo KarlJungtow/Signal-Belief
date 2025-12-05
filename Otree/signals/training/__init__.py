@@ -38,7 +38,6 @@ def creating_session(subsession: Subsession):
         p.p2 = pi * C.P1
         p.c1_max = calc_c1_max(p)
 
-
 class Group(BaseGroup):
     pass
 
@@ -49,6 +48,7 @@ class Player(BasePlayer):
     y2 = models.FloatField()
     p2 = models.FloatField()
     c1_max = models.FloatField()
+    belief_input_raw = models.FloatField(default=50)
 
     # Decision
     c1 = models.FloatField()

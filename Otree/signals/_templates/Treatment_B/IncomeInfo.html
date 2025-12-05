@@ -1,0 +1,76 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}Treatment 3 — Income Info (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
+
+{% block content %}
+
+<style>
+  /* Slightly compact utility table */
+  #utility_table.table {
+    width: 100%;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+  #utility_table.table th,
+  #utility_table.table td {
+    padding: .25rem .5rem;
+    white-space: nowrap;
+  }
+  @media (max-width: 576px) {
+    #utility_table.table { font-size: 0.85rem; }
+  }
+</style>
+
+<p>
+  First, you will receive information about your income. You know that the chances that π = 0.5 or π = 1.5 are
+  <strong>50/50</strong>. There is <strong>no feedback</strong>.
+</p>
+
+<!-- SINGLE CARD: income (left) + table (right) -->
+<div class="card mb-3">
+  <div class="card-body">
+
+    <div class="row">
+      <!-- LEFT: income information + belief -->
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h5>Income &amp; prices</h5>
+        <ul>
+          <li>Current income: <strong>y<sub>1</sub> = {{ y1 }}</strong></li>
+          <li>Future income: <strong>y<sub>2</sub> = {{ y2 }}</strong></li>
+          <li>Price now: <strong>p<sub>1</sub> = {{ p1 }}</strong></li>
+        </ul>
+      </div>
+
+      <!-- RIGHT: utility table -->
+      <div class="col-md-8">
+        <p><strong>Utility reference (not feedback):</strong>
+          u(c<sub>1</sub>, c<sub>2</sub>) = c<sub>1</sub> · c<sub>2</sub></p>
+        <p>Utilities for integer c<sub>1</sub> (1–20) under both possible π values. “—” marks infeasible (c<sub>2</sub> &lt; 1).</p>
+
+        <table id="utility_table" class="table table-sm table-bordered align-middle">
+          <thead>
+            <tr>
+              <th style="width:10%">c<sub>1</sub></th>
+              <th>u at π = 0.5</th>
+              <th>u at π = 1.5</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in table_rows %}
+            <tr>
+              <td>{{ row.c1 }}</td>
+              <td>{% if row.infeasible05 %}—{% else %}{{ row.u05 }}{% endif %}</td>
+              <td>{% if row.infeasible15 %}—{% else %}{{ row.u15 }}{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{{ next_button }}
+{% endblock %}

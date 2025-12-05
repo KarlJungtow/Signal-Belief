@@ -16,22 +16,24 @@ def create_pairs(red_counts):
     return pairs
 
 def create_schedule(player, treatment):
-    if "num_obvious_blue" not in player.participant.vars:
-        player.participant.vars["num_obvious_blue"] = 0
-    if "num_obvious_red" not in player.participant.vars:
-        player.participant.vars["num_obvious_red"] = 0
-
-    # Generate two random obvious red counts. Check, if participant saw the same redcount twice and will see it a third
-    # time this round. Set the last image to be the other one
-    # NOTE: Will be shuffled
+    # When using unmotivated beliefs, obvious signals will be random and not count towards the balancing
     obvious_red_counts = get_obvious_red_counts()
-    if player.participant.vars["num_obvious_blue"] >= 2 and obvious_red_counts[0] == 120:
-        obvious_red_counts[1] = 280
-    if player.participant.vars["num_obvious_red"] >= 2 and obvious_red_counts[0] == 280:
-        obvious_red_counts[1] = 120
+    if treatment != "A":
+        if "num_obvious_blue" not in player.participant.vars:
+            player.participant.vars["num_obvious_blue"] = 0
+        if "num_obvious_red" not in player.participant.vars:
+            player.participant.vars["num_obvious_red"] = 0
 
-    player.participant.vars["num_obvious_blue"] += obvious_red_counts.count(120)
-    player.participant.vars["num_obvious_red"] += obvious_red_counts.count(280)
+        # Generate two random obvious red counts. Check, if participant saw the same redcount twice and will see it a third
+        # time this round. Set the last image to be the other one
+        # NOTE: Will be shuffled
+        if player.participant.vars["num_obvious_blue"] >= 2 and obvious_red_counts[0] == 120:
+            obvious_red_counts[1] = 280
+        if player.participant.vars["num_obvious_red"] >= 2 and obvious_red_counts[0] == 280:
+            obvious_red_counts[1] = 120
+
+        player.participant.vars["num_obvious_blue"] += obvious_red_counts.count(120)
+        player.participant.vars["num_obvious_red"] += obvious_red_counts.count(280)
 
     # Pair all red counts with the income profiles
     red_counts = get_red_counts() + obvious_red_counts
@@ -83,6 +85,7 @@ def build_vars_for_template_choice(player, C):
             "table_rows": build_payoff_table(
                 player.y1, player.y2, C.P1, C.R, player.c1_max
             ),
+            "belief": player.belief_input_raw,
         }
 
 
@@ -219,7 +222,7 @@ def get_income_profile():
     return [5, 15]
 
 def get_round_count():
-    return 1#len(get_red_counts() * len(get_income_profile()))
+    return len((get_red_counts()+get_obvious_red_counts()) * len(get_income_profile()))
 
 if __name__ == '__main__':
     print(synthesize_filenames(get_red_counts() + get_obvious_red_counts(), "T0"))

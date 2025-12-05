@@ -1,0 +1,31 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}Part 3 Instructions{% endblock %}
+
+{% block content %}
+
+<p>
+    In this part, each round will start with an information about your endowment profile in this period. You will also see the table
+    with the possible consumption choices and the potential payoffs associated with these choices for both prices. In this part, you
+    have to make your consumption choice before you get the hint for the Period 2 price.
+</p>
+
+<p>
+    Recall that the probabilities for the price in Period 2 being 0.5 or 2 are 50% each. Thus, both events are equally likely.
+</p>
+
+<p>
+    After selecting and confirming your consumption choice, you will get the price hint for this round.
+</p>
+
+<p>
+    Once you stated and confirmed the stated probability that you attribute to the majority of dots being red, the next round starts
+    with an information about next period’s endowment and a new consumption choice.
+</p>
+
+<p>This procedure is repeated for 12 rounds.</p>
+
+  {{ next_button }}
+{{ endblock }}
+

@@ -1,12 +1,30 @@
-{{ block content }}
-<div>
-    Welcome to the Survey! <br>
-    Do you consent to us processing your data? <br>
-</div>
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}Consent{% endblock %}
+
+{% block content %}
+
+<p>Welcome to this study in economic decision-making.</p>
+
+<p>
+    You will receive a fixed 7 euros show-up fee, and you may earn additional payments depending on your performance in the tasks.
+    This is an individual decision-making study, so other people’s decisions do not influence your payoff.
+</p>
+
+<p>
+    Participation to this study is voluntary, and you may leave at any time. To ensure a fair and quiet session, please refrain
+    from talking to other participants. Using mobile phones or other devices during the experiment is prohibited. The session will
+    last about 90 minutes.
+</p>
+
+<p>
+    By clicking “Start”, you confirm that you have read this information and consent to participate in the study.
+</p>
 
 
     <button type="submit">
-        I consent
+        Start
     </button>
 
 {{ endblock }}
