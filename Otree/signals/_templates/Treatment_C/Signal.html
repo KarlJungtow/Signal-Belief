@@ -1,14 +1,13 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Part 3 — Signal{% endblock %}
+{% block title %}Treatment 2 — Signal{% endblock %}
 
 {% block content %}
 
 <div class="d-flex flex-column align-items-center gap-3">
-  <button type="button" class="btn btn-primary btn-lg" id="show-btn">Get Hint</button>
 
-  <div id="image_wrap" style="display:none; margin: 1rem 0; text-align: center;">
+  <div id="image_wrap" style="display:block; margin: 1rem 0; text-align: center;">
     <img src="{% static image_file %}" alt="Signal image" class="img-fluid w-50" />
     <div id="timer" class="mt-2 lead"></div>
   </div>
@@ -28,30 +27,27 @@
     const imgWrap = document.getElementById('image_wrap');
     const timerEl = document.getElementById('timer');
 
-    showBtn.addEventListener('click', function () {
-      showBtn.style.display = 'none';
-      imgWrap.style.display = 'block';
 
-      let remaining = {{ show_seconds }};
-      timerEl.textContent = `Time left: ${remaining}`;
+    let remaining = {{ show_seconds }};
+    timerEl.textContent = `Time left: ${remaining}`;
 
-      const intervalId = setInterval(() => {
-        remaining -= 1;
-        if (remaining > 0) {
-          timerEl.textContent = `Time left: ${remaining}`;
+    const intervalId = setInterval(() => {
+      remaining -= 1;
+      if (remaining > 0) {
+        timerEl.textContent = `Time left: ${remaining}`;
+      } else {
+        clearInterval(intervalId);
+        // auto-advance
+        const form = document.getElementById('form');
+        if (form) {
+          form.submit();
         } else {
-          clearInterval(intervalId);
-          // auto-advance
-          const form = document.getElementById('form');
-          if (form) {
-            form.submit();
-          } else {
-            const nextBtn = document.getElementById('otree-next-button');
-            if (nextBtn) nextBtn.click();
-          }
+          const nextBtn = document.getElementById('otree-next-button');
+          if (nextBtn) nextBtn.click();
         }
+      }
       }, 1000);
-    });
+
   })();
 </script>
 {% endblock %}

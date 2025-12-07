@@ -35,8 +35,16 @@ class Player(BasePlayer):
     age = models.IntegerField(
         label='What is your age',
     )
-    gender = models.StringField(
+    gender = models.IntegerField(
         label='What is your gender',
+        choices=[
+                 [1, 'Male'],
+                 [2, 'Female'],
+                 [3, 'Non-Binary'],
+                 [4, 'Diverse']
+        ]
+        ,
+        widget=widgets.RadioSelect,
     )
     highest_degree = models.IntegerField(
         choices=[
@@ -46,7 +54,7 @@ class Player(BasePlayer):
             [4, 'Diplom/Master/Magister'],
             [5, 'other'],
         ],
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         label='What is the highest degree or level of education you have completed?'
     )
     # 1.
@@ -137,7 +145,7 @@ class Player(BasePlayer):
             ['2_3', '2–3 times'],
             ['more_3', 'More than 3 times'],
         ],
-        widget=widgets.RadioSelectHorizontal
+        widget=widgets.RadioSelect
     )
 
     q11 = models.StringField(
@@ -152,7 +160,7 @@ class Player(BasePlayer):
             ['less_110', 'Less than 110 €'],
             ['dk', 'Don’t know'],
         ],
-        widget=widgets.RadioSelectHorizontal
+        widget=widgets.RadioSelect
     )
 
     # Question 10 → q12
@@ -167,7 +175,7 @@ class Player(BasePlayer):
             ['less_today', 'Less than today'],
             ['dk', 'Don’t know'],
         ],
-        widget=widgets.RadioSelectHorizontal
+        widget=widgets.RadioSelect
     )
 
     # Question 11 → q13
@@ -182,7 +190,7 @@ class Player(BasePlayer):
             ['neither', 'People with no debts or savings'],
             ['dk', 'Don’t know'],
         ],
-        widget=widgets.RadioSelectHorizontal
+        widget=widgets.RadioSelect
     )
 
 

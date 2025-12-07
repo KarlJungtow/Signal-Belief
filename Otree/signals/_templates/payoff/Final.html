@@ -1,24 +1,189 @@
 {% extends "global/Page.html" %}
-{% block title %}Final Payment{% endblock %}
+{% load otree %}
+
+{% block title %}
+    Final Payment
+{% endblock %}
+
 {% block content %}
 
-<p>One round was chosen at random from the main experiment:
-<strong>{{ player.paid_treatment }} (Round {{ player.paid_round }})</strong>.</p>
+Thank you for taking part in this study. <b>Your total payment is: {{ player.payoff }} euros </b> <br>
+<br>
+Below you see how your final payment has been determined. <br>
+For each part, one round was randomly selected for your consumption payoff
+and one round was randomly selected for your belief payoff. <br>
+<br>
+<hr>
+<h2>Part 1</h2>
 
-{% if player.payoff_type == 'consumption' %}
-  <p>The <strong>consumption decision</strong> in that round was selected.</p>
-  <p>Your utility in that round: {{ player.u_points }}</p>
-{% else %}
-  <p>The <strong>belief accuracy</strong> in that round was selected. <br>
-    You guessed there was a {{ player.belief_raw }}% chance that more than half of the dots are red. There were {{ player.true_red_count }} red dots <br>
-    Your chance of winning  was {{ player.threshold }}</p>
-  <p>Your score in that round: {{ player.belief_points }} </p>
-{% endif %}
+<h3>Consumption payoff</h3>
+<ul>
+    <li>
+        Selected round: {{ con_rounds.0 }}
+    </li>
+    <li>
+        Your endowment was E1 = {{ y1.0 }}, E2 = {{ y2.0 }}
+    </li>
+    <li>
+        In this round, your Period 1 consumption choice was: {{ c1_list.0 }}
+    </li>
+    <li>
+        The actual Period 2 price level was: {{ con_p2.0 }}
+    </li>
+    <li>
+        Your resulting Period 2 consumption was: {{ c2_list.0 }}
+    </li>
+    <li>
+        Your resulting consumption payoff in this round is:
+        {{ u_points.0 }} points.
+    </li>
+</ul>
 
-<p>Your showup-fee is {{ player.showup_fee }} € </p>
-<p> The conversion rate from points to € is {{ player.conversion_rate }}</p>
-<p>Your final payoff is:</p>
+<h3>Belief payoff</h3>
+<ul>
+    <li>
+        Selected round: {{ bel_rounds.0 }}
+    </li>
+    <li>
+        Your stated belief about the chance of the high price was:
+        {{ belief_raws.0 }}%.
+    </li>
+    <li>
+        The actual price level was: {{ bel_p2.0 }}
+    </li>
+    <li>
+        Your probability to win the 2-euro belief bonus was:
+        {{ thresholds_pct.0 }}%.
+    </li>
+    <li>
+        The computer has run the lottery based on your stated probability.
+    </li>
+    <li>
+        Result of the belief lottery:
+        You
+        {% if belief_points.0 > 0 %}
+            <strong>won</strong>
+        {% else %}
+            <strong>did not win</strong>
+        {% endif %}
+        the 2-euro belief bonus in this part.
+    </li>
+</ul>
 
-<h3>{{ player.payoff }}</h3>
+<hr>
+
+<h2>Part 2</h2>
+
+<h3>Consumption payoff</h3>
+<ul>
+    <li>
+        Selected round: {{ con_rounds.1 }}
+    </li>
+    <li>
+        Your endowment was E1 = {{ y1.1 }}, E2 = {{ y2.1 }}
+    </li>
+    <li>
+        In this round, your Period 1 consumption choice was: {{ c1_list.1 }}
+    </li>
+    <li>
+        The actual Period 2 price level was: {{ con_p2.1 }}
+    </li>
+    <li>
+        Your resulting Period 2 consumption was: {{ c2_list.1 }}
+    </li>
+    <li>
+        Your resulting consumption payoff in this round is:
+        {{ u_points.1 }} points.
+    </li>
+</ul>
+
+<h3>Belief payoff</h3>
+<ul>
+    <li>
+        Selected round: {{ bel_rounds.1 }}
+    </li>
+    <li>
+        Your stated belief about the chance of the high price was:
+        {{ belief_raws.1 }}%.
+    </li>
+    <li>
+        The actual price level was: {{ bel_p2.1 }}
+    </li>
+    <li>
+        Your probability to win the 2-euro belief bonus was:
+        {{ thresholds_pct.1 }}%.
+    </li>
+    <li>
+        The computer has run the lottery based on your stated probability.
+    </li>
+    <li>
+        Result of the belief lottery:
+        You
+        {% if belief_points.1 > 0 %}
+            <strong>won</strong>
+        {% else %}
+            <strong>did not win</strong>
+        {% endif %}
+        the 2-euro belief bonus in this part.
+    </li>
+</ul>
+
+<hr>
+
+<h2>Part 3</h2>
+
+<h3>Consumption payoff</h3>
+<ul>
+    <li>
+        Selected round: {{ con_rounds.2 }}
+    </li>
+    <li>
+        Your endowment was E1 = {{ y1.2 }}, E2 = {{ y2.2 }}
+    </li>
+    <li>
+        In this round, your Period 1 consumption choice was: {{ c1_list.2 }}
+    </li>
+    <li>
+        The actual Period 2 price level was: {{ con_p2.2 }}
+    </li>
+    <li>
+        Your resulting Period 2 consumption was: {{ c2_list.2 }}
+    </li>
+    <li>
+        Your resulting consumption payoff in this round is:
+        {{ u_points.2 }} points.
+    </li>
+</ul>
+
+<h3>Belief payoff</h3>
+<ul>
+    <li>
+        Selected round: {{ bel_rounds.2 }}
+    </li>
+    <li>
+        Your stated belief about the chance of the high price was:
+        {{ belief_raws.2 }}%.
+    </li>
+    <li>
+        The actual price level was: {{ bel_p2.2 }}
+    </li>
+    <li>
+        Your probability to win the 2-euro belief bonus was:
+        {{ thresholds_pct.2 }}%.
+    </li>
+    <li>
+        The computer has run the lottery based on your stated probability.
+    </li>
+    <li>
+        Result of the belief lottery:
+        You
+        {% if belief_points.2 > 0 %}
+            <strong>won</strong>
+        {% else %}
+            <strong>did not win</strong>
+        {% endif %}
+        the 2-euro belief bonus in this part.
+    </li>
+</ul>
 
 {% endblock %}

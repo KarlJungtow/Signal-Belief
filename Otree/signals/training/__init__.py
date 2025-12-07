@@ -116,8 +116,8 @@ class Result(Page):
                 "u" : round(player.u, 2),
                 "pi" : player.pi}
 page_sequence = [
-    Choice,
     Signal,
     Belief,
+    Choice,
     Result
 ]

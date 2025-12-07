@@ -3,7 +3,7 @@ import time
 from helper_functions import *
 
 class C(BaseConstants):
-    NAME_IN_URL = "A"
+    NAME_IN_URL = "Treatment_A"
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = get_round_count()
 

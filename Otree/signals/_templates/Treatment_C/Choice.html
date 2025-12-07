@@ -1,15 +1,32 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Part 3 — Choice (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
+{% block title %}Training — Choice (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
 
 {% block content %}
 <style>
+  .pi05 { color: blue; font-weight: 600; }
+  .pi15 { color: red;  font-weight: 600; }
+
+  .payoff-box {
+    display: inline-block;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  /* Fixed-width numeric payoff so table doesn't resize when value changes */
+  .payoff-val {
+    display: inline-block;
+    min-width: 6ch;   /* adjust if you expect very large numbers */
+    text-align: right;
+  }
+
   /* Slightly compact utility table */
   #utility_table.table {
     width: 100%;
     font-size: 0.9rem;
     margin-bottom: 0;
+    table-layout: fixed; /* helps keep column widths stable */
   }
   #utility_table.table th,
   #utility_table.table td {
@@ -24,7 +41,6 @@
 <!-- SINGLE CARD: income (left) + table (right) + slider area full width below -->
 <div class="card mb-3">
   <div class="card-body">
-
     <!-- Top row: income info left, table right -->
     <div class="row">
       <!-- LEFT: income information (no separate box) -->
@@ -39,12 +55,12 @@
           Feasibility requires <strong>1 ≤ c<sub>1</sub> ≤ {{ c1_max }}</strong>.
         </p>
         <p class="mb-0">
-          The probability for the price P<sub>2</sub>=2 is <br>
-          <strong>{{ belief }} %</strong>
+          In this round, you just stated a probability of  <br>
+          <strong>{{ belief }} %</strong> to P<sub>2</sub>=2 is
         </p>
       </div>
 
-      <!-- RIGHT: utility table -->
+      <!-- RIGHT: utility table + payoffs aligned under columns -->
       <div class="col-md-8">
         <p><strong>Utility reference (not feedback):</strong>
           u(c<sub>1</sub>, c<sub>2</sub>) = c<sub>1</sub> · c<sub>2</sub></p>
@@ -62,72 +78,85 @@
             {% for row in table_rows %}
             <tr data-c1="{{ row.c1 }}">
               <td>{{ row.c1 }}</td>
-              <td>{% if row.infeasible05 %}—{% else %}{{ row.u05 }}{% endif %}</td>
-              <td>{% if row.infeasible15 %}—{% else %}{{ row.u15 }}{% endif %}</td>
+              <td>
+                {% if row.infeasible05 %}
+                  —
+                {% else %}
+                  <span class="pi05">{{ row.u05 }}</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if row.infeasible15 %}
+                  —
+                {% else %}
+                  <span class="pi15">{{ row.u15 }}</span>
+                {% endif %}
+              </td>
             </tr>
             {% endfor %}
           </tbody>
+          <tfoot>
+            <tr class="text-center">
+              <!-- empty cell under c1 -->
+              <td class="text-align">
+                <span id="c">—</span>
+              </td>
+              <!-- π = 0.5 payoff -->
+              <td>
+                <div class="payoff-box pi05">
+                  payoff =<span id="u_05" class="payoff-val">—</span>
+                </div>
+              </td>
+              <!-- π = 2 payoff -->
+              <td>
+                <div class="payoff-box pi15">
+                  payoff =<span id="u_15" class="payoff-val">—</span>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
         </table>
-      </div>
+      </div>  <!-- end col-md-8 -->
     </div>  <!-- end row -->
-
+    <hr>
     <hr>
 
-<hr>
+    <p>Choose your period-1 consumption c<sub>1</sub>:</p>
 
-<p>Choose your period-1 consumption c<sub>1</sub>:</p>
-
-<!-- Slider -->
-<div class="d-flex align-items-center gap-2">
-  <span class="text-muted small" aria-hidden="true">1</span>
-
-  <input
-    type="range"
-    name="c1"
-    id="c1_slider"
-    min="1" max="{{ c1_max }}" step="0.1"
-    value="{{ c1_max }}"
-    class="form-range flex-fill"
-  />
-
-  <span class="text-muted small" aria-hidden="true">{{ c1_max }}</span>
-</div>
-
-<div class="row align-items-start mt-3">
-
-  <!-- Enter c1 box (column 1) -->
-  <div class="col-4">
+    <!-- Slider -->
     <div class="d-flex align-items-center gap-2">
-      <label for="c1_input_box" class="mb-0">Enter c<sub>1</sub>:</label>
+      <span class="text-muted small" aria-hidden="true">1</span>
+
       <input
-        type="number"
-        id="c1_input_box"
+        type="range"
+        name="c1"
+        id="c1_slider"
         min="1" max="{{ c1_max }}" step="0.1"
         value="{{ c1_max }}"
-        class="form-control"
-        style="width: 120px;"
+        class="form-range flex-fill"
       />
+
+      <span class="text-muted small" aria-hidden="true">{{ c1_max }}</span>
     </div>
-  </div>
 
-  <!-- π = 0.5 payoff (column 2) -->
-  <div class="col-4 text-center">
-    <div style="font-size:1.1rem;">
-      <strong>π = 0.5</strong><br>
-      payoff = <span id="u_05">—</span>
+    <div class="row align-items-start mt-3">
+
+      <!-- Enter c1 box (column 1) -->
+      <div class="col-4">
+        <div class="d-flex align-items-center gap-2">
+          <label for="c1_input_box" class="mb-0">Enter c<sub>1</sub>:</label>
+          <input
+            type="number"
+            id="c1_input_box"
+            min="1" max="{{ c1_max }}" step="0.1"
+            value="{{ c1_max }}"
+            class="form-control"
+            style="width: 120px;"
+          />
+        </div>
+      </div>
+
     </div>
-  </div>
-
-  <!-- π = 2 payoff (column 3) -->
-  <div class="col-4 text-center">
-    <div style="font-size:1.1rem;">
-      <strong>π = 2</strong><br>
-      payoff = <span id="u_15">—</span>
-    </div>
-  </div>
-
-</div>
-
 
     <!-- hidden output just for JS sync -->
     <div class="mt-2" style="display: none">
@@ -138,7 +167,7 @@
 </div>
 
 {% block next_button %}
-    <button class="otree-btn-next btn btn-primary">Confirm</button>
+    <button class="otree-btn-next btn btn-primary">Get Hint</button>
 {% endblock %}
 {% endblock %}
 
@@ -154,11 +183,9 @@
   const slider = document.getElementById('c1_slider');
   const box    = document.getElementById('c1_input_box');
   const outC1  = document.getElementById('c1_out');
-  const c2_05  = document.getElementById('c2_05');
-  const c2_15  = document.getElementById('c2_15');
   const u_05   = document.getElementById('u_05');
   const u_15   = document.getElementById('u_15');
-
+  const c      = document.getElementById('c');
   const utilRows = Array.from(document.querySelectorAll('#utility_table tbody tr'));
 
   function c2_given(c1, pi) {
@@ -179,6 +206,7 @@
     });
   }
 
+  // applyC1: clamps value but does NOT show alerts
   function applyC1(rawVal) {
     let c1 = parseFloat(rawVal);
 
@@ -197,26 +225,33 @@
     const ok05 = (v05 >= 1);
     const ok15 = (v15 >= 1);
 
-    //c2_05.textContent = ok05 ? fmt(v05) : '—';
-    //c2_15.textContent = ok15 ? fmt(v15) : '—';
-
     u_05.textContent  = ok05 ? fmt(c1 * v05) : '—';
     u_15.textContent  = ok15 ? fmt(c1 * v15) : '—';
-
+    c.textContent     = c1;
     highlightRow(c1);
   }
 
   // initial paint
   applyC1(slider.value || 1);
 
-  // Slider updates continuously
+  // Slider updates continuously (cannot go outside 1..C1_MAX anyway)
   slider.addEventListener('input', function () {
       applyC1(slider.value);
   });
 
-  // Box: allow free typing, only validate on finish
+  // Box: show pop-up on invalid values, then clamp via applyC1
   box.addEventListener('change', function () {
-      applyC1(box.value);
+      const v = parseFloat(box.value);
+
+      if (!isNaN(v) && v < 1) {
+        alert("You must consume at least 1 unit");
+      } else if (!isNaN(v) && v > C1_MAX) {
+        alert("You can consume at most 12 units");
+        // or use C1_MAX dynamically:
+        // alert(`You can consume at most ${C1_MAX} units`);
+      }
+
+      applyC1(v);
   });
 
   // Prevent Enter from submitting page
@@ -225,6 +260,30 @@
       e.preventDefault();
       box.blur();  // applyC1() is triggered via change
     }
+  });
+
+  // EXTRA: guard on Confirm button as well (always show pop-up if invalid)
+  document.addEventListener('DOMContentLoaded', function () {
+    const nextBtn = document.querySelector('.otree-btn-next');
+    if (!nextBtn) return;
+
+    nextBtn.addEventListener('click', function (e) {
+      const v = parseFloat(box.value);
+
+      if (!isNaN(v) && v < 1) {
+        alert("You must consume at least 1 unit");
+        e.preventDefault();
+        return false;
+      }
+      if (!isNaN(v) && v > C1_MAX) {
+        alert("You can consume at most 12 units");
+        // or: alert(`You can consume at most ${C1_MAX} units`);
+        e.preventDefault();
+        return false;
+      }
+
+      // if valid, form submits normally
+    });
   });
 </script>
 {% endblock %}

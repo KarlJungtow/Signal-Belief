@@ -6,6 +6,9 @@
 {% block content %}
 
 <style>
+  .pi05 { color: blue; font-weight: 600; }
+  .pi15 { color: red;  font-weight: 600; }
+
   /* Slightly compact utility table */
   #utility_table.table {
     width: 100%;
@@ -21,11 +24,6 @@
     #utility_table.table { font-size: 0.85rem; }
   }
 </style>
-
-<p>
-  First, you will receive information about your income. You know that the chances that π = 0.5 or π = 1.5 are
-  <strong>50/50</strong>. There is <strong>no feedback</strong>.
-</p>
 
 <!-- SINGLE CARD: income (left) + table (right) -->
 <div class="card mb-3">
@@ -46,22 +44,33 @@
       <div class="col-md-8">
         <p><strong>Utility reference (not feedback):</strong>
           u(c<sub>1</sub>, c<sub>2</sub>) = c<sub>1</sub> · c<sub>2</sub></p>
-        <p>Utilities for integer c<sub>1</sub> (1–20) under both possible π values. “—” marks infeasible (c<sub>2</sub> &lt; 1).</p>
 
         <table id="utility_table" class="table table-sm table-bordered align-middle">
           <thead>
             <tr>
               <th style="width:10%">c<sub>1</sub></th>
-              <th>u at π = 0.5</th>
-              <th>u at π = 1.5</th>
+              <th><span class="pi05">u at π = 0.5</span></th>
+              <th><span class="pi15">u at π = 1.5</span></th>
             </tr>
           </thead>
           <tbody>
             {% for row in table_rows %}
             <tr>
               <td>{{ row.c1 }}</td>
-              <td>{% if row.infeasible05 %}—{% else %}{{ row.u05 }}{% endif %}</td>
-              <td>{% if row.infeasible15 %}—{% else %}{{ row.u15 }}{% endif %}</td>
+              <td>
+                {% if row.infeasible05 %}
+                  —
+                {% else %}
+                  <span class="pi05">{{ row.u05 }}</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if row.infeasible15 %}
+                  —
+                {% else %}
+                  <span class="pi15">{{ row.u15 }}</span>
+                {% endif %}
+              </td>
             </tr>
             {% endfor %}
           </tbody>
@@ -72,5 +81,7 @@
   </div>
 </div>
 
-{{ next_button }}
+{% block next_button %}
+    <button class="otree-btn-next btn btn-primary">Get Hint</button>
+{% endblock %}
 {% endblock %}

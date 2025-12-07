@@ -176,7 +176,7 @@ def record_main_round(player, app_label: str):
 
 
 # ---- Calculation helpers --------------------------------------------------------------------------------------------
-def run_binary_lottery(chosen, prize: float = 100):
+def run_binary_lottery(chosen, prize: float = 20):
     """
     Binary scoring lottery.
     Returns the prize if the player wins, else 0.
@@ -188,9 +188,9 @@ def run_binary_lottery(chosen, prize: float = 100):
     u = random.random()
 
     if u <= threshold:
-        return prize, threshold
+        return prize, round(threshold, 2)
     else:
-        return 0, threshold
+        return 0, round(threshold,2)
 
 
 # ---- helpers per spec ----
