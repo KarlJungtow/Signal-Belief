@@ -1,7 +1,7 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Training — Choice (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
+{% block title %}Treatment A — Choice (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
 
 {% block content %}
 <style>
@@ -246,9 +246,7 @@
       if (!isNaN(v) && v < 1) {
         alert("You must consume at least 1 unit");
       } else if (!isNaN(v) && v > C1_MAX) {
-        alert("You can consume at most 12 units");
-        // or use C1_MAX dynamically:
-        // alert(`You can consume at most ${C1_MAX} units`);
+        alert(`You can consume at most ${C1_MAX} units`);
       }
 
       applyC1(v);

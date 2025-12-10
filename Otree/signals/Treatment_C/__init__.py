@@ -12,7 +12,7 @@ class C(BaseConstants):
     I = 0.0  # net interest
     R = 1.0 + I  # gross R
 
-    SIGNAL_SHOW_SECONDS = 6
+    SIGNAL_SHOW_SECONDS = 8
 
 class Subsession(BaseSubsession):
     pass
@@ -118,7 +118,10 @@ class Belief(Page):
     @staticmethod
     def vars_for_template(player: Player):
         player.belief_time_offset = time.time()
-        return {}
+        vars_dict = build_vars_for_template_choice(player, C)
+        vars_dict["c1"] = player.c1
+
+        return vars_dict
 
     @staticmethod
     def error_message(player: Player, values):
