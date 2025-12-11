@@ -4,12 +4,38 @@
 {% block title %}Treatment C — Belief (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
 
 {% block content %}
-<b>Temporary:</b> Last round you chose {{ c1 }} as you consumption.
 <style>
+  .c1-label {
+    position: absolute;
+    right: 65%;
+    margin-left: 15px;
+    transform: translateY(-115%);
+    white-space: nowrap;
+    font-weight: 600;
+    color: #0d6efd;
+  }
+
+  /* === COLOR + PAYOFF STYLES (copied from Choice page) === */
+  .pi05 { color: blue; font-weight: 600; }
+  .pi15 { color: red;  font-weight: 600; }
+
+  .payoff-box {
+    display: inline-block;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .payoff-val {
+    display: inline-block;
+    min-width: 6ch;
+    text-align: right;
+  }
+
   #utility_table.table {
     width: 100%;
     font-size: 0.9rem;
     margin-bottom: 0;
+    table-layout: fixed;
   }
   #utility_table.table th,
   #utility_table.table td {
@@ -21,7 +47,6 @@
   }
 </style>
 
-<!-- SINGLE CARD CONTAINING: income left + table right + belief entry below -->
 <div class="card mb-3">
   <div class="card-body">
 
@@ -54,21 +79,55 @@
           </thead>
           <tbody>
             {% for row in table_rows %}
-            <tr>
+            <tr data-c1="{{ row.c1 }}">
               <td>{{ row.c1 }}</td>
-              <td>{% if row.infeasible05 %}—{% else %}{{ row.u05 }}{% endif %}</td>
-              <td>{% if row.infeasible15 %}—{% else %}{{ row.u15 }}{% endif %}</td>
+              <td>
+                {% if row.infeasible05 %}
+                  —
+                {% else %}
+                  <span class="pi05">{{ row.u05 }}</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if row.infeasible15 %}
+                  —
+                {% else %}
+                  <span class="pi15">{{ row.u15 }}</span>
+                {% endif %}
+              </td>
             </tr>
             {% endfor %}
           </tbody>
+          <tfoot>
+            <tr class="text-center">
+              <td class="text-align">
+                <span id="c">—</span>
+              </td>
+              <td>
+                <div class="payoff-box pi05">
+                  payoff =<span id="u_05" class="payoff-val">—</span>
+                </div>
+              </td>
+              <td>
+                <div class="payoff-box pi15">
+                  payoff =<span id="u_15" class="payoff-val">—</span>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
         </table>
+
+        <div id="c1-label" class="c1-label">
+          You have just chosen C1=
+        </div>
+
       </div>
     </div>
 
     <hr>
 
     <!-- Belief slider + box -->
-    <p><strong>Belief entry:</strong> What is the likelihood that more than half of the dots were red?</p>
+    <p>Probability that I attribute to the majority of dots being red (P<sub>2</sub>=2)</p>
 
     <div class="d-flex align-items-center gap-2">
       <span>0%</span>
@@ -94,48 +153,87 @@
       /> %
     </div>
 
-    <!-- What oTree actually stores -->
     <input type="hidden" name="belief_input_raw" id="belief_input_raw_hidden" value="50" />
 
   </div>
 </div>
 
-{{ next_button }}
+{% block next_button %}
+    <button class="otree-btn-next btn btn-primary">Confirm</button>
+{% endblock %}
 {% endblock %}
 
 {% block scripts %}
 <script>
 (function () {
-    const slider = document.getElementById('bel_slider');
-    const box    = document.getElementById('bel_input_box');
-    const hidden = document.getElementById('belief_input_raw_hidden');
+  const Y1        = {{ y1 }};
+  const Y2        = {{ y2 }};
+  const P1        = {{ p1 }};
+  const R         = {{ R }};
+  const c1_player = {{ c1 }};
 
-    function setValue(v) {
-        let val = parseFloat(v);
+  const u_05   = document.getElementById('u_05');
+  const u_15   = document.getElementById('u_15');
+  const utilRows = Array.from(document.querySelectorAll('#utility_table tbody tr'));
+  const slider = document.getElementById('bel_slider');
+  const box    = document.getElementById('bel_input_box');
+  const hidden = document.getElementById('belief_input_raw_hidden');
+  const c      = document.getElementById('c');
 
-        // validate
-        if (isNaN(val)) val = 0;
-        if (val < 0) val = 0;
-        if (val > 100) val = 100;
+  function fmt(v) {
+    return Number.isFinite(v) ? v.toFixed(2) : '—';
+  }
 
-        // update all
-        slider.value = val;
-        box.value    = val;
-        hidden.value = val;
-    }
+  function setValue(v) {
+    let val = parseFloat(v);
+    if (isNaN(val)) val = 0;
+    if (val < 0) val = 0;
+    if (val > 100) val = 100;
+    slider.value = val;
+    box.value    = val;
+    hidden.value = val;
+  }
 
-    // Slider → updates everything
-    slider.addEventListener('input', function () {
-        setValue(slider.value);
-    });
-
-    // Box → updates everything
-    box.addEventListener('input', function () {
-        setValue(box.value);
-    });
-
-    // Initialize
+  slider.addEventListener('input', function () {
     setValue(slider.value);
+  });
+
+  box.addEventListener('input', function () {
+    setValue(box.value);
+  });
+
+  setValue(slider.value);
+
+  function highlightRow(c1Val) {
+    const c1Int = Math.round(c1Val);
+    utilRows.forEach(tr => {
+      const isMatch = parseInt(tr.dataset.c1, 10) === c1Int;
+      tr.classList.toggle('table-warning', isMatch);
+    });
+  }
+
+  function c2_given(c1, pi) {
+    const p2 = pi * P1;
+    const s  = Y1 - P1 * c1;
+    return Y2 + (R * s) / p2;
+  }
+
+  function applyC1(rawVal) {
+    let c1Val = parseFloat(rawVal);
+
+    const v05 = c2_given(c1Val, 0.5);
+    const v15 = c2_given(c1Val, 2);
+
+    const ok05 = (v05 >= 1);
+    const ok15 = (v15 >= 1);
+
+    u_05.textContent = ok05 ? fmt(c1Val * v05) : '—';
+    u_15.textContent = ok15 ? fmt(c1Val * v15) : '—';
+    c.textContent    = c1Val;
+    highlightRow(c1Val);
+  }
+
+  applyC1(c1_player);
 })();
 </script>
 {% endblock %}
