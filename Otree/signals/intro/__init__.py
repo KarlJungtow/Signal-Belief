@@ -19,10 +19,10 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     # Q1: True / False
     cq1_other_influence = models.BooleanField(
-        label="Other people's decisions will influence my payoff.",
+        label="Die Entscheidungen anderer Menschen beeinflussen meine Auszahlung.",
         choices=[
-            [True, 'True'],
-            [False, 'False'],
+            [True, 'Richtig'],
+            [False, 'Falsch'],
         ],
         widget=widgets.RadioSelectHorizontal,
     )
@@ -30,11 +30,11 @@ class Player(BasePlayer):
     # Q2: multiple choice
     cq2_borrow_points = models.StringField(
         label=(
-            "Suppose Period 1 endowment is 5. How many points do you borrow "
-            "if you decide to consume 9 units?"
+            "Angenommen, die Dotierung für Periode 1 beträgt 5. Wie viele Punkte leihen Sie sich, "
+            "wenn Sie sich entscheiden, 9 Einheiten zu konsumieren?"
         ),
         choices=[
-            ['nothing', 'Nothing'],
+            ['nothing', 'Nichts'],
             ['4', '4'],
             ['14', '14'],
             ['10', '10'],
@@ -44,32 +44,32 @@ class Player(BasePlayer):
 
     # Q3: True / False
     cq3_price_increase_prob = models.BooleanField(
-        label="Without the hint, the probability of price of consumption good to increase is 50%.",
+        label="Ohne diesen Hinweis beträgt die Wahrscheinlichkeit, dass der Preis für Konsumgüter steigt, 50%.",
         choices=[
-            [True, 'True'],
-            [False, 'False'],
+            [True, 'Richtig'],
+            [False, 'Falsch'],
         ],
         widget=widgets.RadioSelectHorizontal,
     )
 
     # Q4: multiple choice
     cq4_hint_duration = models.StringField(
-        label='When you click on “Get hint” button, the hint will be shown for …',
+        label='Wenn Sie auf die Schaltfläche „Hinweis anzeigen“ klicken, wird der Hinweis … Sekunden lang angezeigt.',
         choices=[
-            ['8_seconds', '8 seconds'],
-            ['30_seconds', '30 seconds'],
-            ['1_minute', '1 minute'],
-            ['unlimited', 'Unlimited time'],
+            ['8_seconds', '8 Sekunden'],
+            ['30_seconds', '30 Sekunden'],
+            ['1_minute', '1 Minute'],
+            ['unlimited', 'Unbegrenzte Zeit'],
         ],
         widget=widgets.RadioSelectHorizontal,
     )
 
     # Q5: True / False
     cq5_price_increase_dots = models.BooleanField(
-        label='The price will increase if the majority of the dots are red.',
+        label='Der Preis steigt, wenn die Mehrheit der Punkte rot ist.',
         choices=[
-            [True, 'True'],
-            [False, 'False'],
+            [True, 'Richtig'],
+            [False, 'Falsch'],
         ],
         widget=widgets.RadioSelectHorizontal,
     )
@@ -89,39 +89,38 @@ class ComprehensionTest(Page):
         # Question 1: Correct answer = False
         if values['cq1_other_influence'] is not False:
             errors['cq1_other_influence'] = (
-                "This is an individual decision-making study, so other people’s "
-                "decisions do not influence your payoff."
+                "Dies ist eine Studie zur individuellen Entscheidungsfindung,  "
+                "daher haben die Entscheidungen anderer Personen keinen Einfluss auf Ihren Gewinn."
             )
 
         # Question 2: Correct answer = '4'
         if values['cq2_borrow_points'] != '4':
             errors['cq2_borrow_points'] = (
-                "If you consume more units than you have in your endowment in Period 1, "
-                "then you borrow C₁ − E₁ units of money which you will repay at the price "
-                "level in Period 2. In this example, the endowment is 5 and consumption is 9, "
-                "resulting in a 4 unit loan."
+                "Wenn Sie in Periode 1 mehr Einheiten verbrauchen, als Sie in Ihrer Dotierung haben, "
+                "dann leihen Sie sich C₁ − E₁ Einheiten Geld, die Sie zum Preisniveau in Periode 2 zurückzahlen."
+                "In diesem Beispiel beträgt die Dotierung 5 und der Verbrauch 9, was zu einem Kredit von 4 Einheiten führt."
             )
 
         # Question 3: Correct answer = True
         if values['cq3_price_increase_prob'] is not True:
             errors['cq3_price_increase_prob'] = (
-                "In Period 1, the price of the consumption good is 1. In Period 2, the price "
-                "can decrease to 0.5 (a 50% decrease) or increase to 2 (a 100% increase), and "
-                "these outcomes are equally likely. Therefore, the probability that the price "
-                "of the consumption good will increase is 50%."
+                "In Periode 1 beträgt der Preis des Konsumguts 1. In Periode 2 kann  "
+                "der Preis auf 0,5 sinken (ein Rückgang um 50%) oder auf 2 steigen (ein Anstieg um 100%), "
+                "wobei diese Ergebnisse gleich wahrscheinlich sind. Daher beträgt die Wahrscheinlichkeit, "
+                "dass der Preis des Konsumguts steigt, 50%."
             )
 
         # Question 4: Correct answer = '8_seconds'
         if values['cq4_hint_duration'] != '8_seconds':
             errors['cq4_hint_duration'] = (
-                "The price hint in each round will be shown only for 8 seconds. "
-                "Each round, there will be a new hint."
+                "Der Preis-Hinweis wird in jeder Runde nur für 8 Sekunden angezeigt. "
+                "In jeder Runde gibt es einen neuen Hinweis."
             )
 
         # Question 5: Correct answer = True
         if values['cq5_price_increase_dots'] is not True:
             errors['cq5_price_increase_dots'] = (
-                "If there are more red dots than blue dots, then the price in Period 2 will be 2."
+                "Wenn es mehr rote Punkte als blaue Punkte gibt, dann wird der Preis in Periode 2 2 betragen."
             )
 
         # If no errors, return None; otherwise oTree will display field-specific feedback

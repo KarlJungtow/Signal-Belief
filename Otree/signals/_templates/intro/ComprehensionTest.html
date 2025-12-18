@@ -1,10 +1,12 @@
 {{ block title }}
-  Comprehension Test
+  Verständnistest
 {{ endblock }}
 {{ block content }}
 
   {{ formfields }}
 
-  {{ next_button }}
-
+{% block next_button %}
+    <button class="otree-btn-next btn btn-primary">Fortfahren</button>
+{% endblock %}
+    
 {{ endblock }}

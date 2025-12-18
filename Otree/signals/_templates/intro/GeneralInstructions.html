@@ -1,7 +1,7 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Instructions{% endblock %}
+{% block title %}Anweisungen{% endblock %}
 
 {% block content %}
 <html>
@@ -15,190 +15,206 @@
 </head>
 
 <p>
-    This study is composed of three parts. In each part you participate in 12 rounds of decision-making. In each round, you will
-    be asked to make two choices. We refer to these as “Consumption choice” and “Price belief”. Both of these choices may affect
-    your final payoff. The specific instruction for each part will be given to you at the beginning of each part.
+    Diese Studie besteht aus drei Teilen. In jedem Teil nehmen Sie an zwölf Entscheidungsrunden teil. In jeder Runde
+    werden Sie gebeten, zwei Entscheidungen zu treffen. Wir bezeichnen diese als <strong>„Konsumentscheidung”</strong> und
+    <strong>„Preisvorstellung”</strong>. Beide Entscheidungen können sich auf Ihren endgültigen Gewinn auswirken. 
+    Die genauen Anweisungen für jeden Teil erhalten Sie zu Beginn des jeweiligen Teils.
 </p>
 
-<h3>Consumption choice</h3>
+<h3> Konsumentscheidung</h3>
 
 <p>
-    Each round represents two time periods, called Period 1 and Period 2. In each round, you will receive an endowment of virtual
-    goods in both periods. We denote the endowment in Period 1 by <em>E1</em> and the endowment in Period 2 by <em>E2</em>.
+    Jede Runde umfasst zwei Zeiträume, die als Zeitraum 1 und Zeitraum 2 bezeichnet werden. In jeder Runde erhalten Sie in beiden Zeiträumen eine Dotation mit virtuellen Gütern.
+    Die Dotation in Zeitraum 1 bezeichnen wir mit <em>E<sub>1</sub></em> und die Dotation in Zeitraum 2 mit <em>E<sub>2</sub></em>.
 </p>
 
-<p>These endowments will be either</p>
+<p>Diese Dotationen werden entweder</p>
 
 <ul>
-    <li><em>E1</em> = 15 and <em>E2</em> = 5</li>
+    <li><em>E<sub>1</sub></em> = 15 und <em>E<sub>2</sub></em> = 5</li>
 </ul>
 
 <p>or</p>
 
 <ul>
-    <li><em>E1</em> = 5 and <em>E2</em> = 15</li>
+    <li><em>E<sub>1</sub></em> = 5 und <em>E<sub>2</sub></em> = 15</li>
 </ul>
 
 <p>
-    In 6 rounds, you will get the first endowment profile, and in the other 6 rounds, you will get the second endowment profile.
-    However, the order in which these profiles appear is random.
+    In sechs Runden erhalten Sie das erste Stiftungsprofil und in den anderen sechs Runden das zweite Stiftungsprofil. 
+    Die Reihenfolge, in der diese Profile erscheinen, ist jedoch zufällig.
 </p>
 
 <p>
-    Your task is to choose how much to consume in Period 1. We denote this consumption choice by <em>c1</em>. Based on your Period 1
-    consumption choice, your consumption in Period 2 (denoted <em>c2</em>) is automatically determined. The latter depends on the price
-    in Period 2.
+    Ihre Aufgabe besteht darin, zu entscheiden, wie viel Sie in Periode 1 konsumieren möchten. 
+    Diese Konsumentscheidung bezeichnen wir mit <em>C<sub>1</sub></em>. Basierend auf Ihrer Konsumentscheidung in Periode 1 wird Ihr Konsum in Periode 2 (bezeichnet mit <em>C<sub>2</sub></em>) automatisch bestimmt. 
+    Letzterer hängt vom Preis in Periode 2 ab.
 </p>
 
 <p>
-    The price of consumption goods in Period 1 is fixed at <em>p1</em> = 1.
+    Der Preis für Konsumgüter in Periode 1 ist auf <em>P<sub>1</sub></em> = 1 festgelegt.
 </p>
 
 <p>
-    The price of consumption goods in Period 2, <em>p2</em>, is randomly determined. It will be either:
+    Der Preis für Konsumgüter in Periode 2, <em>P<sub>2</sub></em>, wird zufällig festgelegt. Er beträgt entweder:
 </p>
 
 <ul>
-    <li>0.5 (50% lower than <em>p1</em>), or</li>
-    <li>2 (100% higher than <em>p1</em>).</li>
+    <li>0,5 (50 % niedriger als <em>P<sub>1</sub></em>), oder</li>
+    <li>2 (100 % höher als <em>P<sub>1</sub></em>).</li>
 </ul>
 
-<p>The two possible price levels for <em>p2</em> have an equal probability (50% chance).</p>
+<p>Die beiden möglichen Preisniveaus für <em>P<sub>2</sub></em> haben eine gleiche Wahrscheinlichkeit (50 % Chance).</p>
 
-<h3>Consumption payoff</h3>
+<h3>Konsumausbeute</h3>
 
 <p>
-    Your consumption payoff points earned each round are calculated with a payoff function (shown on screen during the experiment).
+    Ihre in jeder Runde verdienten Konsumauszahlungspunkte werden mit einer Auszahlungsfunktion berechnet, die während des Experiments auf dem Bildschirm angezeigt wird.
 </p>
 
 <p>
-    You will be given tables showing the possible payoff points you can earn for various integer <em>c1</em> choices, depending on the
-    endowment profile you receive and on the Period 2 price, <em>p2</em>.
+    Sie erhalten Tabellen, aus denen hervorgeht, wie viele Punkte Sie für verschiedene ganzzahlige <em>C<sub>1</sub></em>
+    -Auswahlen erzielen können, abhängig von dem Ihnen zugewiesenen Endowment-Profil und dem Preis <em>P<sub>2</sub></em> in Periode 2.
 </p>
 
 <p>
-    You can also insert numbers with up to one decimal in the box below the table. The associated payoff points will be shown to you
-    in the same line.
+    Sie können auch Zahlen mit bis zu einer Dezimalstelle in das Feld unterhalb der Tabelle eingeben. 
+    Die zugehörigen Auszahlungspunkte werden Ihnen in derselben Zeile angezeigt.
 </p>
 
-<h3>Saving and Borrowing</h3>
+<h3>Sparen und Leihen</h3>
 
 <p>
-    You can save or borrow using money. Your Period 1 saving or borrowing is determined by how your consumption choice <em>c1</em>
-    compares to your Period 1 endowment <em>E1</em>.
-</p>
-
-<p>
-    If you consume fewer units than your Period 1 endowment (<em>c1 &lt; E1</em>), you save <em>E1 − c1</em> units of money, that you can
-    carry over to Period 2. You may think of this as selling <em>E1 − c1</em> units of the good at price <em>p1</em>. These savings will
-    be used to buy additional consumption goods in Period 2 at the price <em>p2</em>. Then, your Period 2 consumption will be:
-</p>
-
-<p><em>c2 = E2 + (E1 − c1) · p1 / p2</em></p>
-
-<p>
-    If you consume more units than your Period 1 endowment (<em>c1 &gt; E1</em>), you borrow <em>c1 − E1</em> units of money, that you
-    must repay in Period 2. You may think of this as buying <em>c1 − E1</em> units of the good at price <em>p1</em>. These borrowings
-    will be repaid by selling a part of your endowment in Period 2 at the price <em>p2</em>. Then, your Period 2 consumption will be:
-</p>
-
-<p><em>c2 = E2 − (c1 − E1) · p1 / p2</em></p>
-
-<p>
-    There is no interest earned on saving, nor is there any interest charged on borrowing.
-</p>
-
-<h3>Constraints on your consumption choice</h3>
-
-<p>
-    Your consumption choice is restricted to be in the range:
-</p>
-
-<p><em>1 ≤ c1 ≤ E1 + E2</em></p>
-
-<p>
-    This restriction makes sure that you consume at least 1 unit of the good in each period even if you have to repay your borrowing
-    and that you will always be able to repay your borrowing whatever the price in Period 2.
-</p>
-
-<h3>Price belief</h3>
-
-<p>
-    In each round you will receive a hint for the randomly chosen price level for Period 2. The timing, when you receive this hint,
-    differs between the three parts.
+    Sie können Geld sparen oder leihen. Ihre Ersparnisse oder Kredite in Periode 1 hängen davon ab, 
+    wie Ihre Konsumentscheidung <em>C<sub>1</sub></em> im Vergleich zu Ihrer Ausstattung in Periode 1 <em>E<sub>1</sub></em> ausfällt.
 </p>
 
 <p>
-    This hint consists of a graph containing 400 red and blue dots. The figure below shows an example. Every round, there will be a
-    different hint graph.
+    Wenn Sie weniger Einheiten verbrauchen als Ihre Ausstattung in Periode 1 (<em>C<sub>1</sub> &lt; E<sub>1</sub></em>), 
+    sparen Sie <em>E<sub>1</sub> − C<sub>1</sub></em> Einheiten Geld, die Sie in Periode 2 übertragen können. 
+    Sie können sich das so vorstellen, als würden Sie <em>E<sub>1</sub> − C<sub>1</sub></em> Einheiten des Gutes zum Preis <em>P<sub>1</sub></em> verkaufen. 
+    Diese Ersparnisse können in Periode 2 verwendet werden, um zusätzliche Konsumgüter zum Preis <em>P<sub>2</sub></em> zu kaufen. 
+    Dann beträgt Ihr Verbrauch in Periode 2:
+</p>
+
+<p><em>C<sub>2</sub> = E<sub>2</sub> + (E<sub>1</sub> − C<sub>1</sub>) · P<sub>1</sub> / P<sub>2</sub></em></p>
+
+<p>
+    Wenn Sie in Periode 1 mehr Einheiten verbrauchen als Ihre Dotierung (<em>C<sub>1</sub> &gt; E<sub>1</sub></em>), leihen Sie sich <em>C<sub>1</sub> − E<sub>1</sub></em> Einheiten Geld, die Sie in Periode 2 zurückzahlen müssen. 
+    Sie können sich das so vorstellen, als würden Sie <em>C<sub>1</sub> − E<sub>1</sub></em> Einheiten des Gutes zum Preis <em>P<sub>1</sub></em> kaufen.
+    Diese Kredite werden durch den Verkauf eines Teils Ihrer Dotierung in Periode 2 zum Preis <em>P<sub>2</sub></em> zurückgezahlt. 
+    Dann beträgt Ihr Verbrauch in Periode 2:
+</p>
+
+<p><em>C<sub>2</sub> = E<sub>2</sub> − (C<sub>1</sub> − E<sub>1</sub>) · P<sub>1</sub> / P<sub>2</sub></em></p>
+
+<p>
+    Es werden weder Zinsen auf Ersparnisse gezahlt noch auf geliehenes Geld berechnet.
+</p>
+
+<h3>Einschränkungen bei Ihrer Konsumentscheidung</h3>
+
+<p>
+    Ihre Verbrauchswahl ist auf den folgenden Bereich beschränkt:
+</p>
+
+<p><em>1 ≤ C<sub>1</sub> ≤ E<sub>1</sub> + E<sub>2</sub></em></p>
+
+<p>
+    Diese Einschränkung stellt sicher, dass Sie in jeder Periode mindestens eine Einheit der Ware konsumieren, selbst wenn Sie Ihre Leihe zurückzahlen müssen, und dass Sie Ihre Leihe unabhängig vom Preis in Periode 2 immer zurückzahlen können.
+</p>
+
+<h3>Preisprognose</h3>
+
+<p>
+    In jeder Runde erhalten Sie einen Hinweis auf die zufällig ausgewählte Gewinnstufe für den zweiten Zeitraum.
+</p>
+
+<p>
+    Dieser Hinweis besteht aus einem Diagramm mit 400 roten und blauen Punkten. Die Abbildung unten zeigt ein Beispiel. In jeder Runde wird ein anderes Hinweisdiagramm verwendet.
 </p>
 <div class="center">
     <img src="{% static 'dots_A_195_x1.png' %}" alt="Example hint" width="100%">
 </div>
 
-<p class="center"><em>Figure: Example hint.</em></p>
+<p class="center"><em>   Beispielhinweis.</em></p>
 
 <ul>
-    <li>If a majority of the dots (&gt; 200) are colored blue, the price level is low: <em>P<sub>2</sub> = 0.5</em>.</li>
-    <li>If a majority of the dots (&gt; 200) are colored red, the price level is high: <em>p2 = 2</em>.</li>
+    <li>Wenn die Mehrheit der Punkte (&gt; 200) blau gefärbt ist, ist das Preisniveau niedrig: <em>P<sub>2</sub> = 0,5</em>.</li>
+    <li>Wenn die Mehrheit der Punkte (&gt; 200) rot gefärbt ist, ist das Preisniveau hoch: <em>P<sub>2</sub> = 2</em>.</li>
 </ul>
 
 <p>
-    The number of blue and red colored dots will never be equal. When you click the “Get hint” button, you will only have 8 seconds
-    to see this graph. After you saw the graph, you will be asked to state your belief about whether the majority of dots is red.
+    Die Anzahl der blauen und roten Punkte wird niemals gleich sein. Wenn Sie auf die Schaltfläche „Hinweis erhalten“ klicken, 
+    haben Sie <strong>acht Sekunden Zeit</strong>, um sich diese Grafik anzusehen. Anschließend werden Sie gebeten anzugeben, ob Sie glauben, 
+    dass die Mehrheit der Punkte rot ist.
 </p>
 
 <p>
-    You can state your belief using a slider or type the probability that you attribute to the majority of dots being red. This
-    probability is denoted by <em>q</em>. Selecting 100% would indicate that you are certain that more than half of the dots are red.
-    Selecting 0% would indicate that you are certain that more than half of the dots are blue. However, if you are uncertain, you may
-    state any probability between 0% and 100%.
+    Sie können Ihre Einschätzung entweder mithilfe eines Schiebereglers angeben oder die Wahrscheinlichkeit eingeben, mit der Sie davon ausgehen, dass die Mehrheit der Punkte rot ist.
+    Wenn Sie 100 % auswählen, bedeutet dies, dass Sie sicher sind, dass mehr als die Hälfte der Punkte rot sind.
+    Die Auswahl von 0 % bedeutet, dass Sie sicher sind, dass mehr als die Hälfte der Punkte blau sind.
+    Wenn Sie sich jedoch nicht sicher sind, können Sie eine beliebige Wahrscheinlichkeit zwischen 0 % und 100 % angeben.
 </p>
 
-<h3>Belief payoff</h3>
+<h3>Preisprognose-Auszahlung</h3>
 
 <p>
-    You can earn a bonus payoff of 2 Euros that is determined by how close your stated probability is to the actual outcome.
-    More specifically:
+    Sie können eine Bonusauszahlung von 2 Euro erhalten. Die Gewinnchance hängt davon ab, wie nah Ihre angegebene Wahrscheinlichkeit am tatsächlichen Ergebnis liegt.
+    Der Computer prüft, ob am Ende tatsächlich Rot die Mehrheit hatte (dann ist das „wahre Ergebnis“ 100 %) oder Blau die Mehrheit hatte (dann ist das „wahre Ergebnis“ 0 %).
+</p>
+
+<p>
+    Ihre Gewinnwahrscheinlichkeit für den 2-Euro-Bonus wird dann wie folgt berechnet:
+    <strong>Bonus-Wahrscheinlichkeit = 1 − (Ihre Angabe − wahres Ergebnis)<sup>2</sup></strong>.
+    (Dabei werden die Werte als Anteile zwischen 0 und 1 gerechnet: 0 % = 0 und 100 % = 1.)
 </p>
 
 <ul>
     <li>
-        You will receive 2 Euros with probability <em>q</em> if the majority of dots was red.
+        Beispiel: Wenn tatsächlich Rot die Mehrheit war (wahres Ergebnis = 100 %) und Sie 80 % angeben, dann ist die Bonus-Wahrscheinlichkeit
+        <strong>1 − (0,80 − 1,00)<sup>2</sup> = 0,96</strong>, also 96 %.
     </li>
     <li>
-        If the majority of dots was blue, you receive 2 Euros with the probability <em>1 − q</em>.
+        Beispiel: Wenn tatsächlich Blau die Mehrheit war (wahres Ergebnis = 0 %) und Sie 30 % angeben, dann ist die Bonus-Wahrscheinlichkeit
+        <strong>1 − (0,30 − 0,00)<sup>2</sup> = 0,91</strong>, also 91 %.
     </li>
 </ul>
 
 <p>
-    This rule makes sure that it is in your own interest to state your true belief.
+    Diese Regel stellt sicher, dass es in Ihrem eigenen Interesse liegt, die Wahrscheinlichkeit so anzugeben, wie Sie sie wirklich einschätzen.
 </p>
 
-<h3>Final payoff</h3>
+
+<h3>Endauszahlung</h3>
 
 <p>
-    At the end of the experiment, one round in each part will be randomly selected and your consumption payoff points from these
-    rounds will determine your final monetary payoff. We will transform payoff points to euros with a 1 to 20 ratio
-    (100 points = 5 euros). Another round in each part will be randomly selected for the reward on your stated belief.
+    Am Ende des Experiments wird eine Runde aus jedem Teil zufällig ausgewählt, und Ihre Konsumauszahlungspunkte
+    aus diesen Runden bestimmen Ihre endgültige Geldauszahlung. Wir wandeln die Auszahlungspunkte im Verhältnis 1:20 in Euro um (100 Punkte = 5 Euro).
+    Eine weitere Runde aus jedem Teil wird zufällig ausgewählt, um Ihre angegebene Überzeugung zu belohnen.
 </p>
 
 <p>
-    For both chosen rounds, we will remind you of your decisions and show you the actual outcomes. For the consumption choice, we will
-    show you the actual Period 2 price level and the computer will calculate your resulting payoff points. For beliefs, the computer
-    will run a lottery to determine whether you earned the 2 Euros bonus using your stated probability. You will only see the actual
-    outcomes for these randomly chosen rounds.
+    Für beide ausgewählten Runden werden wir Sie an Ihre Entscheidungen erinnern und Ihnen die tatsächlichen Ergebnisse zeigen.
+    Bei der Konsumentscheidung zeigen wir Ihnen das tatsächliche Preisniveau der Periode 2 und der Computer berechnet Ihre 
+    daraus resultierenden Auszahlungspunkte. Bei den Überzeugungen führt der Computer eine Lotterie durch, 
+    um anhand der von Ihnen angegebenen Wahrscheinlichkeit zu ermitteln, ob Sie den 2-Euro-Bonus erhalten haben. 
+    Sie sehen nur die tatsächlichen Ergebnisse dieser zufällig ausgewählten Runden.
 </p>
 
-<h3>Training rounds</h3>
+<h3>Trainingsrunden</h3>
 
 <p>
-    On the next screen, we will ask you a few questions about these instructions to ensure you understand them.
-    Then, there will be two training rounds. Your decisions during these rounds will not affect your final payoff.
-    These rounds are designed to familiarize you with tasks. We will provide feedback on your decisions during these training rounds.
+    Auf dem nächsten Bildschirm werden wir Ihnen einige Fragen zu diesen Anweisungen stellen, um sicherzustellen, dass Sie sie verstanden haben.
+    Anschließend finden zwei Trainingsrunden statt. Ihre Entscheidungen während dieser Runden haben keinen Einfluss auf Ihre endgültige Auszahlung. 
+    Diese Runden dienen dazu, Sie mit den Aufgaben vertraut zu machen. Wir geben Ihnen Feedback zu Ihren Entscheidungen während dieser Trainingsrunden.
+
 </p>
 
-    {{ next_button }}
+{% block next_button %}
+    <button class="otree-btn-next btn btn-primary">Forthfahren</button>
+{% endblock %}
+
 {{ endblock }}
 
 

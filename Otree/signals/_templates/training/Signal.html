@@ -1,12 +1,12 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Training — Round {{ player.round_number }}{% endblock %}
+{% block title %}Training — Runde {{ player.round_number }}{% endblock %}
 
 {% block content %}
 
 <div class="d-flex flex-column align-items-center gap-3">
-  <button type="button" class="btn btn-primary btn-lg" id="show-btn">Get hint</button>
+  <button type="button" class="btn btn-primary btn-lg" id="show-btn">Hinweis erhalten</button>
 
   <div id="image_wrap" style="display:none; margin: 1rem 0; text-align: center;">
     <img src="{% static image_file %}" alt="Signal image" class="img-fluid w-50" />
@@ -33,12 +33,12 @@
       imgWrap.style.display = 'block';
 
       let remaining = {{ show_seconds }};
-      timerEl.textContent = `Time left: ${remaining}`;
+      timerEl.textContent = `Verbleibende Zeit: ${remaining}`;
 
       const intervalId = setInterval(() => {
         remaining -= 1;
         if (remaining > 0) {
-          timerEl.textContent = `Time left: ${remaining}`;
+          timerEl.textContent = `Verbleibende Zeit: ${remaining}`;
         } else {
           clearInterval(intervalId);
           // auto-advance
