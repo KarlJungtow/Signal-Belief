@@ -1,15 +1,28 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Feedback Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}{% endblock %}
+{% block title %}Feedback für Runde {{ player.round_number }} of {{ C.NUM_ROUNDS }}{% endblock %}
 
 {% block content %}
-You chose to consume {{ c1 }} units today. It ended up being the high-price state.
-The price of the consumption good doubled. Consequently, tomorrow's consumption will be {{ c2 }} units.
-According to this scenario, your payoff for this round is {{ u }} ({{ c1 }} x {{ c2 }} units).
 
-Had it been the low state, the price would have halved and you would have consumed {{ c2_low }} units tomorrow.
-In this scenario, your payoff would have been {{ u_low }} points ({{ c1 }} x {{ c2_low }})."
+<p>
+    In dieser Feedback-Runde haben Sie sich dafür entschieden, in der ersten Periode <strong>{{ c1 }}</strong> Einheiten zu konsumieren.
+    Wenn diese Runde für Ihre Endauszahlung ausgewählt würde, würden wir Ihre Auszahlung abhängig vom Preiszustand in Periode 2 wie folgt berechnen:
+</p>
 
-{{ next_button }}
+<ul>
+    <li>
+        <strong>Hochpreis-Zustand (P<sub>2</sub>=2):</strong> Ihr Konsum in Periode 2 wäre <strong>{{ c2 }}</strong> Einheiten,
+        und Ihre Auszahlung wäre <strong>{{ u }}</strong> Punkte ({{ c1 }} × {{ c2 }}).
+    </li>
+    <li>
+        <strong>Niedrigpreis-Zustand (P<sub>2</sub>=0,5):</strong> Ihr Konsum in Periode 2 wäre <strong>{{ c2_low }}</strong> Einheiten,
+        und Ihre Auszahlung wäre <strong>{{ u_low }}</strong> Punkte ({{ c1 }} × {{ c2_low }}).
+    </li>
+</ul>
+
+{% block next_button %}
+    <button class="otree-btn-next btn btn-primary">Forthfahren</button>
+{% endblock %}
+
 {{endblock}}
