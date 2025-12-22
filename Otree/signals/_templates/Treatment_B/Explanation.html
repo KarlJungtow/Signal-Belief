@@ -1,23 +1,38 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Treatment B Instructions{% endblock %}
+{% block title %}Anweisungen für Teil (2 oder 3){% endblock %}
 
 {% block content %}
 
-In this part, each round will start with an information about your endowment profile in this period. <br>
-You will also see the table with the possible consumption choices and the potential
-payoffs associated with these choices for both prices. However, you cannot yet make your consumption choice. <br>
-Before you can do that, you will get the hint for the price level in Period 2.
-To proceed, you must click on the button “Get hint”.
-After you clicked this button, you will see the price hint for this round for 8 seconds. <br>
-Once you stated and confirmed the probability that you attribute to the majority of dots being red,
-you will be reminded about your endowment profile and the potential payoffs associated with the various
-possible consumption choices for both prices. You will also see your own stated belief for <em>P<sub>2</sub>=2</em>
-Now you can make a consumption choice. <br>
-After confirming your consumption choice, the next round starts with an information about next period’s endowment. <br>
-This procedure is repeated for 12 rounds. <br>
+<p>
+    In diesem Teil beginnt jede Runde mit Informationen über Ihr Dotationsprofil in dieser Runde. Sie sehen außerdem
+    die Tabelle mit den möglichen Konsumentscheidungen und den potenziellen Auszahlungen, die mit diesen Entscheidungen
+    für beide Preise verbunden sind. Allerdings können Sie Ihre Konsumentscheidung noch nicht treffen.
 
-{{ next_button }}
+</p>
+
+<p>
+    Bevor Sie dies tun können, erhalten Sie den Preis-Hinweis für den Preis in Periode 2. Um fortzufahren,
+    müssen Sie auf die Schaltfläche „Hinweis anzeigen” klicken. Nachdem Sie auf diese Schaltfläche geklickt haben, sehen Sie den Preis-Hinweis für diese Runde acht Sekunden lang.
+</p>
+
+<p>
+    Nachdem Sie die Wahrscheinlichkeit angegeben und bestätigt haben, die Sie der Mehrheit der roten Punkte zuweisen,
+    werden Sie erneut an Ihr Dotationsprofil erinnert und sehen die potenziellen Auszahlungen, die mit den verschiedenen
+    Konsumentscheidungen für beide Preise verbunden sind. Sie sehen außerdem Ihre eigene Überzeugung bezüglich <em>P<sub>2</sub>=2</em>.
+    Nun können Sie eine Konsumentscheidung treffen.
+</p>
+
+<p>
+    Nachdem Sie Ihre Konsumentscheidung ausgewählt und bestätigt haben, beginnt die nächste Runde mit Informationen über das
+    Dotationsprofil der nächsten Runde.
+</p>
+
+<p> Dieser Vorgang wird 12 Runden lang wiederholt.</p>
+
+{% block next_button %}
+    <button class="otree-btn-next btn btn-primary">Forthfahren</button>
+{% endblock %}
 
 {% endblock %}

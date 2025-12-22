@@ -1,7 +1,7 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Treatment C — Choice (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
+{% block title %}Teil (2 oder 3) — Entscheidung (Runde {{ player.round_number }} von {{ C.NUM_ROUNDS }}){% endblock %}
 
 {% block content %}
 <style>
@@ -45,33 +45,32 @@
     <div class="row">
       <!-- LEFT: income information (no separate box) -->
       <div class="col-md-4 mb-3 mb-md-0">
-        <h5>Income &amp; prices</h5>
+        <h5>Dotation</h5>
         <ul>
-          <li>Current income: <strong>y<sub>1</sub> = {{ y1 }}</strong></li>
-          <li>Future income: <strong>y<sub>2</sub> = {{ y2 }}</strong></li>
-          <li>Price now: <strong>p<sub>1</sub> = {{ p1 }}</strong></li>
+          <li>Period 1: E<sub>1</sub> = {{ y1 }}</li>
+          <li>Period 2: E<sub>2</sub> = {{ y2 }}</li>
+          <li>Aktueller Preis: P<sub>1</sub> = {{ p1 }}</li>
         </ul>
-        <p class="mb-1">
+        <!-- <p class="mb-1">
           Feasibility requires <strong>1 ≤ c<sub>1</sub> ≤ {{ c1_max }}</strong>.
-        </p>
+        </p> -->
         <p class="mb-0">
-          The probability for the price P<sub>2</sub>=2 is <br>
-          <strong>{{ belief }} %</strong>
+          Die Wahrscheinlichkeit für den Preis P<sub>2</sub>=2 beträgt <strong>{{ belief }} %</strong>
         </p>
       </div>
 
       <!-- RIGHT: utility table + payoffs aligned under columns -->
-      <div class="col-md-8">
-        <p><strong>Utility reference (not feedback):</strong>
-          u(c<sub>1</sub>, c<sub>2</sub>) = c<sub>1</sub> · c<sub>2</sub></p>
-        <p class="mb-2">Utilities for different c<sub>1</sub> values:</p>
+        <div class="col-md-8">
+          <!--<p><strong>Utility reference (not feedback):</strong>
+          u(c<sub>1</sub>, c<sub>2</sub>) = c<sub>1</sub> · c<sub>2</sub></p>-->
+        <p class="mb-2">Auszahlung für verschiedene C<sub>1</sub>- und P<sub>2</sub>-Werte:</p>
 
         <table id="utility_table" class="table table-sm table-bordered align-middle">
           <thead>
             <tr>
-              <th style="width:10%">c<sub>1</sub></th>
-              <th>u at π = 0.5</th>
-              <th>u at π = 2</th>
+              <th style="width:10%">C<sub>1</sub></th>
+              <th>Auszahlung wenn P<sub>2</sub> = 0,5</th>
+              <th>Auszahlung wenn P<sub>2</sub> = 2</th>
             </tr>
           </thead>
           <tbody>
@@ -104,13 +103,13 @@
               <!-- π = 0.5 payoff -->
               <td>
                 <div class="payoff-box pi05">
-                  payoff =<span id="u_05" class="payoff-val">—</span>
+                  <span id="u_05" class="payoff-val">—</span>
                 </div>
               </td>
               <!-- π = 2 payoff -->
               <td>
                 <div class="payoff-box pi15">
-                  payoff =<span id="u_15" class="payoff-val">—</span>
+                  <span id="u_15" class="payoff-val">—</span>
                 </div>
               </td>
             </tr>
@@ -121,7 +120,10 @@
     <hr>
     <hr>
 
-    <p>Choose your period-1 consumption c<sub>1</sub>:</p>
+    <p>
+      <strong>Was möchten Sie für Ihren Verbrauch C<sub>1</sub> in der ersten Periode auswählen?</strong>
+      Sie können entweder den Schieberegler verwenden oder einen Wert in das Feld unten eingeben.
+    </p>
 
     <!-- Slider -->
     <div class="d-flex align-items-center gap-2">
@@ -144,7 +146,7 @@
       <!-- Enter c1 box (column 1) -->
       <div class="col-4">
         <div class="d-flex align-items-center gap-2">
-          <label for="c1_input_box" class="mb-0">Enter c<sub>1</sub>:</label>
+          <label for="c1_input_box" class="mb-0">Eingeben C<sub>1</sub>:</label>
           <input
             type="number"
             id="c1_input_box"
@@ -160,14 +162,14 @@
 
     <!-- hidden output just for JS sync -->
     <div class="mt-2" style="display: none">
-      c<sub>1</sub>: <output id="c1_out">{{ c1_max }}</output>
+      C<sub>1</sub>: <output id="c1_out">{{ c1_max }}</output>
     </div>
 
   </div>
 </div>
 
 {% block next_button %}
-    <button class="otree-btn-next btn btn-primary">Get Hint</button>
+    <button class="otree-btn-next btn btn-primary">Hinweis erhalten</button>
 {% endblock %}
 {% endblock %}
 

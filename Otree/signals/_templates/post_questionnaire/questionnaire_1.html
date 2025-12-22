@@ -1,10 +1,12 @@
 {{ block title }}
-    Questionnaire
+    Fragebogen
 {{ endblock }}
 {{ block content }}
-    Please enter the following information: <br>
+    Bitte geben Sie die folgenden Informationen ein: <br>
 
     {{ formfields }}
-    {{ next_button }}
+    {% block next_button %}
+        <button class="otree-btn-next btn btn-primary">Forthfahren</button>
+    {% endblock %}
 
 {{ endblock }}

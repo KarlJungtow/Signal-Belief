@@ -11,13 +11,13 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
     LIKERT_1_7 = [
-        [1, '1 – Strongly disagree'],
+        [1, '1 – Stimme überhaupt nicht zu'],
         [2, '2'],
         [3, '3'],
-        [4, '4 – Neutral'],
+        [4, '4'],
         [5, '5'],
         [6, '6'],
-        [7, '7 – Strongly agree'],
+        [7, '7 – Stimme voll und ganz zu'],
     ]
 
 
@@ -33,15 +33,15 @@ class Player(BasePlayer):
 
 
     age = models.IntegerField(
-        label='What is your age',
+        label='Wie alt sind Sie?',
     )
     gender = models.IntegerField(
-        label='What is your gender',
+        label='Was ist Ihr Geschlecht?',
         choices=[
-                 [1, 'Male'],
-                 [2, 'Female'],
-                 [3, 'Non-Binary'],
-                 [4, 'Diverse']
+                 [1, 'Männlich'],
+                 [2, 'Weiblich'],
+                 #[3, 'Nicht binär'],
+                 [3, 'Sonstiges']
         ]
         ,
         widget=widgets.RadioSelect,
@@ -52,64 +52,64 @@ class Player(BasePlayer):
             [2, 'Berufsausbildung'],
             [3, 'Bachelor'],
             [4, 'Diplom/Master/Magister'],
-            [5, 'other'],
+            [5, 'Sonstiges'],
         ],
         widget=widgets.RadioSelect,
-        label='What is the highest degree or level of education you have completed?'
+        label='Was ist der höchste Bildungsabschluss, den Sie erreicht haben?'
     )
     # 1.
     q1 = models.IntegerField(
         choices=C.LIKERT_1_7,
         widget=widgets.RadioSelectHorizontal,
-        label="I often start out expecting the worst, even though I will probably do OK."
+        label="Ich gehe oft von vornherein vom Schlimmsten aus, obwohl ich wahrscheinlich ganz gut zurechtkommen werde."
     )
 
     # 2.
     q2 = models.IntegerField(
         choices=C.LIKERT_1_7,
         widget=widgets.RadioSelectHorizontal,
-        label="I worry about how things will turn out."
+        label="Ich mache mir Sorgen darüber, wie die Dinge ausgehen werden."
     )
 
     # 3.
     q3 = models.IntegerField(
         choices=C.LIKERT_1_7,
         widget=widgets.RadioSelectHorizontal,
-        label="I often worry that I won’t be able to carry through my intentions."
+        label="Ich mache mir oft Sorgen, dass ich meine Vorhaben nicht umsetzen kann."
     )
 
     # 4.
     q4 = models.IntegerField(
         choices=C.LIKERT_1_7,
         widget=widgets.RadioSelectHorizontal,
-        label="I spend lots of time imagining what could go wrong."
+        label="Ich mache mir oft Sorgen, dass ich meine Vorhaben nicht umsetzen kann."
     )
 
     # 5.
     q5 = models.IntegerField(
         choices=C.LIKERT_1_7,
         widget=widgets.RadioSelectHorizontal,
-        label="I imagine how I would feel if things went badly."
+        label="Ich stelle mir vor, wie ich mich fühlen würde, wenn es schlecht läuft."
     )
 
     # 6.
     q6 = models.IntegerField(
         choices=C.LIKERT_1_7,
         widget=widgets.RadioSelectHorizontal,
-        label="In these situations, sometimes I worry more about looking like a fool than doing really well."
+        label="In solchen Situationen mache ich mir manchmal mehr Sorgen, mich zu blamieren, als wirklich sehr gut abzuschneiden."
     )
     # Question 5
     q7 = models.IntegerField(
-        label="How do you see yourself: are you generally a person who is fully prepared to take risks or do you try to avoid taking risks? "
-              "Please tick a box on the scale, where the value 0 means: ‘not at all willing to take risks’ and the value 10 means: "
-              "‘very willing to take risks’.",
+        label="Wie schätzen Sie sich selbst ein: Sind Sie generell ein Mensch, der vollständig bereit ist, Risiken einzugehen,
+        "oder versuchen Sie eher, Risiken zu vermeiden? Bitte kreuzen Sie einen Wert auf der Skala an, wobei 0 bedeutet: 'überhaupt nicht bereit,
+        "Risiken einzugehen' und 10 bedeutet: 'sehr bereit, Risiken einzugehen'.",
         choices=[[i, str(i)] for i in range(0, 11)],   # Likert 0–10
         widget=widgets.RadioSelectHorizontal
     )
 
     # Question 6
     q8 = models.IntegerField(
-        label='Please rate the following statement: “Debt is an integral part of today’s life.”',
+        label="Bitte bewerten Sie die folgende Aussage: 'Schulden sind ein fester Bestandteil des heutigen Lebens.'",
         choices=[
             [1, '1'],
             [2, '2'],
@@ -123,8 +123,8 @@ class Player(BasePlayer):
 
     # Question 7
     q9 = models.IntegerField(
-        label='What do you think how does the average participant in this experiment rate the following statement? '
-              '“There is no excuse for borrowing money.”',
+        label="Wie, glauben Sie, bewertet der durchschnittliche Teilnehmer bzw. die durchschnittliche Teilnehmerin dieses Experiments die folgende Aussage?"
+        "'Es gibt keine Entschuldigung dafür, sich Geld zu leihen'.",
         choices=[
             [1, '1'],
             [2, '2'],
@@ -138,27 +138,27 @@ class Player(BasePlayer):
 
     # Question 8
     q10 = models.StringField(
-        label='Have you ever taken out a loan?',
+        label='Haben Sie schon einmal einen Kredit aufgenommen?',
         choices=[
-            ['never', 'Never'],
-            ['once', 'Once'],
-            ['2_3', '2–3 times'],
-            ['more_3', 'More than 3 times'],
+            ['never', 'Nie'],
+            ['once', 'Einmal'],
+            ['2_3', '2–3 Mal'],
+            ['more_3', 'Mehr als 3 Mal'],
         ],
         widget=widgets.RadioSelect
     )
 
     q11 = models.StringField(
         label=(
-            "Imagine you put 100 € into a savings account with a fixed interest rate of 2% per year. "
-            "You leave the money there for 5 years and do not make any further deposits or withdrawals. "
-            "How much will you have on the account after 5 years?"
+            "Stellen Sie sich vor, Sie legen 100 € auf ein Sparkonto mit einem festen Zinssatz von 2 % pro Jahr."
+            "Sie lassen das Geld dort 5 Jahre liegen und tätigen keine weiteren Einzahlungen oder Abhebungen."
+            "Wie viel Geld haben Sie nach 5 Jahren auf dem Konto?"
         ),
         choices=[
-            ['more_110', 'More than 110 €'],
-            ['exact_110', 'Exactly 110 €'],
-            ['less_110', 'Less than 110 €'],
-            ['dk', 'Don’t know'],
+            ['more_110', 'Mehr als 110 €'],
+            ['exact_110', 'Genau 110 €'],
+            ['less_110', 'Weniger als 110 €'],
+            ['dk', 'Weiß nicht'],
         ],
         widget=widgets.RadioSelect
     )
@@ -166,14 +166,14 @@ class Player(BasePlayer):
     # Question 10 → q12
     q12 = models.StringField(
         label=(
-            "Imagine the interest rate on your savings account is 1% per year and inflation is 2% per year. "
-            "After 1 year, with the money in this account, you would be able to buy…"
+            "Stellen Sie sich vor, der Zinssatz auf Ihrem Sparkonto beträgt 1 % pro Jahr und die Inflation beträgt"
+            "2 % pro Jahr. Nach 1 Jahr könnten Sie sich mit dem Geld auf diesem Konto …"
         ),
         choices=[
-            ['more_today', 'More than today'],
-            ['same_today', 'Exactly the same as today'],
-            ['less_today', 'Less than today'],
-            ['dk', 'Don’t know'],
+            ['more_today', 'Mehr als heute'],
+            ['same_today', 'Genau so wie heute'],
+            ['less_today', 'Weniger als heute'],
+            ['dk', 'Weiß nicht'],
         ],
         widget=widgets.RadioSelect
     )
@@ -181,16 +181,43 @@ class Player(BasePlayer):
     # Question 11 → q13
     q13 = models.StringField(
         label=(
-            "Suppose inflation turns out to be higher than people expected when they signed their loan "
-            "and savings contracts. Who benefits the most from this situation?"
+            "Angenommen, die Inflation fällt höher aus, als die Menschen erwartet haben, als sie ihre Kredit- und Sparverträge"
+            "abgeschlossen haben. Wer profitiert in dieser Situation am meisten?"
         ),
         choices=[
-            ['debtors', 'People with large fixed-rate debts (e.g. mortgages)'],
-            ['savers', 'People with savings'],
-            ['neither', 'People with no debts or savings'],
-            ['dk', 'Don’t know'],
+            ['debtors', 'Personen mit hohen festverzinslichen Schulden (z. B. Hypotheken).'],
+            ['savers', 'Personen mit Ersparnissen'],
+            ['neither', 'Personen ohne Schulden oder Ersparnisse'],
+            ['dk', 'Weiß nicht'],
         ],
         widget=widgets.RadioSelect
+    )
+
+    # Question 12 → q14
+    q14 = models.StringField(
+        label=(
+            "Wenn Sie an einem Rennen teilnehmen und die Person auf dem zweiten Platz überholen: "
+            "Auf welchem Platz sind Sie dann?"
+        ),
+        blank=False,
+    )
+
+    # Question 13 → q15
+    q15 = models.StringField(
+        label=(
+            "Ein Bauer hatte 15 Schafe und bis auf 8 sind alle gestorben. "
+            "Wie viele sind übrig?"
+        ),
+        blank=False,
+    )
+
+    # Question 14 → q16
+    q16 = models.StringField(
+        label=(
+            "Emilys Vater hat drei Töchter. Die ersten beiden heißen April und May. "
+            "Wie heißt die dritte Tochter?"
+        ),
+        blank=False,
     )
 
 
@@ -211,4 +238,8 @@ class questionnaire_3(Page):
 class questionnaire_4(Page):
     form_model = "player"
     form_fields = ["q11", "q12", "q13"]
-page_sequence = [questionnaire_1, questionnaire_2, questionnaire_3, questionnaire_4]
+
+class questionnaire_5(Page):
+    form_model = "player"
+    form_fields = ["q14", "q15", "q16"]
+page_sequence = [questionnaire_1, questionnaire_2, questionnaire_3, questionnaire_4, questionnaire_5]

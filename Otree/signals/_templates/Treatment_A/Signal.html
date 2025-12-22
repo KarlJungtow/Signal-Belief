@@ -1,7 +1,7 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Treatment A — Round {{ player.round_number }}{% endblock %}
+{% block title %}Teil 1 (Runde {{ player.round_number }} von {{ C.NUM_ROUNDS }}){% endblock %}
 
 {% block content %}
 
@@ -33,12 +33,12 @@
       imgWrap.style.display = 'block';
 
       let remaining = {{ show_seconds }};
-      timerEl.textContent = `Time left: ${remaining}`;
+      timerEl.textContent = `Verbleibende Zeit: ${remaining}`;
 
       const intervalId = setInterval(() => {
         remaining -= 1;
         if (remaining > 0) {
-          timerEl.textContent = `Time left: ${remaining}`;
+          timerEl.textContent = `Verbleibende Zeit: ${remaining}`;
         } else {
           clearInterval(intervalId);
           // auto-advance

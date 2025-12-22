@@ -1,28 +1,31 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Treatment A Instructions{% endblock %}
+{% block title %}Anweisungen für Teil 1{% endblock %}
 
 {% block content %}
 
 <p>
-    In this part, each round will start with the price hint about Period 2. You have to check the hint by clicking on the
-    “Get hint” button so that you can see the matrix with red and blue dots for 8 seconds. Then you must state the probability
-    that you attribute to the majority of dots being red.
+    In diesem Teil beginnt jede Runde mit einem Preis-Hinweis für Periode 2, den Sie durch Klicken auf die Schaltfläche „Hinweis anzeigen”
+    sehen können. Sie sehen dann acht Sekunden lang ein Diagramm mit roten und blauen Punkten. Anschließend müssen Sie Ihre Einschätzung zur 
+    Wahrscheinlichkeit abgeben, dass die Mehrheit der Punkte rot ist.
 </p>
 
 <p>
-    Once you confirmed the stated probability that you attribute to the majority of dots being red, you will be informed about your
-    endowment profile and the potential payoffs associated with the various possible consumption choices for both prices. You will
-    also see your own stated belief for <em>P<sub>2</sub>=2</em>.
+    Nachdem Sie die Wahrscheinlichkeit bestätigt haben, die Sie der Mehrheit der roten Punkte zuweisen, 
+    werden Sie über Ihr Dotationsprofil und die potenziellen Auszahlungen informiert, die mit den verschiedenen Konsumentscheidungen
+    für die beiden Preise verbunden sind. Sie sehen auch Ihre eigene Überzeugung bezüglich <em>P<sub>2</sub>=2</em>.
 </p>
 
 <p>
-    After selecting and confirming your consumption choice, the next round starts with a new price hint.
+    Nachdem Sie Ihre Konsumentscheidung ausgewählt und bestätigt haben, beginnt die nächste Runde mit einem neuen Preis-Hinweis.
 </p>
 
-<p>This procedure is repeated for 12 rounds.</p>
+<p> Dieser Vorgang wird 12 Runden lang wiederholt.</p>
 
-  {{ next_button }}
+{% block next_button %}
+    <button class="otree-btn-next btn btn-primary">Forthfahren</button>
+{% endblock %}
+
 {{ endblock }}
 

@@ -1,7 +1,7 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Treatment B — Belief (Round {{ player.round_number }} of {{ C.NUM_ROUNDS }}){% endblock %}
+{% block title %}Teil (2 oder 3) — Preisprognose (Runde {{ player.round_number }} von {{ C.NUM_ROUNDS }}){% endblock %}
 
 {% block content %}
 
@@ -28,28 +28,27 @@
     <div class="row">
       <!-- Income info -->
       <div class="col-md-4 mb-3 mb-md-0">
-        <h5>Income &amp; prices</h5>
+        <h5>Dotation</h5>
         <ul>
-          <li>Current income: <strong>y<sub>1</sub> = {{ y1 }}</strong></li>
-          <li>Future income: <strong>y<sub>2</sub> = {{ y2 }}</strong></li>
-          <li>Price now: <strong>p<sub>1</sub> = {{ p1 }}</strong></li>
+          <li>Period 1: E<sub>1</sub> = {{ y1 }}</li>
+          <li>Period 2: E<sub>2</sub> = {{ y2 }}</li>
+          <li>Aktueller Preis: P<sub>1</sub> = {{ p1 }}</li>
         </ul>
       </div>
 
       <!-- Payoff table -->
       <div class="col-md-8">
-        <p><strong>Utility reference (not feedback):</strong>
-          u(c<sub>1</sub>, c<sub>2</sub>) = c<sub>1</sub> · c<sub>2</sub></p>
+        <!--<p><strong>Utility reference (not feedback):</strong>
+          u(c<sub>1</sub>, c<sub>2</sub>) = c<sub>1</sub> · c<sub>2</sub></p>-->
 
-        <p>Utilities for integer c<sub>1</sub> (1–20) under both possible π values.
-           “—” marks infeasible (c<sub>2</sub> &lt; 1).</p>
+        <p class="mb-2">Auszahlung für verschiedene C<sub>1</sub>- und P<sub>2</sub>-Werte:</p>
 
         <table id="utility_table" class="table table-sm table-bordered align-middle">
           <thead>
             <tr>
-              <th style="width:10%">c<sub>1</sub></th>
-              <th>u at π = 0.5</th>
-              <th>u at π = 1.5</th>
+              <th style="width:10%">C<sub>1</sub></th>
+              <th>Auszahlung wenn P<sub>2</sub> = 0,5</th>
+              <th>Auszahlung wenn P<sub>2</sub> = 2</th>
             </tr>
           </thead>
           <tbody>
@@ -68,8 +67,7 @@
     <hr>
 
     <!-- Belief slider + box -->
-    <p><strong>Belief entry:</strong> What is the likelihood that more than half of the dots were red?</p>
-
+    <p><strong>Wie hoch schätzen Sie die Wahrscheinlichkeit ein, dass die Mehrheit der Punkte rot ist (P<sub>2</sub> = 2)?</strong></p>
     <div class="d-flex align-items-center gap-2">
       <span>0%</span>
       <input
@@ -83,7 +81,7 @@
     </div>
 
     <div class="d-flex align-items-center gap-2 mt-2">
-      <label for="bel_input_box" class="mb-0">Likelihood:</label>
+      <label for="bel_input_box" class="mb-0">Wahrscheinlichkeit:</label>
       <input
         type="number"
         id="bel_input_box"
@@ -100,7 +98,9 @@
   </div>
 </div>
 
-{{ next_button }}
+{% block next_button %}
+    <button class="otree-btn-next btn btn-primary">Forthfahren</button>
+{% endblock %}
 {% endblock %}
 
 {% block scripts %}

@@ -1,10 +1,10 @@
 {% extends "global/Page.html" %}
 {% load otree %}
 
-{% block title %}Treatment A — Round {{ player.round_number }}{% endblock %}
+{% block title %} Teil 1 — Preisprognose (Runde {{ player.round_number }} von {{ C.NUM_ROUNDS }}{% endblock %}
 
 {% block content %}
-  <p><strong>Probability that I attribute to the majority of dots being red (P<sub>2</sub> = 2)</strong></p>
+  <p><strong>Wie hoch schätzen Sie die Wahrscheinlichkeit ein, dass die Mehrheit der Punkte rot ist (P<sub>2</sub> = 2)?</strong></p>
 
   <div style="display: flex; align-items: center; gap: 10px;">
     <span>0%</span>
@@ -19,7 +19,7 @@
   </div>
 
   <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
-    <label for="bel_input_box" style="margin: 0;">Likelihood:</label>
+    <label for="bel_input_box" style="margin: 0;">Wahrscheinlichkeit:</label>
     <input
       type="number"
       id="bel_input_box"
@@ -35,7 +35,7 @@
   <input type="hidden" name="belief_input_raw" id="belief_input_raw_hidden" value="50" />
 
 {% block next_button %}
-    <button class="otree-btn-next btn btn-primary">Confirm</button>
+    <button class="otree-btn-next btn btn-primary">Bestätigen</button>
 {% endblock %}
 
 {% endblock %}
