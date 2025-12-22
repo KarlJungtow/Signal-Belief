@@ -48,14 +48,15 @@ class Player(BasePlayer):
     )
     highest_degree = models.IntegerField(
         choices=[
-            [1, 'Abitur / Fachabitur'],
-            [2, 'Berufsausbildung'],
-            [3, 'Bachelor'],
-            [4, 'Diplom/Master/Magister'],
+            [1, '(Fach-)Abitur / (Fach-)Hochschulreife'],
+            [2, 'Berufsausbildung (Lehre) / Fachschule'],
+            [3, 'Bachelor (oder im Bachelorstudium)'],
+            [4, 'Master / Diplom / Magister / Staatsexamen (oder im Masterstudium)'],
             [5, 'Sonstiges'],
         ],
         widget=widgets.RadioSelect,
-        label='Was ist der höchste Bildungsabschluss, den Sie erreicht haben?'
+        label="Welcher Bildungsabschluss ist derzeit Ihr höchster Abschluss "
+              "(oder in welchem Abschluss befinden Sie sich aktuell)?"
     )
     # 1.
     q1 = models.IntegerField(
@@ -82,7 +83,7 @@ class Player(BasePlayer):
     q4 = models.IntegerField(
         choices=C.LIKERT_1_7,
         widget=widgets.RadioSelectHorizontal,
-        label="Ich mache mir oft Sorgen, dass ich meine Vorhaben nicht umsetzen kann."
+        label="Ich verbringe viel Zeit damit, mir vorzustellen, was schiefgehen könnte."
     )
 
     # 5.
@@ -100,8 +101,8 @@ class Player(BasePlayer):
     )
     # Question 5
     q7 = models.IntegerField(
-        label="Wie schätzen Sie sich selbst ein: Sind Sie generell ein Mensch, der vollständig bereit ist, Risiken einzugehen,
-        "oder versuchen Sie eher, Risiken zu vermeiden? Bitte kreuzen Sie einen Wert auf der Skala an, wobei 0 bedeutet: 'überhaupt nicht bereit,
+        label="Wie schätzen Sie sich selbst ein: Sind Sie generell ein Mensch, der vollständig bereit ist, Risiken einzugehen, "
+        "oder versuchen Sie eher, Risiken zu vermeiden? Bitte kreuzen Sie einen Wert auf der Skala an, wobei 0 bedeutet: 'überhaupt nicht bereit, "
         "Risiken einzugehen' und 10 bedeutet: 'sehr bereit, Risiken einzugehen'.",
         choices=[[i, str(i)] for i in range(0, 11)],   # Likert 0–10
         widget=widgets.RadioSelectHorizontal
@@ -111,12 +112,12 @@ class Player(BasePlayer):
     q8 = models.IntegerField(
         label="Bitte bewerten Sie die folgende Aussage: 'Schulden sind ein fester Bestandteil des heutigen Lebens.'",
         choices=[
-            [1, '1'],
+            [1, '1: Stimme überhaupt nicht zu'],
             [2, '2'],
             [3, '3'],
             [4, '4'],
             [5, '5'],
-            [6, '6'],
+            [6, '6: Stimme voll und ganz zu'],
         ],   # Likert 1–6
         widget=widgets.RadioSelectHorizontal
     )
@@ -124,14 +125,14 @@ class Player(BasePlayer):
     # Question 7
     q9 = models.IntegerField(
         label="Wie, glauben Sie, bewertet der durchschnittliche Teilnehmer bzw. die durchschnittliche Teilnehmerin dieses Experiments die folgende Aussage?"
-        "'Es gibt keine Entschuldigung dafür, sich Geld zu leihen'.",
+        " 'Es gibt keine Entschuldigung dafür, sich Geld zu leihen'.",
         choices=[
-            [1, '1'],
+            [1, '1: Stimme überhaupt nicht zu'],
             [2, '2'],
             [3, '3'],
             [4, '4'],
             [5, '5'],
-            [6, '6'],
+            [6, '6: Stimme voll und ganz zu'],
         ],  # Likert 1–6
         widget=widgets.RadioSelectHorizontal
     )
@@ -150,8 +151,8 @@ class Player(BasePlayer):
 
     q11 = models.StringField(
         label=(
-            "Stellen Sie sich vor, Sie legen 100 € auf ein Sparkonto mit einem festen Zinssatz von 2 % pro Jahr."
-            "Sie lassen das Geld dort 5 Jahre liegen und tätigen keine weiteren Einzahlungen oder Abhebungen."
+            "Stellen Sie sich vor, Sie legen 100 € auf ein Sparkonto mit einem festen Zinssatz von 2 % pro Jahr. "
+            "Sie lassen das Geld dort 5 Jahre liegen und tätigen keine weiteren Einzahlungen oder Abhebungen. "
             "Wie viel Geld haben Sie nach 5 Jahren auf dem Konto?"
         ),
         choices=[
@@ -166,7 +167,7 @@ class Player(BasePlayer):
     # Question 10 → q12
     q12 = models.StringField(
         label=(
-            "Stellen Sie sich vor, der Zinssatz auf Ihrem Sparkonto beträgt 1 % pro Jahr und die Inflation beträgt"
+            "Stellen Sie sich vor, der Zinssatz auf Ihrem Sparkonto beträgt 1 % pro Jahr und die Inflation beträgt "
             "2 % pro Jahr. Nach 1 Jahr könnten Sie sich mit dem Geld auf diesem Konto …"
         ),
         choices=[
@@ -181,7 +182,7 @@ class Player(BasePlayer):
     # Question 11 → q13
     q13 = models.StringField(
         label=(
-            "Angenommen, die Inflation fällt höher aus, als die Menschen erwartet haben, als sie ihre Kredit- und Sparverträge"
+            "Angenommen, die Inflation fällt höher aus, als die Menschen erwartet haben, als sie ihre Kredit- und Sparverträge "
             "abgeschlossen haben. Wer profitiert in dieser Situation am meisten?"
         ),
         choices=[
@@ -214,8 +215,8 @@ class Player(BasePlayer):
     # Question 14 → q16
     q16 = models.StringField(
         label=(
-            "Emilys Vater hat drei Töchter. Die ersten beiden heißen April und May. "
-            "Wie heißt die dritte Tochter?"
+            "Wenn drei Elfen drei Spielzeuge in einer Stunde einpacken können, wie viele Elfen werden benötigt, "
+            "um sechs Spielzeuge in zwei Stunden einzupacken?"
         ),
         blank=False,
     )

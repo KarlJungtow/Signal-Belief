@@ -2,187 +2,183 @@
 {% load otree %}
 
 {% block title %}
-    Final Payment
+    Endauszahlung
 {% endblock %}
 
 {% block content %}
 
-Thank you for taking part in this study. <b>Your total payment is: {{ player.payoff }} euros </b> <br>
+Vielen Dank für Ihre Teilnahme an dieser Studie. <b>Ihre Gesamtauszahlung beträgt: {{ player.payoff }} Euro </b> <br>
 <br>
-Below you see how your final payment has been determined. <br>
-For each part, one round was randomly selected for your consumption payoff
-and one round was randomly selected for your belief payoff. <br>
+Unten sehen Sie, wie Ihre Endauszahlung bestimmt wurde. Für jeden Teil wurde jeweils eine Runde zufällig für Ihre Konsumauszahlung
+und eine Runde zufällig für Ihren Preisprognose-Bonus ausgewählt. <br>
 <br>
 <hr>
-<h2>Part 1</h2>
+<h2>Teil 1</h2>
 
-<h3>Consumption payoff</h3>
+<h3>Konsumauszahlung</h3>
 <ul>
     <li>
-        Selected round: {{ con_rounds.0 }}
+        Ausgewählte Runde: {{ con_rounds.0 }}
     </li>
     <li>
-        Your endowment was E1 = {{ y1.0 }}, E2 = {{ y2.0 }}
+        Ihre Dotation war E<sub>1</sub> = {{ y1.0 }}, E<sub>2</sub> = {{ y2.0 }}
     </li>
     <li>
-        In this round, your Period 1 consumption choice was: {{ c1_list.0 }}
+        In dieser Runde war Ihre Konsumentscheidung in Periode 1: {{ c1_list.0 }}
     </li>
     <li>
-        The actual Period 2 price level was: {{ con_p2.0 }}
+        Das tatsächliche Preisniveau in Periode 2 war: {{ con_p2.0 }}
     </li>
     <li>
-        Your resulting Period 2 consumption was: {{ c2_list.0 }}
+        Ihr daraus resultierender Konsum in Periode 2 war: {{ c2_list.0 }}
     </li>
     <li>
-        Your resulting consumption payoff in this round is:
-        {{ u_points.0 }} points.
+        Ihre daraus resultierende Konsumauszahlung in dieser Runde beträgt:
+        {{ u_points.0 }} Punkte.
     </li>
 </ul>
 
-<h3>Belief payoff</h3>
+<h3>Preisprognose-Bonus</h3>
 <ul>
     <li>
-        Selected round: {{ bel_rounds.0 }}
+        Ausgewählte Runde: {{ bel_rounds.0 }}
     </li>
     <li>
-        Your stated belief about the chance of the high price was:
+        Ihre angegebene Wahrscheinlichkeit für einen hohen Preis war:
         {{ belief_raws.0 }}%.
     </li>
     <li>
-        The actual price level was: {{ bel_p2.0 }}
+        Das tatsächliche Preisniveau war: {{ bel_p2.0 }}
     </li>
     <li>
-        Your probability to win the 2-euro belief bonus was:
+        Ihre Gewinnwahrscheinlichkeit für den 2-Euro-Bonus betrug:
         {{ thresholds_pct.0 }}%.
     </li>
     <li>
-        The computer has run the lottery based on your stated probability.
+        Der Computer hat die Lotterie auf Grundlage Ihrer angegebenen Wahrscheinlichkeit durchgeführt.
     </li>
     <li>
-        Result of the belief lottery:
-        You
+        Ergebnis der Lotterie:
+        Sie haben den 2-Euro-Bonus in diesem Teil
         {% if belief_points.0 > 0 %}
-            <strong>won</strong>
+            <strong>gewonnen</strong>
         {% else %}
-            <strong>did not win</strong>
-        {% endif %}
-        the 2-euro belief bonus in this part.
+            <strong>nicht gewonnen</strong>
+        {% endif %}.
     </li>
 </ul>
 
 <hr>
 
-<h2>Part 2</h2>
+<h2>Teil 2</h2>
 
-<h3>Consumption payoff</h3>
+<h3>Konsumauszahlung</h3>
 <ul>
     <li>
-        Selected round: {{ con_rounds.1 }}
+        Ausgewählte Runde: {{ con_rounds.1 }}
     </li>
     <li>
-        Your endowment was E1 = {{ y1.1 }}, E2 = {{ y2.1 }}
+        Ihre Dotation war E<sub>1</sub> = {{ y1.1 }}, E<sub>2</sub> = {{ y2.1 }}
     </li>
     <li>
-        In this round, your Period 1 consumption choice was: {{ c1_list.1 }}
+        In dieser Runde war Ihre Konsumentscheidung in Periode 1: {{ c1_list.1 }}
     </li>
     <li>
-        The actual Period 2 price level was: {{ con_p2.1 }}
+        Das tatsächliche Preisniveau in Periode 2 war: {{ con_p2.1 }}
     </li>
     <li>
-        Your resulting Period 2 consumption was: {{ c2_list.1 }}
+        Ihr daraus resultierender Konsum in Periode 2 war: {{ c2_list.1 }}
     </li>
     <li>
-        Your resulting consumption payoff in this round is:
-        {{ u_points.1 }} points.
+        Ihre daraus resultierende Konsumauszahlung in dieser Runde beträgt:
+        {{ u_points.1 }} Punkte.
     </li>
 </ul>
 
-<h3>Belief payoff</h3>
+<h3>Preisprognose-Bonus</h3>
 <ul>
     <li>
-        Selected round: {{ bel_rounds.1 }}
+        Ausgewählte Runde: {{ bel_rounds.1 }}
     </li>
     <li>
-        Your stated belief about the chance of the high price was:
+        Ihre angegebene Wahrscheinlichkeit für einen hohen Preis war:
         {{ belief_raws.1 }}%.
     </li>
     <li>
-        The actual price level was: {{ bel_p2.1 }}
+        Das tatsächliche Preisniveau war: {{ bel_p2.1 }}
     </li>
     <li>
-        Your probability to win the 2-euro belief bonus was:
+        Ihre Gewinnwahrscheinlichkeit für den 2-Euro-Bonus betrug:
         {{ thresholds_pct.1 }}%.
     </li>
     <li>
-        The computer has run the lottery based on your stated probability.
+        Der Computer hat die Lotterie auf Grundlage Ihrer angegebenen Wahrscheinlichkeit durchgeführt.
     </li>
     <li>
-        Result of the belief lottery:
-        You
+        Ergebnis der Lotterie:
+        Sie haben den 2-Euro-Bonus in diesem Teil
         {% if belief_points.1 > 0 %}
-            <strong>won</strong>
+            <strong>gewonnen</strong>
         {% else %}
-            <strong>did not win</strong>
-        {% endif %}
-        the 2-euro belief bonus in this part.
+            <strong>nicht gewonnen</strong>
+        {% endif %}.
     </li>
 </ul>
 
 <hr>
 
-<h2>Part 3</h2>
+<h2>Teil 3</h2>
 
-<h3>Consumption payoff</h3>
+<h3>Konsumauszahlung</h3>
 <ul>
     <li>
-        Selected round: {{ con_rounds.2 }}
+        Ausgewählte Runde: {{ con_rounds.2 }}
     </li>
     <li>
-        Your endowment was E1 = {{ y1.2 }}, E2 = {{ y2.2 }}
+        Ihre Dotation war E<sub>1</sub> = {{ y1.2 }}, E<sub>2</sub> = {{ y2.2 }}
     </li>
     <li>
-        In this round, your Period 1 consumption choice was: {{ c1_list.2 }}
+        In dieser Runde war Ihre Konsumentscheidung in Periode 1: {{ c1_list.2 }}
     </li>
     <li>
-        The actual Period 2 price level was: {{ con_p2.2 }}
+        Das tatsächliche Preisniveau in Periode 2 war: {{ con_p2.2 }}
     </li>
     <li>
-        Your resulting Period 2 consumption was: {{ c2_list.2 }}
+        Ihr daraus resultierender Konsum in Periode 2 war: {{ c2_list.2 }}
     </li>
     <li>
-        Your resulting consumption payoff in this round is:
-        {{ u_points.2 }} points.
+        Ihre daraus resultierende Konsumauszahlung in dieser Runde beträgt:
+        {{ u_points.2 }} Punkte.
     </li>
 </ul>
 
-<h3>Belief payoff</h3>
+<h3>Preisprognose-Bonus</h3>
 <ul>
     <li>
-        Selected round: {{ bel_rounds.2 }}
+        Ausgewählte Runde: {{ bel_rounds.2 }}
     </li>
     <li>
-        Your stated belief about the chance of the high price was:
+        Ihre angegebene Wahrscheinlichkeit für einen hohen Preis war:
         {{ belief_raws.2 }}%.
     </li>
     <li>
-        The actual price level was: {{ bel_p2.2 }}
+        Das tatsächliche Preisniveau war: {{ bel_p2.2 }}
     </li>
     <li>
-        Your probability to win the 2-euro belief bonus was:
+        Ihre Gewinnwahrscheinlichkeit für den 2-Euro-Bonus betrug:
         {{ thresholds_pct.2 }}%.
     </li>
     <li>
-        The computer has run the lottery based on your stated probability.
+        Der Computer hat die Lotterie auf Grundlage Ihrer angegebenen Wahrscheinlichkeit durchgeführt.
     </li>
     <li>
-        Result of the belief lottery:
-        You
+        Ergebnis der Lotterie:
+        Sie haben den 2-Euro-Bonus in diesem Teil
         {% if belief_points.2 > 0 %}
-            <strong>won</strong>
+            <strong>gewonnen</strong>
         {% else %}
-            <strong>did not win</strong>
-        {% endif %}
-        the 2-euro belief bonus in this part.
+            <strong>nicht gewonnen</strong>
+        {% endif %}.
     </li>
 </ul>
 
