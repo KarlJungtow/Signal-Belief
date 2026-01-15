@@ -6,7 +6,7 @@ SESSION_CONFIGS = [
         app_sequence=[
 
                     #'intro',
-                    #'training',
+                    'training',
                     'Treatment_A',
                     'Treatment_C',
                     'Treatment_B',
@@ -29,7 +29,7 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=0.2, participation_fee=4.00, doc=""
 )
 
-PARTICIPANT_FIELDS = ["num_obvious_blue", "num_obvious_red"]
+PARTICIPANT_FIELDS = ["num_obvious_blue", "num_obvious_red", "treatment"]
 SESSION_FIELDS = []
 
 # ISO-639 code

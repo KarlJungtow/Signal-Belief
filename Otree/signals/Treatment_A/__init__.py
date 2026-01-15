@@ -34,7 +34,6 @@ class Player(BasePlayer):
     p2 = models.FloatField()  # period-2 price (= pi * p1 by default)
     image_file = models.StringField()
     r = models.FloatField()
-
     # Decision
     c1_max = models.FloatField()
     c1 = models.FloatField()
@@ -70,6 +69,15 @@ def creating_session(subsession: Subsession):
 
 # ------------- Pages -------------
 class Explanation(Page):
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        if player.round_number == 1:
+            try:
+                player.participant.treatment += 1
+            except:
+                player.participant.treatment = 1
+        return {"treatment": player.participant.vars["treatment"],}
     @staticmethod
     def is_displayed(player: Player):
         return player.round_number == 1
@@ -118,6 +126,7 @@ class Signal(Page):
         return dict(
             image_file=player.image_file,
             show_seconds= C.SIGNAL_SHOW_SECONDS,
+            treatment=player.participant.treatment,
         )
 
 
@@ -128,7 +137,7 @@ class Belief(Page):
     @staticmethod
     def vars_for_template(player: Player):
         player.belief_time_offset = time.time()
-        return {}
+        return {"treatment": player.participant.treatment,}
     @staticmethod
     def error_message(player: Player, values):
         v = values.get("belief_input_raw")
