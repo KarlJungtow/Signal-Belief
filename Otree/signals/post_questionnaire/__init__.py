@@ -40,8 +40,8 @@ class Player(BasePlayer):
         choices=[
                  [1, 'Männlich'],
                  [2, 'Weiblich'],
-                 #[3, 'Nicht binär'],
-                 [3, 'Sonstiges']
+                 [3, 'Sonstiges'],
+                 [4, 'Keine Angabe']
         ]
         ,
         widget=widgets.RadioSelect,
@@ -53,6 +53,7 @@ class Player(BasePlayer):
             [3, 'Bachelor (oder im Bachelorstudium)'],
             [4, 'Master / Diplom / Magister / Staatsexamen (oder im Masterstudium)'],
             [5, 'Sonstiges'],
+            [6, 'Keine Angabe'],
         ],
         widget=widgets.RadioSelect,
         label="Welcher Bildungsabschluss ist derzeit Ihr höchster Abschluss "
@@ -97,11 +98,11 @@ class Player(BasePlayer):
     q6 = models.IntegerField(
         choices=C.LIKERT_1_7,
         widget=widgets.RadioSelectHorizontal,
-        label="In solchen Situationen mache ich mir manchmal mehr Sorgen, mich zu blamieren, als wirklich sehr gut abzuschneiden."
+        label="In solchen Situationen mache ich mir manchmal mehr Sorgen, mich zu blamieren, als darum, ob ich wirklich gut abschneide."
     )
     # Question 5
     q7 = models.IntegerField(
-        label="Wie schätzen Sie sich selbst ein: Sind Sie generell ein Mensch, der vollständig bereit ist, Risiken einzugehen, "
+        label="Wie schätzen Sie sich selbst ein: Sind Sie generell ein Mensch, der bereit ist, Risiken einzugehen, "
         "oder versuchen Sie eher, Risiken zu vermeiden? Bitte kreuzen Sie einen Wert auf der Skala an, wobei 0 bedeutet: 'überhaupt nicht bereit, "
         "Risiken einzugehen' und 10 bedeutet: 'sehr bereit, Risiken einzugehen'.",
         choices=[[i, str(i)] for i in range(0, 11)],   # Likert 0–10
@@ -141,10 +142,10 @@ class Player(BasePlayer):
     q10 = models.StringField(
         label='Haben Sie schon einmal einen Kredit aufgenommen?',
         choices=[
-            ['never', 'Nie'],
-            ['once', 'Einmal'],
-            ['2_3', '2–3 Mal'],
-            ['more_3', 'Mehr als 3 Mal'],
+            ['never', 'nie'],
+            ['once', 'einmal'],
+            ['2_3', 'zwei- bis dreimal'],
+            ['more_3', 'mehr als dreimal'],
         ],
         widget=widgets.RadioSelect
     )
@@ -156,10 +157,10 @@ class Player(BasePlayer):
             "Wie viel Geld haben Sie nach 5 Jahren auf dem Konto?"
         ),
         choices=[
-            ['more_110', 'Mehr als 110 €'],
-            ['exact_110', 'Genau 110 €'],
-            ['less_110', 'Weniger als 110 €'],
-            ['dk', 'Weiß nicht'],
+            ['more_110', 'mehr als 110 €'],
+            ['exact_110', 'genau 110 €'],
+            ['less_110', 'weniger als 110 €'],
+            ['dk', 'weiß ich nicht'],
         ],
         widget=widgets.RadioSelect
     )
@@ -167,14 +168,14 @@ class Player(BasePlayer):
     # Question 10 → q12
     q12 = models.StringField(
         label=(
-            "Stellen Sie sich vor, der Zinssatz auf Ihrem Sparkonto beträgt 1 % pro Jahr und die Inflation beträgt "
-            "2 % pro Jahr. Nach 1 Jahr könnten Sie sich mit dem Geld auf diesem Konto …"
+            "Stellen Sie sich vor, der Zinssatz auf Ihrem Sparkonto beträgt 1 % pro Jahr und die Inflation beträgt 2 % pro Jahr."
+            "Was könnten Sie sich nach 1 Jahr mit dem Geld auf diesem Konto kaufen?"
         ),
         choices=[
-            ['more_today', 'Mehr als heute'],
-            ['same_today', 'Genau so wie heute'],
-            ['less_today', 'Weniger als heute'],
-            ['dk', 'Weiß nicht'],
+            ['more_today', 'mehr als heute'],
+            ['same_today', 'genau so viel wie heute'],
+            ['less_today', 'weniger als heute'],
+            ['dk', 'weiß ich nicht'],
         ],
         widget=widgets.RadioSelect
     )
@@ -182,14 +183,14 @@ class Player(BasePlayer):
     # Question 11 → q13
     q13 = models.StringField(
         label=(
-            "Angenommen, die Inflation fällt höher aus, als die Menschen erwartet haben, als sie ihre Kredit- und Sparverträge "
-            "abgeschlossen haben. Wer profitiert in dieser Situation am meisten?"
+            "Angenommen, die Inflation fällt höher aus, als die Menschen erwartet haben, als sie ihre Kredit- und Sparverträge abgeschlossen haben."
+            "Wer profitiert am meisten von der höheren Inflation?"
         ),
         choices=[
-            ['debtors', 'Personen mit hohen festverzinslichen Schulden (z. B. Hypotheken).'],
-            ['savers', 'Personen mit Ersparnissen'],
-            ['neither', 'Personen ohne Schulden oder Ersparnisse'],
-            ['dk', 'Weiß nicht'],
+            ['debtors', 'Menschen mit festverzinslichen Kreditverträgen (z.B. Hypothekenkrediten)'],
+            ['savers', 'Menschen mit Ersparnissen'],
+            ['neither', 'Menschen, die weder Ersparnisse noch Kredite haben'],
+            ['dk', 'weiß ich nicht'],
         ],
         widget=widgets.RadioSelect
     )

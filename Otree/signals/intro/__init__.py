@@ -30,8 +30,7 @@ class Player(BasePlayer):
     # Q2: multiple choice
     cq2_borrow_points = models.StringField(
         label=(
-            "Angenommen, die Dotierung für Periode 1 beträgt 5. Wie viele Punkte leihen Sie sich, "
-            "wenn Sie sich entscheiden, 9 Einheiten zu konsumieren?"
+            "Angenommen, die Erstausstattung in Periode 1 beträgt 5. Wie viele Geldeinheiten leihen Sie sich, wenn Sie 9 Gütereinheiten konsumieren?"
         ),
         choices=[
             ['nothing', 'Nichts'],
@@ -44,7 +43,7 @@ class Player(BasePlayer):
 
     # Q3: True / False
     cq3_price_increase_prob = models.BooleanField(
-        label="Ohne diesen Hinweis beträgt die Wahrscheinlichkeit, dass der Preis für Konsumgüter steigt, 50%.",
+        label="Ohne einen Hinweis beträgt die Wahrscheinlichkeit, dass der Preis für Konsumgüter in Periode 2 steigt, 50%.",
         choices=[
             [True, 'Richtig'],
             [False, 'Falsch'],
@@ -96,16 +95,16 @@ class ComprehensionTest(Page):
         # Question 2: Correct answer = '4'
         if values['cq2_borrow_points'] != '4':
             errors['cq2_borrow_points'] = (
-                "Wenn Sie in Periode 1 mehr Einheiten verbrauchen, als Sie in Ihrer Dotierung haben, "
-                "dann leihen Sie sich C₁ − E₁ Einheiten Geld, die Sie zum Preisniveau in Periode 2 zurückzahlen."
-                "In diesem Beispiel beträgt die Dotierung 5 und der Verbrauch 9, was zu einem Kredit von 4 Einheiten führt."
+                "Wenn Sie in Periode 1 mehr Gütereinheiten konsumieren, als Sie in Ihrer Erstausstattung erhalten haben, dann leihen Sie sich "
+                "C<sub>1</sub> − E<sub>1</sub> Einheiten Geld, für die Sie zum Preisniveau P<sub>1</sub> = 1 die fehlenden Gütereinheiten kaufen. "
+                "In diesem Beispiel beträgt die Erstausstattung E<sub>1</sub> = 5 und der Konsum C<sub>1</sub> = 9, was zu einem Kredit von 4 Geldeinheiten führt."
             )
 
         # Question 3: Correct answer = True
         if values['cq3_price_increase_prob'] is not True:
             errors['cq3_price_increase_prob'] = (
-                "In Periode 1 beträgt der Preis des Konsumguts 1. In Periode 2 kann  "
-                "der Preis auf 0,5 sinken (ein Rückgang um 50%) oder auf 2 steigen (ein Anstieg um 100%), "
+                "In Periode 1 beträgt der Preis des Konsumguts P<sub>1</sub> = 1. In Periode 2 kann  "
+                "der Preis auf P<sub>2</sub> = 0,5 sinken (ein Rückgang um 50%) oder auf P<sub>2</sub> steigen (ein Anstieg um 100%), "
                 "wobei diese Ergebnisse gleich wahrscheinlich sind. Daher beträgt die Wahrscheinlichkeit, "
                 "dass der Preis des Konsumguts steigt, 50%."
             )
@@ -120,7 +119,7 @@ class ComprehensionTest(Page):
         # Question 5: Correct answer = True
         if values['cq5_price_increase_dots'] is not True:
             errors['cq5_price_increase_dots'] = (
-                "Wenn es mehr rote Punkte als blaue Punkte gibt, dann wird der Preis in Periode 2 2 betragen."
+                "Wenn es mehr rote Punkte als blaue Punkte gibt, dann wird der Preis in Periode 2 auf P<sub>2</sub>= 2 steigen."
             )
 
         # If no errors, return None; otherwise oTree will display field-specific feedback
