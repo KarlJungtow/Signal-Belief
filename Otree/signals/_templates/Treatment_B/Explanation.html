@@ -1,7 +1,7 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Anweisungen für Teil (2 oder 3){% endblock %}
+{% block title %}Anweisungen für Teil {{ treatment }} {% endblock %}
 
 {% block content %}
 
@@ -32,7 +32,7 @@
 <p> Dieser Vorgang wird 12 Runden lang wiederholt.</p>
 
 {% block next_button %}
-    <button class="otree-btn-next btn btn-primary">Forthfahren</button>
+    <button class="otree-btn-next btn btn-primary">Fortfahren</button>
 {% endblock %}
 
 {% endblock %}

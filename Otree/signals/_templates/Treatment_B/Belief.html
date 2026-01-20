@@ -1,11 +1,14 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}Teil (2 oder 3) — Preisprognose (Runde {{ player.round_number }} von {{ C.NUM_ROUNDS }}){% endblock %}
+{% block title %}Teil {{ treatment }} — Preisprognose (Runde {{ player.round_number }} von {{ C.NUM_ROUNDS }}){% endblock %}
 
 {% block content %}
 
 <style>
+  .pi05 { color: blue; font-weight: 600; }
+  .pi15 { color: red;  font-weight: 600; }
+
   #utility_table.table {
     width: 100%;
     font-size: 0.9rem;
@@ -55,8 +58,20 @@
             {% for row in table_rows %}
             <tr>
               <td>{{ row.c1 }}</td>
-              <td>{% if row.infeasible05 %}—{% else %}{{ row.u05 }}{% endif %}</td>
-              <td>{% if row.infeasible15 %}—{% else %}{{ row.u15 }}{% endif %}</td>
+              <td>
+                {% if row.infeasible05 %}
+                  —
+                {% else %}
+                  <span class="pi05">{{ row.u05 }}</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if row.infeasible15 %}
+                  —
+                {% else %}
+                  <span class="pi15">{{ row.u15 }}</span>
+                {% endif %}
+              </td>
             </tr>
             {% endfor %}
           </tbody>
@@ -99,7 +114,7 @@
 </div>
 
 {% block next_button %}
-    <button class="otree-btn-next btn btn-primary">Forthfahren</button>
+    <button class="otree-btn-next btn btn-primary">Fortfahren</button>
 {% endblock %}
 {% endblock %}
 
