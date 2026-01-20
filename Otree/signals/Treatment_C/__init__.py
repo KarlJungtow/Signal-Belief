@@ -109,6 +109,14 @@ class Choice(Page):
         player.choice_time_spent = round(time.time() - player.choice_time_offset, 2)
 
 
+class Choice_confirmed(Page):
+    @staticmethod
+    def vars_for_template(player: Player):
+        vars_dict = build_vars_for_template_choice(player, C)
+        vars_dict["c1"] = player.c1
+        return vars_dict
+
+
 class Signal(Page):
     @staticmethod
     def vars_for_template(player: Player):
@@ -157,6 +165,7 @@ page_sequence = [
     Explanation,
     SyncGate,
     Choice,
+    Choice_confirmed,
     Signal,
     Belief,
 ]

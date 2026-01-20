@@ -35,7 +35,7 @@ def creating_session(subsession: Subsession):
         pi, y1 = p.participant.vars['training_schedule'][
             subsession.round_number - 1
         ]
-
+        p.participant.vars['treatment'] = 0
         p.pi = pi
         p.y1 = y1
         p.y2 = 15 if y1 == 5 else 5
@@ -81,6 +81,7 @@ class Choice(Page):
         player.c2 = c2_given(player, C)
         player.u = u_given(player)
 
+
 class Signal(Page):
     @staticmethod
     def vars_for_template(player: Player):
@@ -109,12 +110,19 @@ class Result(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
+        belief = player.belief_input_raw / 100
         return {"c1" : player.c1,
                 "c2" :  round(player.c2,2),
                 "c2_low" :  round(calc_c2(player.y1, player.y2, C.P1, 0.5, player.c1, C.R),2),
                 "u_low" : round((player.c1 * calc_c2(player.y1, player.y2, 1, 0.5, player.c1, C.R)),2),
                 "u" : round(player.u, 2),
-                "pi" : player.pi}
+                "pi" : player.pi,
+                "h_hat": belief*100,
+                "threshold": round(run_lottery_training(belief)[1]*100, 0),
+                "complementary_probability": round((1-run_lottery_training(belief)[1])*100, 0),
+                "prize": run_lottery_training(belief)[0],
+                }
+
 page_sequence = [
     Signal,
     Belief,

@@ -192,6 +192,24 @@ def run_binary_lottery(chosen, prize: float = 20):
         return 0, round(threshold, 2)
 
 
+def run_lottery_training(h_hat, prize: float = 2):
+    """
+    Binary scoring lottery.
+    Returns the prize if the player wins, else 0.
+    """
+    h_hat = float(h_hat or 0.0)
+    h_true = 1 #TODO Dynamisch machen
+
+    threshold = max(0.0, 1.0 - abs(h_hat - h_true) ** 2)
+    u = random.random()
+
+    if u <= threshold:
+        return prize, round(threshold, 2)
+    else:
+        return 0, round(threshold, 2)
+
+
+
 # ---- helpers per spec ----
 def calc_c1_max(p) -> float:
     return floor(p.y1 + p.y2 / 2 - 0.5)  # TODO: Price HIGH
@@ -230,4 +248,4 @@ def get_round_count():
 
 
 if __name__ == '__main__':
-    print(synthesize_filenames(get_red_counts() + get_obvious_red_counts(), "T0"))
+    print(run_lottery_training(0.5)[0])

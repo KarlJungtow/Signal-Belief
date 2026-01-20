@@ -5,10 +5,10 @@ SESSION_CONFIGS = [
         name='signals',
         app_sequence=[
                     #'intro',
-                    #'training',
-                    'Treatment_A',
+                    'training',
+                    #'Treatment_A',
                     'Treatment_C',
-                    'Treatment_B',
+                    #'Treatment_B',
                     #'post_questionnaire',
                     'payoff'
             ],
