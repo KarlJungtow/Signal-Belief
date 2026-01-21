@@ -19,6 +19,15 @@
         <strong>Niedrigpreis-Zustand (P<sub>2</sub>=0,5):</strong> Ihr Konsum in Periode 2 wäre <strong>{{ c2_low }}</strong> Einheiten,
         und Ihre Auszahlung wäre <strong>{{ u_low }}</strong> Punkte ({{ c1 }} × {{ c2_low }}).
     </li>
+
+    <p>
+        In dem Signal, dass Sie gesehen haben, waren mehr rote als blaue Punkte. Sie haben eine Wahrscheinlichkeit von {{ h_hat }}%
+        angegeben, dass mehr rote Punkte vorhanden waren. Damit hatten Sie eine ~{{ threshold }}% Chance, 2€ zu gewinnen. Das Ergebnis der Lotterie war: {{ prize }}€
+        <br>
+        Wenn es der niedrige Preis gewesen wäre, hätten Sie eine Wahrscheinlichkeit von ~{{ complementary_probability }}% gehabt, 2€ zu gewinnen.
+        <br>
+
+    </p>
 </ul>
 
 {% block next_button %}

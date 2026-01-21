@@ -69,6 +69,14 @@ def creating_session(subsession: Subsession):
 # ------------- Pages -------------
 class Explanation(Page):
     @staticmethod
+    def vars_for_template(player: Player):
+        if player.round_number == 1:
+            try:
+                player.participant.treatment += 1
+            except:
+                player.participant.treatment = 1
+        return {"treatment": player.participant.treatment,}
+    @staticmethod
     def is_displayed(player: Player):
         return player.round_number == 1
 
@@ -101,12 +109,21 @@ class Choice(Page):
         player.choice_time_spent = round(time.time() - player.choice_time_offset, 2)
 
 
+class Choice_confirmed(Page):
+    @staticmethod
+    def vars_for_template(player: Player):
+        vars_dict = build_vars_for_template_choice(player, C)
+        vars_dict["c1"] = player.c1
+        return vars_dict
+
+
 class Signal(Page):
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
             image_file=player.image_file,
             show_seconds=C.SIGNAL_SHOW_SECONDS,
+            treatment=player.participant.treatment,
         )
 
 
@@ -148,6 +165,7 @@ page_sequence = [
     Explanation,
     SyncGate,
     Choice,
+    Choice_confirmed,
     Signal,
     Belief,
 ]

@@ -66,6 +66,14 @@ def creating_session(subsession: Subsession):
 # ------------- Pages -------------
 class Explanation(Page):
     @staticmethod
+    def vars_for_template(player: Player):
+        if player.round_number == 1:
+            try:
+                player.participant.treatment += 1
+            except:
+                player.participant.treatment = 1
+        return {"treatment": player.participant.treatment,}
+    @staticmethod
     def is_displayed(player):
         return player.round_number == 1
 
@@ -88,6 +96,7 @@ class Signal(Page):
         return dict(
             image_file=player.image_file,
             show_seconds= C.SIGNAL_SHOW_SECONDS,
+            treatment=player.participant.treatment,
         )
 
 

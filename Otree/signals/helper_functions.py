@@ -15,6 +15,7 @@ def create_pairs(red_counts):
     pairs = [(y, y1) for (y1, y) in pairs]
     return pairs
 
+
 def create_schedule(player, treatment):
     # When using unmotivated beliefs, obvious signals will be random and not count towards the balancing
     obvious_red_counts = get_obvious_red_counts()
@@ -43,7 +44,6 @@ def create_schedule(player, treatment):
     schedule = pairs[:]
     images = image_files_master[:]
 
-    #
     combined = list(zip(schedule, images))
     random.shuffle(combined)
 
@@ -75,18 +75,21 @@ def create_session(subsession, C, treatment):
         p.c1_max = calc_c1_max(p)
 
 
+
+
 def build_vars_for_template_choice(player, C):
     return {
-            "y1": player.y1,
-            "y2": player.y2,
-            "p1": C.P1,
-            "R": C.R,
-            "c1_max": player.c1_max,
-            "table_rows": build_payoff_table(
-                player.y1, player.y2, C.P1, C.R, player.c1_max
-            ),
-            "belief": player.belief_input_raw,
-        }
+        "y1": player.y1,
+        "y2": player.y2,
+        "p1": C.P1,
+        "R": C.R,
+        "c1_max": player.c1_max,
+        "table_rows": build_payoff_table(
+            player.y1, player.y2, C.P1, C.R, player.c1_max
+        ),
+        "belief": player.belief_input_raw,
+        "treatment": player.participant.treatment,
+    }
 
 
 def build_payoff_table(y1, y2, p1, R, c1_max):
@@ -107,12 +110,9 @@ def build_payoff_table(y1, y2, p1, R, c1_max):
         c2_05 = calc_c2(y1, y2, p1, p2_05, c, R)
         u05 = round(c * c2_05, 2) if c2_05 >= 1 else None
 
-        # π = 2
         pi2 = 2
         p2_2 = pi2 * p1
-        # s2 = y1 - p1 * c
-        # c2_2 = (y2 + R * s2) / p2_2
-        c2_2= calc_c2(y1, y2, p1, p2_2, c, R)
+        c2_2 = calc_c2(y1, y2, p1, p2_2, c, R)
         u2 = round(c * c2_2, 2) if c2_2 >= 1 else None
 
         rows.append(
@@ -146,7 +146,6 @@ def synthesize_filenames(red_count, treatment):
     block2 = generate_block("x2")
 
     return block1 + block2
-
 
 
 # helper_functions.py
@@ -184,26 +183,46 @@ def run_binary_lottery(chosen, prize: float = 20):
     h_hat = float(chosen.get("h_hat") or 0.0)
     h_true = 1 if float(chosen.get("h_true") or 0.0) > 0.5 else 0
 
-    threshold = max(0.0, 1.0 - abs(h_hat - h_true)**2)
+    threshold = max(0.0, 1.0 - abs(h_hat - h_true) ** 2)
     u = random.random()
 
     if u <= threshold:
         return prize, round(threshold, 2)
     else:
-        return 0, round(threshold,2)
+        return 0, round(threshold, 2)
+
+
+def run_lottery_training(h_hat, prize: float = 2):
+    """
+    Binary scoring lottery.
+    Returns the prize if the player wins, else 0.
+    """
+    h_hat = float(h_hat or 0.0)
+    h_true = 1 #TODO Dynamisch machen
+
+    threshold = max(0.0, 1.0 - abs(h_hat - h_true) ** 2)
+    u = random.random()
+
+    if u <= threshold:
+        return prize, round(threshold, 2)
+    else:
+        return 0, round(threshold, 2)
+
 
 
 # ---- helpers per spec ----
 def calc_c1_max(p) -> float:
-    return floor(p.y1 + p.y2 / 2 - 0.5) # TODO: Price HIGH
+    return floor(p.y1 + p.y2 / 2 - 0.5)  # TODO: Price HIGH
 
 
 def c2_given(p, C) -> float:
     return calc_c2(p.y1, p.y2, C.P1, p.p2, p.c1, C.R)
 
+
 def calc_c2(y1, y2, p1, p2, c1, R):
-    s = y1 - p1*c1
-    return y2 + (R*s)/p2
+    s = y1 - p1 * c1
+    return y2 + (R * s) / p2
+
 
 def u_given(p) -> float:
     return float(p.c1) * p.c2
@@ -213,16 +232,21 @@ def u_given(p) -> float:
 def get_red_counts():
     return [185, 195, 205, 215]
 
+
 def get_obvious_red_counts():
     obvious_red_counts = [120, 120, 280, 280]
     random.shuffle(obvious_red_counts)
     return obvious_red_counts[:2]
 
+
 def get_income_profile():
     return [5, 15]
 
-def get_round_count():
-    return 1#len((get_red_counts()+get_obvious_red_counts()) * len(get_income_profile()))
 
+def get_round_count():
+    return 1  # len((get_red_counts()+get_obvious_red_counts()) * len(get_income_profile()))
+
+def sround(var):
+    return int(var) if round(var) == var else var
 if __name__ == '__main__':
-    print(synthesize_filenames(get_red_counts() + get_obvious_red_counts(), "T0"))
+    print(run_lottery_training(0.5)[0])
