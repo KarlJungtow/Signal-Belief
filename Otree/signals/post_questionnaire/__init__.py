@@ -142,10 +142,11 @@ class Player(BasePlayer):
     q10 = models.StringField(
         label='Haben Sie schon einmal einen Kredit aufgenommen?',
         choices=[
-            ['never', 'nie'],
-            ['once', 'einmal'],
-            ['2_3', 'zwei- bis dreimal'],
-            ['more_3', 'mehr als dreimal'],
+            ['1', 'nie'],
+            ['2', 'einmal'],
+            ['3', 'zwei- bis dreimal'],
+            ['4', 'mehr als dreimal'],
+            ['5', 'keine Angabe'],
         ],
         widget=widgets.RadioSelect
     )
@@ -196,7 +197,7 @@ class Player(BasePlayer):
     )
 
     # Question 12 → q14
-    q14 = models.StringField(
+    q14 = models.IntegerField(
         label=(
             "Wenn Sie an einem Rennen teilnehmen und die Person auf dem zweiten Platz überholen: "
             "Auf welchem Platz sind Sie dann?"
@@ -205,7 +206,7 @@ class Player(BasePlayer):
     )
 
     # Question 13 → q15
-    q15 = models.StringField(
+    q15 = models.IntegerField(
         label=(
             "Ein Bauer hatte 15 Schafe und bis auf 8 sind alle gestorben. "
             "Wie viele sind übrig?"
@@ -214,7 +215,7 @@ class Player(BasePlayer):
     )
 
     # Question 14 → q16
-    q16 = models.StringField(
+    q16 = models.IntegerField(
         label=(
             "Wenn drei Elfen drei Spielzeuge in einer Stunde einpacken können, wie viele Elfen werden benötigt, "
             "um sechs Spielzeuge in zwei Stunden einzupacken?"
