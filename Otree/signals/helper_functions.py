@@ -246,6 +246,7 @@ def get_income_profile():
 def get_round_count():
     return 1  # len((get_red_counts()+get_obvious_red_counts()) * len(get_income_profile()))
 
-
+def sround(var):
+    return int(var) if round(var) == var else var
 if __name__ == '__main__':
     print(run_lottery_training(0.5)[0])

@@ -111,15 +111,18 @@ class Result(Page):
     @staticmethod
     def vars_for_template(player: Player):
         belief = player.belief_input_raw / 100
+        lottery = run_lottery_training(belief)
+        chance = lottery[1] * 100
+        threshold = sround(chance)
         return {"c1" : player.c1,
-                "c2" :  round(player.c2,2),
-                "c2_low" :  round(calc_c2(player.y1, player.y2, C.P1, 0.5, player.c1, C.R),2),
-                "u_low" : round((player.c1 * calc_c2(player.y1, player.y2, 1, 0.5, player.c1, C.R)),2),
-                "u" : round(player.u, 2),
+                "c2" :  sround(player.c2),
+                "c2_low" :  sround(calc_c2(player.y1, player.y2, C.P1, 0.5, player.c1, C.R)),
+                "u_low" : sround((player.c1 * calc_c2(player.y1, player.y2, 1, 0.5, player.c1, C.R))),
+                "u" : sround(player.u),
                 "pi" : player.pi,
-                "h_hat": belief*100,
-                "threshold": round(run_lottery_training(belief)[1]*100, 0),
-                "complementary_probability": round((1-run_lottery_training(belief)[1])*100, 0),
+                "h_hat": int(belief*100),
+                "threshold": threshold,
+                "complementary_probability": 100-threshold,
                 "prize": run_lottery_training(belief)[0],
                 }
 
