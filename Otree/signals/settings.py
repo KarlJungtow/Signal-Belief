@@ -6,11 +6,11 @@ SESSION_CONFIGS = [
         app_sequence=[
                     #'intro',
                     #'training',
+                    #'Treatment_A',
+                    #'Treatment_B',
                     'Treatment_C',
-                    'Treatment_A',
-                    'Treatment_B',
-                    #'post_questionnaire',
-                    #'payoff'
+                    'post_questionnaire',
+                    'payoff'
             ],
         num_demo_participants=1,
         showup_fee=7.0,
