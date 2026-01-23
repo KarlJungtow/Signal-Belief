@@ -105,7 +105,7 @@ und eine Runde zufällig für die Vergütung Ihrer Preiserwartung ausgewählt. <
         {{ belief_raws.1 }}%.
     </li>
     <li>
-        Das tatsächliche Preisniveau war: {{ bel_p2.1 }}
+        Das Preisniveau war: {{ bel_p2.1 }}
     </li>
     <li>
         Ihre Gewinnwahrscheinlichkeit für den 2-Euro-Bonus betrug:
@@ -141,7 +141,7 @@ und eine Runde zufällig für die Vergütung Ihrer Preiserwartung ausgewählt. <
         In dieser Runde war Ihre Konsumentscheidung in Periode 1: {{ c1_list.2 }}
     </li>
     <li>
-        Das tatsächliche Preisniveau in Periode 2 war: {{ con_p2.2 }}
+        Das Preisniveau in Periode 2 war: {{ con_p2.2 }}
     </li>
     <li>
         Ihr daraus resultierender Konsum in Periode 2 war: {{ c2_list.2 }}
@@ -162,7 +162,7 @@ und eine Runde zufällig für die Vergütung Ihrer Preiserwartung ausgewählt. <
         {{ belief_raws.2 }}%.
     </li>
     <li>
-        Das tatsächliche Preisniveau war: {{ bel_p2.2 }}
+        Das Preisniveau war: {{ bel_p2.2 }}
     </li>
     <li>
         Ihre Gewinnwahrscheinlichkeit für den 2-Euro-Bonus betrug:
@@ -181,5 +181,38 @@ und eine Runde zufällig für die Vergütung Ihrer Preiserwartung ausgewählt. <
         {% endif %}.
     </li>
 </ul>
+
+<hr>
+
+<h3>Zusammenfassung</h3>
+
+<table class="table table-sm" style="max-width: 520px;">
+    <tbody>
+        <tr>
+            <td>Feste Aufwandsentschädigung:</td>
+            <td class="text-end"><strong>&nbsp;</strong> {{ showup_fee }} Euro</td>
+        </tr>
+        <tr>
+            <td>Konsumentscheidung in Teil 1:</td>
+            <td class="text-end"><strong>&nbsp;</strong> {{ u_euros.0 }} Euro</td>
+        </tr>
+        <tr>
+            <td>Konsumentscheidung in Teil 2:</td>
+            <td class="text-end"><strong>&nbsp;</strong> {{ u_euros.1 }} Euro</td>
+        </tr>
+        <tr>
+            <td>Konsumentscheidung in Teil 3:</td>
+            <td class="text-end"><strong>&nbsp;</strong> {{ u_euros.2 }} Euro</td>
+        </tr>
+        <tr>
+            <td>Lotterien:</td>
+            <td class="text-end"><strong>&nbsp;</strong> {{ total_belief_euros }} Euro</td>
+        </tr>
+        <tr>
+            <td><strong>SUMME</strong></td>
+            <td class="text-end"><strong>&nbsp;</strong> {{ player.payoff }} Euro</td>
+        </tr>
+    </tbody>
+</table>
 
 {% endblock %}

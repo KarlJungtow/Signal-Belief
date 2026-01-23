@@ -91,6 +91,7 @@ class Player(BasePlayer):
     final_payoff = models.CurrencyField()
     conversion_rate = models.FloatField()
     showup_fee = models.FloatField()
+    total_belief_euros = models.FloatField()
 
 
 
@@ -188,6 +189,7 @@ def set_final_payoff(player: Player):
 
     player.conversion_rate = float(player.session.config.get('conversion_rate'))
     belief_prize = float(player.session.config.get('binary_lotterie_prize'))
+    belief_wins = 0
 
     # ------------- CONSUMPTION PAYOFFS (3 rounds) -------------
     for chosen, suffix in zip(chosen_consumption_rounds, C.SUFFIXES):
@@ -217,6 +219,10 @@ def set_final_payoff(player: Player):
         setattr(player, f"bel_p2_{suffix}", chosen.get('pi', 0))
 
         belief_pts, threshold_val = run_binary_lottery(chosen, belief_prize)
+
+        if belief_pts >0:
+            belief_wins += 1
+            
         setattr(player, f"belief_points_{suffix}", belief_pts)
         setattr(player, f"threshold_{suffix}", threshold_val)
 
@@ -226,6 +232,8 @@ def set_final_payoff(player: Player):
         # diagnostics
         setattr(player, f"true_red_count_{suffix}", chosen.get('red_count', 0))
         setattr(player, f"belief_raw_{suffix}", chosen.get('belief_input_raw', 0.0))
+
+    player.total_belief_euros = round(2 * belief_wins, 2)
 
     # ------------- Show-up fee & final -------------
     player.showup_fee = float(player.session.config.get('showup_fee'))
@@ -254,11 +262,13 @@ class Final(Page):
             c2_list=player.c2_list,
             con_p2=player.con_p2,
             u_points=player.u_points,
-            u_euros=player.u_euros,
             belief_raws=player.belief_raws,
             bel_p2=player.bel_p2,
             thresholds_pct=thresholds_pct,
             belief_points=player.belief_points,
+            u_euros=player.u_euros,
+            showup_fee=player.showup_fee,
+            total_belief_euros=player.total_belief_euros,
         )
 
 
