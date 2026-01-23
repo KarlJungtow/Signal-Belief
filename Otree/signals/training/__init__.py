@@ -122,7 +122,6 @@ class Result(Page):
                 "pi" : player.pi,
                 "h_hat": int(belief*100),
                 "threshold": threshold,
-                "complementary_probability": 100-threshold,
                 "prize": run_lottery_training(belief)[0],
                 }
 
