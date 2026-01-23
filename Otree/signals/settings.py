@@ -4,12 +4,12 @@ SESSION_CONFIGS = [
     dict(
         name='signals',
         app_sequence=[
-                    'intro',
-                    'training',
+                    #'intro',
+                    #'training',
                     'Treatment_A',
                     'Treatment_B',
                     'Treatment_C',
-                    'post_questionnaire',
+                    #'post_questionnaire',
                     'payoff'
             ],
         num_demo_participants=1,

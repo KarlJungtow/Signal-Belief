@@ -78,6 +78,11 @@ class Player(BasePlayer):
     u_points_B = models.FloatField()
     u_points_C = models.FloatField()
 
+    # Euro equivalents of consumption payoff
+    u_euros_A = models.FloatField()
+    u_euros_B = models.FloatField()
+    u_euros_C = models.FloatField()
+
     belief_points_A = models.FloatField()
     belief_points_B = models.FloatField()
     belief_points_C = models.FloatField()
@@ -126,6 +131,10 @@ class Player(BasePlayer):
     @property
     def u_points(self):
         return self._triplet("u_points")
+
+    @property
+    def u_euros(self):
+        return self._triplet("u_euros")
 
     @property
     def belief_points(self):
@@ -195,6 +204,10 @@ def set_final_payoff(player: Player):
         u_val = round(float(chosen.get('u') or 0.0), 2)
         setattr(player, f"u_points_{suffix}", u_val)
 
+        # euro equivalent (points × conversion_rate)
+        u_eur = round(u_val * player.conversion_rate, 2)
+        setattr(player, f"u_euros_{suffix}", u_eur)
+
         # add consumption payoff
         player.payoff += u_val * player.conversion_rate
 
@@ -241,6 +254,7 @@ class Final(Page):
             c2_list=player.c2_list,
             con_p2=player.con_p2,
             u_points=player.u_points,
+            u_euros=player.u_euros,
             belief_raws=player.belief_raws,
             bel_p2=player.bel_p2,
             thresholds_pct=thresholds_pct,
