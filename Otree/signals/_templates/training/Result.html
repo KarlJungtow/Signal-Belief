@@ -6,29 +6,31 @@
 {% block content %}
 
 <p>
-    In dieser Feedback-Runde haben Sie sich dafür entschieden, in der ersten Periode <strong>{{ c1 }}</strong> Einheiten zu konsumieren.
-    Wenn diese Runde für Ihre Endauszahlung ausgewählt würde, würden wir Ihre Auszahlung abhängig vom Preiszustand in Periode 2 wie folgt berechnen:
+    In dieser Trainingsrunde haben Sie sich dafür entschieden, in der ersten Periode <strong>{{ c1 }}</strong> Einheiten zu konsumieren.
+    Wenn diese Runde für Ihre Endauszahlung ausgewählt würde, würden wir Ihre Auszahlung je nach Preisniveau in Periode 2 wie folgt berechnen:
 </p>
 
 <ul>
     <li>
-        <strong>Hochpreis-Zustand (P<sub>2</sub>=2):</strong> Ihr Konsum in Periode 2 wäre <strong>{{ c2 }}</strong> Einheiten,
+        <strong>hohes-Preisniveau (P<sub>2</sub>=2):</strong> Ihr Konsum in Periode 2 wäre <strong>{{ c2 }}</strong> Einheiten,
         und Ihre Auszahlung wäre <strong>{{ u }}</strong> Punkte ({{ c1 }} × {{ c2 }}).
     </li>
     <li>
-        <strong>Niedrigpreis-Zustand (P<sub>2</sub>=0,5):</strong> Ihr Konsum in Periode 2 wäre <strong>{{ c2_low }}</strong> Einheiten,
+        <strong>niedriges-Preisniveau (P<sub>2</sub>=0,5):</strong> Ihr Konsum in Periode 2 wäre <strong>{{ c2_low }}</strong> Einheiten,
         und Ihre Auszahlung wäre <strong>{{ u_low }}</strong> Punkte ({{ c1 }} × {{ c2_low }}).
     </li>
 </ul>
 
 <p>
-    In dem Signal, dass Sie gesehen haben, waren mehr rote als blaue Punkte. Sie haben eine Wahrscheinlichkeit von {{ h_hat }}%
-    angegeben, dass mehr rote Punkte vorhanden waren. Damit hatten Sie eine ~{{ threshold }}% Chance, 2€ zu gewinnen. Das Ergebnis der Lotterie war: {{ prize }}€
-    <br>
-    Wenn es der niedrige Preis gewesen wäre, hätten Sie eine Wahrscheinlichkeit von ~{{ complementary_probability }}% gehabt, 2€ zu gewinnen.
-    <br>
-
+    In dem Signal, dass Sie gesehen haben, waren mehr rote als blaue Punkte. Das Preisniveau war also hoch (P2=2).
+    Sie hätten folglich <strong>{{ u }}</strong> Punkte erhalten.
 </p>
+
+<p>
+    Sie haben eine Wahrscheinlichkeit von {{ h_hat }}% angegeben, dass mehr rote Punkte vorhanden waren. Damit hatten Sie eine ~{{ threshold }}% Chance, 2€ zu gewinnen.
+    Das Ergebnis der Lotterie war: Sie hätten die {{ prize }}€ erhalten.
+</p>
+
 
 
 {% block next_button %}
