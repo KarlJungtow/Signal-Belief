@@ -5,14 +5,14 @@ from helper_functions import *
 class C(BaseConstants):
     NAME_IN_URL = "Treatment_A"
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 2 #get_round_count() 
+    NUM_ROUNDS = 12 #get_round_count() 
 
     # Defaults from the spec
     P1 = 1.0
     I = 0.0  # net interest
     R = 1.0 + I  # gross R
 
-    SIGNAL_SHOW_SECONDS = 8
+    SIGNAL_SHOW_SECONDS = 1
 
 
 class Subsession(BaseSubsession):

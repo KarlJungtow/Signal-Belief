@@ -4,18 +4,25 @@ SESSION_CONFIGS = [
     dict(
         name='signals',
         app_sequence=[
-                    #'intro',
+                    'intro',
                     #'training',
                     'Treatment_A',
-                    'Treatment_C',
-                    #'Treatment_B',                    
+                    'Treatment_B',
+                    'Treatment_C',                    
                     #'post_questionnaire',
-                    #'payoff'
+                    'payoff'
             ],
         num_demo_participants=2,
         showup_fee=7.0,
         conversion_rate=0.05,
         binary_lotterie_prize=40,
+    ),
+]
+
+ROOMS = [
+    dict(
+        name='cons_exp',
+        display_name='Consumption-saving experiment',
     ),
 ]
 
@@ -25,7 +32,7 @@ SESSION_CONFIGS = [
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = dict(
-    real_world_currency_per_point=0.2, participation_fee=4.00, doc=""
+    real_world_currency_per_point=0.2, participation_fee=0.00, doc=""
 )
 
 PARTICIPANT_FIELDS = ["num_obvious_blue", "num_obvious_red", "treatment"]
