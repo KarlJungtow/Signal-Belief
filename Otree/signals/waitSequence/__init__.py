@@ -11,6 +11,7 @@ class Player(BasePlayer): pass
 
 class SyncAll(WaitPage):
     wait_for_all_groups = True  # ← ensures every participant in session must arrive
-    body_text = "Bitte warten Sie, bis alle Teilnehmer diesen Punkt erreicht haben."
+    title_text = "Bitte warten"
+    body_text = "Bitte warten Sie, bis alle Teilnehmer diesen Punkt erreicht haben. Der nächste Teil beginnt dann gemeinsam."
 
 page_sequence = [SyncAll]

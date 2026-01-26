@@ -106,24 +106,37 @@ class Belief(Page):
 
 
 class Result(Page):
-    form_model='player'
+    form_model = 'player'
 
     @staticmethod
     def vars_for_template(player: Player):
+
+        def fmt2(x):
+            # "up to 2 decimals" (no trailing zeros)
+            s = f"{x:.2f}"
+            s = s.rstrip('0').rstrip('.')
+            return s
+
         belief = player.belief_input_raw / 100
-        lottery = run_lottery_training(belief)
-        chance = lottery[1] * 100
+        prize, prob = run_lottery_training(belief)   # don't call twice
+        chance = prob * 100
         threshold = sround(chance)
-        return {"c1" : player.c1,
-                "c2" :  sround(player.c2),
-                "c2_low" :  sround(calc_c2(player.y1, player.y2, C.P1, 0.5, player.c1, C.R)),
-                "u_low" : sround((player.c1 * calc_c2(player.y1, player.y2, 1, 0.5, player.c1, C.R))),
-                "u" : sround(player.u),
-                "pi" : player.pi,
-                "h_hat": int(belief*100),
-                "threshold": threshold,
-                "prize": run_lottery_training(belief)[0],
-                }
+
+        c2_low_val = calc_c2(player.y1, player.y2, C.P1, 0.5, player.c1, C.R)
+        u_low_val = player.c1 * c2_low_val
+
+        return {
+            "c1": fmt2(player.c1),          # or f"{player.c1:.1f}" if you prefer
+            "c2": fmt2(player.c2),
+            "c2_low": fmt2(c2_low_val),
+            "u_low": fmt2(u_low_val),
+            "u": fmt2(player.u),
+            "pi": player.pi,
+            "h_hat": int(belief * 100),
+            "threshold": fmt2(threshold),
+            "prize": prize,
+        }
+
 
 page_sequence = [
     Signal,
