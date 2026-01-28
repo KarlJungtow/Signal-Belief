@@ -8,7 +8,7 @@ SESSION_CONFIGS = [
                     #'training',
                     'Treatment_A',
                     'Treatment_C',
-                    #'Treatment_B',                    
+                    'Treatment_B',
                     #'post_questionnaire',
                     #'payoff'
             ],

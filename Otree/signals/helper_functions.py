@@ -88,7 +88,7 @@ def build_vars_for_template_choice(player, C):
             player.y1, player.y2, C.P1, C.R, player.c1_max
         ),
         "belief": player.belief_input_raw,
-        "treatment": player.participant.treatment,
+        "treatment": len(player.participant.treatment),
     }
 
 
@@ -244,8 +244,11 @@ def get_income_profile():
 
 
 def get_round_count():
-    return 1  # len((get_red_counts()+get_obvious_red_counts()) * len(get_income_profile()))
+    return 2  # len((get_red_counts()+get_obvious_red_counts()) * len(get_income_profile()))
 
+def smart_append(array, var):
+    if not var in array:
+        array.append(var)
 def sround(var):
     return int(var) if round(var) == var else var
 if __name__ == '__main__':

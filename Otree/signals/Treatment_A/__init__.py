@@ -73,10 +73,11 @@ class Explanation(Page):
     def vars_for_template(player: Player):
         if player.round_number == 1:
             try:
-                player.participant.treatment += 1
+                smart_append(player.participant.treatment, C.NAME_IN_URL)
             except:
-                player.participant.treatment = 1
-        return {"treatment": player.participant.vars["treatment"],}
+                player.participant.treatment = []
+                smart_append(player.participant.treatment, C.NAME_IN_URL)
+        return {"treatment": len(player.participant.treatment)}
     @staticmethod
     def is_displayed(player: Player):
         return player.round_number == 1
@@ -125,7 +126,7 @@ class Signal(Page):
         return dict(
             image_file=player.image_file,
             show_seconds= C.SIGNAL_SHOW_SECONDS,
-            treatment=player.participant.treatment,
+            treatment=len(player.participant.treatment),
         )
 
 
@@ -136,7 +137,7 @@ class Belief(Page):
     @staticmethod
     def vars_for_template(player: Player):
         player.belief_time_offset = time.time()
-        return {"treatment": player.participant.treatment,}
+        return {"treatment": len(player.participant.treatment)}
     @staticmethod
     def error_message(player: Player, values):
         v = values.get("belief_input_raw")
