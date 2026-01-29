@@ -4,15 +4,15 @@ SESSION_CONFIGS = [
     dict(
         name='signals',
         app_sequence=[
-                    #'intro',
-                    #'training',
+                    'intro',
+                    'training',
                     'Treatment_A',
                     'Treatment_C',
                     'Treatment_B',
-                    #'post_questionnaire',
-                    #'payoff'
+                    'post_questionnaire',
+                    'payoff'
             ],
-        num_demo_participants=2,
+        num_demo_participants=1,
         showup_fee=7.0,
         conversion_rate=0.05,
         binary_lotterie_prize=40,
