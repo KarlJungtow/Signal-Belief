@@ -21,7 +21,7 @@ SESSION_CONFIGS = [
 
 ROOMS = [
     dict(
-        name='cons_exp',
+        name='awi_lab',
         display_name='Consumption-saving experiment',
     ),
 ]
