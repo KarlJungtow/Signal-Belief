@@ -35,7 +35,7 @@ def creating_session(subsession: Subsession):
         pi, y1 = p.participant.vars['training_schedule'][
             subsession.round_number - 1
         ]
-        p.participant.vars['treatment'] = 0
+        p.participant.vars['treatment'] = []
         p.pi = pi
         p.y1 = y1
         p.y2 = 15 if y1 == 5 else 5
