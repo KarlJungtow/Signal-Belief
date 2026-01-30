@@ -88,7 +88,7 @@ def build_vars_for_template_choice(player, C):
             player.y1, player.y2, C.P1, C.R, player.c1_max
         ),
         "belief": player.belief_input_raw,
-        "treatment": player.participant.treatment,
+        "treatment": len(player.participant.treatment),
     }
 
 
