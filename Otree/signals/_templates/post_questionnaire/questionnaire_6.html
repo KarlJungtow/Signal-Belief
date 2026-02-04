@@ -1,0 +1,12 @@
+{{ block title }}
+    Fragebogen
+{{ endblock }}
+{{ block content }}
+    Bitte geben Sie die folgenden Informationen ein: <br>
+
+    {{ formfields }}
+    {% block next_button %}
+        <button class="otree-btn-next btn btn-primary">Fortfahren</button>
+    {% endblock %}
+
+{{ endblock }}

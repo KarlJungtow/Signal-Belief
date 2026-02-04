@@ -12,7 +12,7 @@ class C(BaseConstants):
     I = 0.0  # net interest
     R = 1.0 + I  # gross R
 
-    SIGNAL_SHOW_SECONDS = 1
+    SIGNAL_SHOW_SECONDS = 8
 
 class Subsession(BaseSubsession):
     pass

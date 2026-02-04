@@ -15,7 +15,7 @@ class C(BaseConstants):
 
     PIS = [2]
     INCOME = [5, 15]
-    SIGNAL_SHOW_SECONDS = 1
+    SIGNAL_SHOW_SECONDS = 8
 
 
 class Subsession(BaseSubsession):

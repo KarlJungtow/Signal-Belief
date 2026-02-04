@@ -223,6 +223,18 @@ class Player(BasePlayer):
         blank=False,
     )
 
+    # Question q17
+    q17 = models.IntegerField(
+        label="Wie schwierig war es, den Anweisungen zu folgen? (1 = sehr schwierig, 5 = überhaupt nicht schwierig)",
+        choices=[
+            [1, '1'],
+            [2, '2'],
+            [3, '3'],
+            [4, '4'],
+            [5, '5'],
+        ],  # Likert 1–5
+        widget=widgets.RadioSelectHorizontal
+    )
 
 
 # PAGES
@@ -245,4 +257,9 @@ class questionnaire_4(Page):
 class questionnaire_5(Page):
     form_model = "player"
     form_fields = ["q14", "q15", "q16"]
-page_sequence = [questionnaire_1, questionnaire_2, questionnaire_3, questionnaire_4, questionnaire_5]
+
+class questionnaire_6(Page):
+    form_model = "player"
+    form_fields = ["q17"]
+    
+page_sequence = [questionnaire_1, questionnaire_2, questionnaire_3, questionnaire_4, questionnaire_5, questionnaire_6]
