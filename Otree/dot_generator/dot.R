@@ -3,7 +3,7 @@ rm(list = ls())
 library(ggplot2)
 
 ## where to save files
-setwd("dots")
+setwd("C:/Users/Bulutay/Documents/GitHub/Signal-Belief/Otree/dot_generator")
 
 #######################
 ## PARAMETERS YOU SET ##
