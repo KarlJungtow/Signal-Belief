@@ -3,7 +3,7 @@ rm(list = ls())
 library(ggplot2)
 
 ## where to save files
-setwd("C:/Users/kjung/Desktop/Signal-Belief/Otree/dot_generator/dots")
+setwd("dots")
 
 #######################
 ## PARAMETERS YOU SET ##
@@ -17,7 +17,7 @@ grid_size   <- 20
 n_cells     <- grid_size^2
 
 # desired red-dot counts
-red_counts  <- c(120, 185, 195, 205, 215, 280)  # example; include others as needed
+red_counts <- c(120, 190, 195, 199, 201, 205, 210, 280)  # example; include others as needed
 
 # special red counts that get a/b suffix
 special_counts <- c(120, 280)

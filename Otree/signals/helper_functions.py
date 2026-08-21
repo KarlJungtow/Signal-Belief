@@ -17,42 +17,39 @@ def create_pairs(red_counts):
 
 
 def create_schedule(player, treatment):
-    # When using unmotivated beliefs, obvious signals will be random and not count towards the balancing
+    # Six non-extreme signals appear once under each income profile.
+    regular_red_counts = get_red_counts()
+
+    # Four extreme-signal realizations: two for each income profile.
+    # The balancing rule guarantees at least one 120 and one 280
+    # across the four extreme slots within the treatment.
     obvious_red_counts = get_obvious_red_counts()
-    if treatment != "A":
-        if "num_obvious_blue" not in player.participant.vars:
-            player.participant.vars["num_obvious_blue"] = 0
-        if "num_obvious_red" not in player.participant.vars:
-            player.participant.vars["num_obvious_red"] = 0
 
-        # Generate two random obvious red counts. Check, if participant saw the same redcount twice and will see it a third
-        # time this round. Set the last image to be the other one
-        # NOTE: Will be shuffled
-        if player.participant.vars["num_obvious_blue"] >= 2 and obvious_red_counts[0] == 120:
-            obvious_red_counts[1] = 280
-        if player.participant.vars["num_obvious_red"] >= 2 and obvious_red_counts[0] == 280:
-            obvious_red_counts[1] = 120
+    profiles = get_income_profile()
 
-        player.participant.vars["num_obvious_blue"] += obvious_red_counts.count(120)
-        player.participant.vars["num_obvious_red"] += obvious_red_counts.count(280)
+    # x1 corresponds to the first profile (y1 = 5),
+    # x2 to the second profile (y1 = 15).
+    x1_counts = regular_red_counts + obvious_red_counts[:2]
+    x2_counts = regular_red_counts + obvious_red_counts[2:]
 
-    # Pair all red counts with the income profiles
-    red_counts = get_red_counts() + obvious_red_counts
-    pairs = create_pairs(red_counts)
-    image_files_master = synthesize_filenames(red_counts, treatment)
+    schedule = (
+        [(r, profiles[0]) for r in x1_counts]
+        + [(r, profiles[1]) for r in x2_counts]
+    )
 
-    schedule = pairs[:]
-    images = image_files_master[:]
+    images = synthesize_filenames(
+        x1_counts,
+        x2_counts,
+        treatment,
+    )
 
     combined = list(zip(schedule, images))
     random.shuffle(combined)
 
     schedule, images = zip(*combined)
-    schedule = list(schedule)
-    images = list(images)
 
-    player.participant.vars[f"{treatment}_schedule"] = schedule
-    player.participant.vars[f"{treatment}_images"] = images
+    player.participant.vars[f"{treatment}_schedule"] = list(schedule)
+    player.participant.vars[f"{treatment}_images"] = list(images)
 
 
 def create_session(subsession, C, treatment):
@@ -127,25 +124,29 @@ def build_payoff_table(y1, y2, p1, R, c1_max):
     return rows
 
 
-def synthesize_filenames(red_count, treatment):
-    def generate_block(x):
-        seen = {120: False, 280: False}
+def synthesize_filenames(red_counts_x1, red_counts_x2, treatment):
+    def generate_block(red_counts, x):
+        seen = {120: 0, 280: 0}
         names = []
 
-        for r in red_count:
+        for r in red_counts:
             if r in seen:
-                suffix = "a" if not seen[r] else "b"
-                seen[r] = True
-                names.append(f"dots_{treatment}_{r}_{x}_{suffix}.png")
+                seen[r] += 1
+                suffix = "a" if seen[r] == 1 else "b"
+                names.append(
+                    f"dots_{treatment}_{r}_{x}_{suffix}.png"
+                )
             else:
-                names.append(f"dots_{treatment}_{r}_{x}.png")
+                names.append(
+                    f"dots_{treatment}_{r}_{x}.png"
+                )
 
         return names
 
-    block1 = generate_block("x1")
-    block2 = generate_block("x2")
-
-    return block1 + block2
+    return (
+        generate_block(red_counts_x1, "x1")
+        + generate_block(red_counts_x2, "x2")
+    )
 
 
 # helper_functions.py
@@ -230,13 +231,21 @@ def u_given(p) -> float:
 
 # Constants ------------------------------------------------------------------------------------------------------------
 def get_red_counts():
-    return [185, 195, 205, 215]
+    return [190, 195, 199, 201, 205, 210]
 
 
 def get_obvious_red_counts():
-    obvious_red_counts = [120, 120, 280, 280]
-    random.shuffle(obvious_red_counts)
-    return obvious_red_counts[:2]
+    # Draw the first three extreme signals independently with replacement.
+    draws = [random.choice([120, 280]) for _ in range(3)]
+
+    # If the first three are identical, force the fourth to be the opposite
+    # extreme; otherwise draw the fourth independently.
+    if draws[0] == draws[1] == draws[2]:
+        draws.append(280 if draws[0] == 120 else 120)
+    else:
+        draws.append(random.choice([120, 280]))
+
+    return draws
 
 
 def get_income_profile():
@@ -244,7 +253,8 @@ def get_income_profile():
 
 
 def get_round_count():
-    return 2  # len((get_red_counts()+get_obvious_red_counts()) * len(get_income_profile()))
+    # Six non-extreme + two extreme signals per income profile.
+    return (len(get_red_counts()) + 2) * len(get_income_profile())
 
 def smart_append(array, var):
     if not var in array:

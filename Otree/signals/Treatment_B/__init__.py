@@ -5,7 +5,7 @@ import time
 class C(BaseConstants):
     NAME_IN_URL = 'Treatment_B'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 12 #get_round_count()
+    NUM_ROUNDS = get_round_count()
 
     # Defaults from the spec
     P1 = 1.0
